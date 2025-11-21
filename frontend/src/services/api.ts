@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://lightsteelblue-locust-816886.hostingersite.com/api';
 
 // Create axios instance
 export const api: AxiosInstance = axios.create({
