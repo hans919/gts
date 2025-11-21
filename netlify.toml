@@ -5,6 +5,7 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  VITE_API_URL = "https://lightsteelblue-locust-816886.hostingersite.com/api"
 
 [[redirects]]
   from = "/*"
