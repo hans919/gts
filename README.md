@@ -834,8 +834,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👨‍💻 Author
 
 **Your Name**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
+- GitHub: [@yourusername](https://github.com/hans919)
+- Email: delossantoshanschristian@sjcbi.edu.ph
 
 ---
 
@@ -854,9 +854,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 For support and questions:
-- 📧 Email: your.email@example.com
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/graduate-tracer-system/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/yourusername/graduate-tracer-system/discussions)
+- 📧 Email: delossantoshanschristian@sjcbi.edu.ph
+- 🐛 Issues: [GitHub Issues](https://github.com/hans919/graduate-tracer-system/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/hans919/graduate-tracer-system/discussions)
 
 ---
 
@@ -920,8 +920,8 @@ For support and questions:
 
 **Made with ❤️ and ☕**
 
-[Report Bug](https://github.com/yourusername/graduate-tracer-system/issues) · 
-[Request Feature](https://github.com/yourusername/graduate-tracer-system/issues) · 
+[Report Bug](https://github.com/hans919/graduate-tracer-system/issues) · 
+[Request Feature](https://github.com/hans919/graduate-tracer-system/issues) · 
 [Documentation](docs/)
 
 </div>
