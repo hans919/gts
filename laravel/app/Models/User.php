@@ -47,4 +47,28 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the graduate profile associated with the user.
+     */
+    public function graduate()
+    {
+        return $this->hasOne(\App\Models\Graduate::class);
+    }
+
+    /**
+     * Check if user is an admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if user is a graduate
+     */
+    public function isGraduate(): bool
+    {
+        return $this->role === 'graduate';
+    }
 }

@@ -24,7 +24,7 @@ export default function Header({ onMenuClick, user }: HeaderProps) {
   };
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <header className="border-b border-gray-200 sticky top-0 z-40" style={{ backgroundColor: '#457507' }}>
       <div className="flex items-center justify-between px-4 py-3">
         {/* Left Section */}
         <div className="flex items-center space-x-4">
@@ -32,20 +32,20 @@ export default function Header({ onMenuClick, user }: HeaderProps) {
             variant="ghost"
             size="icon"
             onClick={onMenuClick}
-            className="lg:hidden"
+            className="lg:hidden text-white hover:bg-white/10"
           >
             <Menu className="h-6 w-6" />
           </Button>
           <div>
-            <h1 className="text-xl font-bold">SJCB Tracer System</h1>
-            <p className="text-xs text-muted-foreground hidden sm:block">Track and manage alumni data</p>
+            <h1 className="text-xl font-bold text-white">SJCB Tracer System</h1>
+            <p className="text-xs text-white/80 hidden sm:block">Track and manage alumni data</p>
           </div>
         </div>
 
         {/* Right Section */}
         <div className="flex items-center space-x-3">
           {/* Notifications */}
-          <Button variant="ghost" size="icon" className="relative">
+          <Button variant="ghost" size="icon" className="relative text-white hover:bg-white/10">
             <Bell className="h-5 w-5" />
             <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center" variant="destructive">
               3
@@ -57,16 +57,16 @@ export default function Header({ onMenuClick, user }: HeaderProps) {
             <Button
               variant="ghost"
               onClick={() => setShowDropdown(!showDropdown)}
-              className="flex items-center gap-3"
+              className="flex items-center gap-3 text-white hover:bg-white/10"
             >
               <div className="hidden md:block text-right">
-                <p className="text-sm font-medium">{user.name}</p>
-                <p className="text-xs text-muted-foreground capitalize">{user.role}</p>
+                <p className="text-sm font-medium text-white">{user.name}</p>
+                <p className="text-xs text-white/80 capitalize">{user.role}</p>
               </div>
-              <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center">
-                <User className="h-5 w-5 text-primary-foreground" />
+              <div className="h-10 w-10 rounded-full bg-white/20 flex items-center justify-center">
+                <User className="h-5 w-5 text-white" />
               </div>
-              <ChevronDown className="h-4 w-4" />
+              <ChevronDown className="h-4 w-4 text-white" />
             </Button>
 
             {/* Dropdown Menu */}

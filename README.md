@@ -1,11 +1,12 @@
-# 🎓 Graduate Tracer System
+# 🎓 SJCB Graduate Tracer System
 
-A comprehensive web-based system for tracking and managing graduate information, employment status, and survey responses. Built with Laravel 11 and React 18 with authentic ShadCN UI design.
+A comprehensive web-based system for tracking and managing graduate information, employment status, and survey responses with dual-portal architecture. Built with Laravel 11 and React 18 with authentic ShadCN UI design.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Laravel](https://img.shields.io/badge/Laravel-11-red.svg)
 ![React](https://img.shields.io/badge/React-18-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.2-blue.svg)
+![Vite](https://img.shields.io/badge/Vite-5.0-646CFF.svg)
 
 ---
 
@@ -30,46 +31,60 @@ A comprehensive web-based system for tracking and managing graduate information,
 
 ## ✨ Features
 
-### 🎯 Graduate Management
-- ✅ Add, edit, and delete graduate records
-- ✅ Comprehensive graduate profiles (personal, academic, contact info)
-- ✅ Advanced search and filtering
-- ✅ Status tracking (employed, unemployed, further studies)
-- ✅ Export capabilities
+### 🎯 Admin Portal
+- ✅ **Graduate Management**: Add, edit, delete graduate records with comprehensive profiles
+- ✅ **Dynamic Survey System**: Create custom surveys with multiple question types (text, textarea, radio, checkbox, select)
+- ✅ **Real-time Analytics**: Interactive dashboard with charts showing graduate statistics
+- ✅ **Resource Management**: Jobs, career services, training programs, and support tickets
+- ✅ **Survey Response Viewer**: View and analyze graduate survey submissions
+- ✅ **Notification System**: Auto-create notifications when posting jobs, surveys, and resources
 
-### 📊 Analytics Dashboard
-- ✅ Real-time statistics
-- ✅ Employment status visualization (pie charts)
-- ✅ Salary distribution analysis (bar charts)
-- ✅ Program-wise graduate distribution
-- ✅ Interactive data visualizations with Recharts
+### 👨‍🎓 Graduate Self-Service Portal
+- ✅ **Profile Management**: Edit personal, academic, and address information
+- ✅ **Profile Photo Upload**: Upload and manage profile pictures (2MB max, JPG/PNG/GIF)
+- ✅ **Change Password**: Secure password change functionality
+- ✅ **Employment Survey**: Submit and update employment status
+- ✅ **Career Updates**: Log job changes and career progression
+- ✅ **Survey History**: View completed surveys (employment + admin-created)
+- ✅ **Take Surveys**: Respond to admin-created surveys with dynamic question types
+- ✅ **Real-time Notifications**: Auto-refresh notification bell (10-second polling)
+- ✅ **Alumni Resources**: Browse jobs, career services, and training programs
+- ✅ **Support & Feedback**: Submit support tickets directly from portal
+- ✅ **Privacy Settings**: Manage data privacy and account preferences
 
-### 📝 Survey System
-- ✅ Create custom surveys with multiple question types
-- ✅ Dynamic question builder
-- ✅ Survey status management (draft, active, closed)
-- ✅ Response tracking and analysis
-- ✅ Survey templates
-
-### 📈 Reports
-- ✅ Employment reports
-- ✅ Graduate statistics
-- ✅ Survey analysis
-- ✅ Export to PDF, Excel, CSV
+### 📊 Analytics & Reporting
+- ✅ Real-time dashboard statistics (total graduates, active surveys, employment rate)
+- ✅ Bar chart: Graduates by graduation year (using Recharts)
+- ✅ Pie chart: Employment status distribution with color coding
+- ✅ Recent graduates display with avatars
+- ✅ Export capabilities for reports
 
 ### 🔐 Authentication & Security
-- ✅ Secure login with Laravel Sanctum
-- ✅ Role-based access control
-- ✅ Token-based API authentication
-- ✅ Protected routes
+- ✅ Unified login system (admin + graduate roles)
+- ✅ Laravel Sanctum token-based authentication
+- ✅ Role-based access control (RBAC)
+- ✅ Protected API routes
+- ✅ Secure password hashing
+- ✅ Token expiration and refresh
+
+### 🔔 Real-time Notification System
+- ✅ Auto-create notifications when admin posts surveys, jobs, services, training
+- ✅ Notification bell icon with unread count badge
+- ✅ Dropdown modal with notification list
+- ✅ Auto-refresh every 10 seconds (no manual refresh needed)
+- ✅ Mark as read and delete functionality
+- ✅ Color-coded notification types (survey: blue, job: purple, event: green)
+- ✅ Timestamp display
+- ✅ Click outside to close
 
 ### 🎨 Modern UI/UX
 - ✅ Authentic ShadCN UI design system
+- ✅ Custom green header (#457507) for both admin and graduate portals
 - ✅ Responsive layout (mobile, tablet, desktop)
-- ✅ Dark mode support
 - ✅ Professional typography (Inter font)
 - ✅ Smooth animations and transitions
 - ✅ Accessible components
+- ✅ Gradient backgrounds and modern card designs
 
 ---
 
@@ -229,39 +244,109 @@ After seeding the database, use these credentials to log in:
 **Admin Account:**
 - Email: `admin@test.com`
 - Password: `password123`
+- Access: Full system access including graduate management, surveys, analytics, and resources
 
 **Graduate Account:**
+- Register via `/register` or use seeded account
 - Email: `graduate@test.com`
 - Password: `password123`
+- Access: Self-service portal with profile management, surveys, and resources
 
 ### Common Tasks
 
-#### Add a Graduate
+#### Admin Portal
+
+**Add a Graduate**
 1. Navigate to **Graduates** → **Add Graduate**
-2. Fill in personal information (Student ID, Name, Email)
+2. Fill in personal information (Student ID, Name, Email, Phone)
 3. Fill in academic information (Program, Major, Degree Level, Graduation Year)
-4. Add address information (optional)
+4. Add address information (Street, City, State, Country, Postal Code)
 5. Click **Add Graduate**
 
-#### Create a Survey
+**Create a Dynamic Survey**
 1. Navigate to **Surveys** → **Create Survey**
 2. Enter survey title and description
 3. Add questions using the **Add Question** button
-4. Configure question types (text, multiple choice, rating scale)
+4. Configure question types:
+   - **Text**: Short answer
+   - **Textarea**: Long answer
+   - **Radio**: Single choice (add options, press Enter for multiple)
+   - **Checkbox**: Multiple choice
+   - **Select**: Dropdown selection
 5. Set survey status (draft/active/closed)
-6. Click **Create Survey**
+6. Optionally target specific graduation years or programs
+7. Click **Create Survey**
+8. Notifications automatically sent to graduates when status is "active"
 
-#### View Analytics
-1. Navigate to **Analytics** from the sidebar
-2. View real-time statistics cards (Total Graduates, Employed, etc.)
-3. Interact with pie and bar charts for detailed insights
-4. Filter data by program, graduation year, etc.
+**View Survey Responses**
+1. Navigate to **Surveys**
+2. Click **View Responses** on any survey
+3. See statistics: Total responses, questions count, completion rate
+4. View individual graduate responses with their names and emails
+5. Export data using the Export button
 
-#### Generate Reports
-1. Navigate to **Reports**
-2. Select report type (Employment, Graduate Stats, Survey Analysis)
-3. Choose export format (PDF, Excel, CSV)
-4. Click download button
+**Manage Resources**
+1. Navigate to **Jobs**, **Career Services**, or **Support Tickets**
+2. Click **Add New** to create resources
+3. Notifications automatically sent to all graduates
+4. Edit or delete resources as needed
+
+**View Analytics**
+1. Navigate to **Dashboard** from the sidebar
+2. View statistics: Total Graduates, Active Surveys, Employment Rate, Survey Responses
+3. Interact with bar chart (graduates by year) and pie chart (employment status)
+4. View recent graduates with their programs and graduation years
+
+#### Graduate Portal
+
+**Update Profile**
+1. Log in to graduate portal at `/graduate/dashboard`
+2. Click profile dropdown → **Edit Profile**
+3. Edit personal, academic, or address information
+4. Click **Save Changes**
+
+**Upload Profile Photo**
+1. Click profile dropdown → **Settings**
+2. Click camera icon or **Upload Photo** button
+3. Select image (max 2MB, JPG/PNG/GIF)
+4. Click **Upload Photo**
+5. Photo appears in header after page reload
+
+**Change Password**
+1. Click profile dropdown → **Settings**
+2. Scroll to **Change Password** section
+3. Enter current password
+4. Enter new password (min 8 characters)
+5. Confirm new password
+6. Click **Change Password**
+
+**Take a Survey**
+1. Click notification bell icon or navigate to **Survey History**
+2. Click **Take Survey** on active surveys
+3. Answer all required questions
+4. Click **Submit Survey**
+
+**Submit Career Update**
+1. Navigate to **Career Updates** from quick actions
+2. Fill in job information (title, company, status, salary)
+3. Click **Submit**
+
+**Access Alumni Resources**
+1. Navigate to **Alumni Resources**
+2. Browse available jobs, career services, and training programs
+3. Bookmark jobs for later reference
+
+**Submit Support Ticket**
+1. Navigate to **Support & Feedback**
+2. Select priority level
+3. Enter subject and description
+4. Click **Submit Ticket**
+
+**View Notifications**
+1. Check notification bell icon (red badge shows unread count)
+2. Click bell to open dropdown modal
+3. Notifications auto-refresh every 10 seconds
+4. Click **Mark as Read** or **Delete** on individual notifications
 
 ---
 
@@ -404,7 +489,7 @@ GET /api/surveys
 Authorization: Bearer {token}
 ```
 
-#### Create Survey
+#### Create Survey with Dynamic Questions
 ```http
 POST /api/surveys
 Authorization: Bearer {token}
@@ -412,17 +497,199 @@ Content-Type: application/json
 
 Request Body:
 {
-  "title": "Employment Survey 2024",
-  "description": "Annual graduate employment survey",
+  "title": "Graduate Feedback Survey 2024",
+  "description": "Annual graduate feedback survey",
   "status": "active",
+  "target_graduation_year": 2024,
+  "target_program": "BS Computer Science",
   "questions": [
     {
       "question_text": "Are you currently employed?",
-      "question_type": "multiple_choice",
+      "question_type": "radio",
       "options": ["Yes", "No"],
+      "required": true
+    },
+    {
+      "question_text": "What is your current job title?",
+      "question_type": "text",
+      "required": false
+    },
+    {
+      "question_text": "Rate your satisfaction with the program",
+      "question_type": "select",
+      "options": ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied"],
       "required": true
     }
   ]
+}
+
+Response (201 Created):
+{
+  "id": 1,
+  "title": "Graduate Feedback Survey 2024",
+  "status": "active",
+  "created_at": "2025-11-21T12:00:00Z"
+}
+```
+
+#### Get Survey Responses
+```http
+GET /api/surveys/{id}/responses
+Authorization: Bearer {token}
+
+Response (200 OK):
+{
+  "survey": {
+    "id": 1,
+    "title": "Graduate Feedback Survey 2024"
+  },
+  "responses": [
+    {
+      "id": 1,
+      "graduate_id": 5,
+      "graduate_name": "John Doe",
+      "graduate_email": "john@example.com",
+      "submitted_at": "2025-11-21T14:30:00Z",
+      "answers": [
+        {
+          "question": "Are you currently employed?",
+          "answer": "Yes"
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### Submit Survey Response (Graduate Portal)
+```http
+POST /api/graduate/submit-survey-response
+Authorization: Bearer {token}
+Content-Type: application/json
+
+Request Body:
+{
+  "survey_id": 1,
+  "responses": [
+    {
+      "question_id": 1,
+      "answer": "Yes"
+    },
+    {
+      "question_id": 2,
+      "answer": "Software Engineer"
+    }
+  ]
+}
+```
+
+### Graduate Portal Endpoints
+
+#### Get Profile
+```http
+GET /api/graduate/profile
+Authorization: Bearer {token}
+
+Response (200 OK):
+{
+  "id": 2,
+  "student_id": "2024-001",
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john@example.com",
+  "profile_photo": "profile-photos/xyz.jpg",
+  ...
+}
+```
+
+#### Update Profile
+```http
+PUT /api/graduate/profile
+Authorization: Bearer {token}
+Content-Type: application/json
+
+Request Body:
+{
+  "phone": "+1234567890",
+  "address": "123 New St",
+  "city": "New York"
+}
+```
+
+#### Upload Profile Photo
+```http
+POST /api/graduate/profile-photo
+Authorization: Bearer {token}
+Content-Type: multipart/form-data
+
+Request Body:
+profile_photo: [file]
+
+Response (200 OK):
+{
+  "message": "Profile photo uploaded successfully",
+  "profile_photo": "profile-photos/abc123.jpg"
+}
+```
+
+#### Change Password
+```http
+PUT /api/graduate/change-password
+Authorization: Bearer {token}
+Content-Type: application/json
+
+Request Body:
+{
+  "current_password": "oldpassword",
+  "new_password": "newpassword123",
+  "new_password_confirmation": "newpassword123"
+}
+
+Response (200 OK):
+{
+  "message": "Password changed successfully"
+}
+```
+
+#### Get Notifications
+```http
+GET /api/graduate/notifications
+Authorization: Bearer {token}
+
+Response (200 OK):
+[
+  {
+    "id": 1,
+    "title": "New Survey Available",
+    "message": "Graduate Feedback Survey 2024 is now available",
+    "type": "survey",
+    "read": false,
+    "created_at": "2025-11-21T12:00:00Z"
+  }
+]
+```
+
+#### Mark Notification as Read
+```http
+PUT /api/graduate/notifications/{id}/read
+Authorization: Bearer {token}
+```
+
+#### Delete Notification
+```http
+DELETE /api/graduate/notifications/{id}
+Authorization: Bearer {token}
+```
+
+#### Get Survey History
+```http
+GET /api/graduate/survey-history
+Authorization: Bearer {token}
+
+Response (200 OK):
+{
+  "employment_surveys": [...],
+  "other_surveys": [...]
 }
 ```
 
@@ -436,11 +703,27 @@ Authorization: Bearer {token}
 Response (200 OK):
 {
   "total_graduates": 150,
-  "employed_count": 120,
-  "unemployed_count": 30,
-  "employment_rate": 80,
-  "average_salary": 50000
+  "total_surveys": 10,
+  "active_surveys": 3,
+  "total_responses": 85,
+  "employment_stats": [
+    {"employment_status": "employed", "count": 120},
+    {"employment_status": "unemployed", "count": 30}
+  ],
+  "recent_graduates": [...]
 }
+```
+
+#### Graduates by Year
+```http
+GET /api/analytics/graduates-by-year
+Authorization: Bearer {token}
+
+Response (200 OK):
+[
+  {"graduation_year": "2024", "count": 50},
+  {"graduation_year": "2023", "count": 60}
+]
 ```
 
 ---
@@ -488,18 +771,37 @@ graduate-tracer-system/
 │   │   │       ├── MainLayout.tsx
 │   │   │       └── Sidebar.tsx
 │   │   ├── pages/
-│   │   │   ├── Dashboard.tsx        # Main dashboard
-│   │   │   ├── Login.tsx            # Login page
+│   │   │   ├── Dashboard.tsx        # Admin dashboard with charts
+│   │   │   ├── Login.tsx            # Unified login page
 │   │   │   ├── Analytics.tsx        # Charts & stats
 │   │   │   ├── Reports.tsx          # Reports page
-│   │   │   ├── Settings.tsx         # Settings
+│   │   │   ├── Settings.tsx         # Admin settings
 │   │   │   ├── graduates/
 │   │   │   │   ├── GraduateList.tsx
 │   │   │   │   ├── AddGraduate.tsx  # Separate add form
 │   │   │   │   └── GraduateForm.tsx # Edit form
-│   │   │   └── surveys/
-│   │   │       ├── SurveyList.tsx
-│   │   │       └── SurveyForm.tsx
+│   │   │   ├── surveys/
+│   │   │   │   ├── SurveyList.tsx
+│   │   │   │   ├── SurveyForm.tsx
+│   │   │   │   └── SurveyResponses.tsx  # View responses
+│   │   │   ├── admin/
+│   │   │   │   ├── JobsManagement.tsx
+│   │   │   │   ├── CareerServicesManagement.tsx
+│   │   │   │   └── SupportTicketsManagement.tsx
+│   │   │   └── graduate-portal/
+│   │   │       ├── GraduateDashboard.tsx
+│   │   │       ├── GraduateRegister.tsx
+│   │   │       ├── GraduateSettings.tsx
+│   │   │       ├── EmploymentSurvey.tsx
+│   │   │       ├── CareerUpdates.tsx
+│   │   │       ├── SurveyHistory.tsx
+│   │   │       ├── TakeSurvey.tsx
+│   │   │       ├── Notifications.tsx
+│   │   │       ├── PrivacySettings.tsx
+│   │   │       ├── AlumniResources.tsx
+│   │   │       ├── FeedbackSupport.tsx
+│   │   │       ├── ForgotPassword.tsx
+│   │   │       └── ResetPassword.tsx
 │   │   ├── services/
 │   │   │   └── api.ts           # Axios configuration
 │   │   ├── lib/
@@ -863,54 +1165,69 @@ For support and questions:
 ## 🔄 Changelog
 
 ### Version 1.0.0 (November 21, 2025)
-- ✨ Initial release
-- ✅ Complete graduate management system
-- ✅ Survey builder with dynamic questions
-- ✅ Analytics dashboard with interactive charts
-- ✅ Report generation (PDF, Excel, CSV)
-- ✅ Authentic ShadCN UI design system
-- ✅ Fully responsive layout
-- ✅ RESTful API with Laravel Sanctum
-- ✅ TypeScript for type safety
-- ✅ Comprehensive documentation
+- ✨ Initial release with dual-portal architecture
+- ✅ **Admin Portal**: Complete graduate management system
+- ✅ **Graduate Portal**: Self-service portal with 10+ pages
+- ✅ **Dynamic Survey System**: Create surveys with 5 question types (text, textarea, radio, checkbox, select)
+- ✅ **Survey Response Viewer**: Admin can view all graduate submissions
+- ✅ **Real-time Notifications**: Auto-refresh every 10 seconds, auto-create on admin actions
+- ✅ **Profile Photo Upload**: Graduates can upload profile pictures (2MB max)
+- ✅ **Password Management**: Secure password change functionality
+- ✅ **Analytics Dashboard**: Interactive charts with Recharts (bar + pie charts)
+- ✅ **Resource Management**: Jobs, career services, training programs, support tickets
+- ✅ **Notification System**: Bell icon with dropdown modal, mark as read, delete
+- ✅ **Custom Green Header**: #457507 color for both portals
+- ✅ **Authentic ShadCN UI**: Fully responsive with modern design
+- ✅ **RESTful API**: Laravel Sanctum authentication with 20+ endpoints
+- ✅ **TypeScript**: Complete type safety
+- ✅ **8 Database Tables**: Users, graduates, surveys, questions, responses, notifications, jobs, etc.
+- ✅ **Comprehensive Documentation**: Setup guides, API docs, troubleshooting
 
 ---
 
 ## 🗺️ Roadmap
 
 ### Version 1.1.0
-- [ ] Email notifications for surveys
+- [ ] Email notifications for surveys (SMTP integration)
 - [ ] Advanced analytics with custom date ranges
 - [ ] Bulk import from Excel/CSV
-- [ ] Graduate profile pictures
-- [ ] Enhanced search with filters
+- [ ] Enhanced search with multiple filters
+- [ ] Push notifications (Web Push API)
+- [ ] Export survey responses to Excel/PDF
+- [ ] Admin dashboard customization
 
 ### Version 1.2.0
 - [ ] Mobile app (React Native)
 - [ ] Multi-language support (i18n)
 - [ ] Advanced reporting with custom queries
 - [ ] Integration with LinkedIn API
-- [ ] Real-time updates with WebSockets
+- [ ] Real-time updates with WebSockets (replace polling)
+- [ ] Alumni directory with networking features
+- [ ] Event calendar and RSVP system
 
 ### Version 2.0.0
-- [ ] Advanced user roles and permissions
+- [ ] Advanced user roles and permissions (multiple admin levels)
 - [ ] Audit logging and activity tracking
-- [ ] Alumni networking features
-- [ ] Job board integration
-- [ ] Event management system
+- [ ] Job board integration with application tracking
+- [ ] Video testimonials from graduates
+- [ ] AI-powered analytics and insights
+- [ ] Mobile app notifications
+- [ ] Two-factor authentication (2FA)
 
 ---
 
 ## 📚 Additional Documentation
 
-- [API Documentation](docs/API.md)
-- [Database Schema](docs/DATABASE.md)
-- [Deployment Guide](docs/DEPLOYMENT.md)
-- [ShadCN UI Guide](docs/SHADCN_AUTHENTIC_GUIDE.md)
-- [Validation Fix Guide](docs/VALIDATION_FIX.md)
-- [Problems Fixed](docs/PROBLEMS_FIXED.md)
-- [Login UI Update](docs/LOGIN_UI_UPDATE.md)
-- [Graduate Forms Separated](docs/GRADUATE_FORMS_SEPARATED.md)
+- [Complete Implementation Guide](COMPLETE_IMPLEMENTATION.md) - Full feature documentation
+- [ShadCN UI Guide](SHADCN_AUTHENTIC_GUIDE.md) - UI component usage
+- [Validation Fix Guide](VALIDATION_FIX.md) - Form validation patterns
+- [Login UI Update](LOGIN_UI_UPDATE.md) - Authentication system
+- [Graduate Forms Separated](GRADUATE_FORMS_SEPARATED.md) - Form architecture
+- [Problems Fixed](PROBLEMS_FIXED.md) - Troubleshooting guide
+- [API Reference](API_REFERENCE.md) - Complete API documentation
+- [Architecture](ARCHITECTURE.md) - System architecture overview
+- [Installation](INSTALLATION.md) - Detailed installation guide
+- [Quick Start](QUICK_START.md) - Get started in 5 minutes
 
 ---
 

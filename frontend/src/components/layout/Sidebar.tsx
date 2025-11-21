@@ -7,6 +7,9 @@ import {
   FileText,
   Settings,
   X,
+  Briefcase,
+  GraduationCap,
+  MessageSquare,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -46,6 +49,21 @@ const navItems: NavItem[] = [
     name: 'Reports',
     path: '/reports',
     icon: <FileText className="h-5 w-5" />,
+  },
+  {
+    name: 'Jobs',
+    path: '/jobs',
+    icon: <Briefcase className="h-5 w-5" />,
+  },
+  {
+    name: 'Services',
+    path: '/career-services',
+    icon: <GraduationCap className="h-5 w-5" />,
+  },
+  {
+    name: 'Support',
+    path: '/support-tickets',
+    icon: <MessageSquare className="h-5 w-5" />,
   },
   {
     name: 'Settings',

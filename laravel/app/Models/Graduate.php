@@ -18,16 +18,20 @@ class Graduate extends Model
         'phone',
         'alternative_email',
         'alternative_phone',
+        'date_of_birth',
         'program',
         'major',
         'graduation_year',
+        'graduation_date',
+        'current_status',
         'degree_level',
         'address',
         'city',
         'state',
         'country',
         'postal_code',
-        'gpa'
+        'gpa',
+        'profile_photo'
     ];
 
     protected $casts = [

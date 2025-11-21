@@ -145,14 +145,15 @@ export default function SurveyList() {
                 </div>
               </CardContent>
               <CardFooter className="flex gap-2 mt-auto">
-                <Button variant="outline" size="sm" className="flex-1" asChild>
-                  <Link to={`/surveys/${survey.id}/edit`}>
-                    <Pencil className="mr-2 h-4 w-4" />
-                    Edit
+                <Button variant="default" size="sm" className="flex-1" asChild>
+                  <Link to={`/surveys/${survey.id}/responses`}>
+                    View Responses
                   </Link>
                 </Button>
-                <Button variant="outline" size="sm">
-                  <Copy className="h-4 w-4" />
+                <Button variant="outline" size="sm" asChild>
+                  <Link to={`/surveys/${survey.id}/edit`}>
+                    <Pencil className="h-4 w-4" />
+                  </Link>
                 </Button>
                 <Button
                   variant="outline"

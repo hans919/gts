@@ -274,7 +274,7 @@ export default function SurveyForm() {
                         </div>
 
                         <div className="grid gap-2">
-                          <Label>Options</Label>
+                          <Label>Required</Label>
                           <label className="flex h-10 items-center gap-2 rounded-md border border-input bg-background px-3 py-2">
                             <input
                               type="checkbox"
@@ -286,6 +286,25 @@ export default function SurveyForm() {
                           </label>
                         </div>
                       </div>
+
+                      {/* Show options field for radio, checkbox, and select types */}
+                      {['radio', 'checkbox', 'select'].includes(question.type) && (
+                        <div className="grid gap-2">
+                          <Label>Options (one per line)</Label>
+                          <Textarea
+                            value={Array.isArray(question.options) ? question.options.join('\n') : ''}
+                            onChange={(e) => {
+                              const optionsArray = e.target.value.split('\n');
+                              updateQuestion(index, 'options', optionsArray);
+                            }}
+                            placeholder="Option 1&#10;Option 2&#10;Option 3"
+                            rows={4}
+                          />
+                          <p className="text-xs text-muted-foreground">
+                            Enter each option on a new line
+                          </p>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 ))}

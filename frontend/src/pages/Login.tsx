@@ -34,8 +34,13 @@ export default function Login() {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
 
-      // Redirect to dashboard
-      navigate('/dashboard');
+      // Redirect based on user role
+      const userRole = response.data.user.role;
+      if (userRole === 'graduate') {
+        navigate('/graduate/dashboard');
+      } else {
+        navigate('/dashboard'); // Admin, staff, or other roles
+      }
     } catch (err: any) {
       console.error('Login error:', err.response?.data);
       
@@ -143,26 +148,42 @@ export default function Login() {
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2">
               <Info className="h-4 w-4 text-muted-foreground" />
-              <CardTitle className="text-sm font-medium">Test Credentials</CardTitle>
+              <CardTitle className="text-sm font-medium">Role-Based Access</CardTitle>
             </div>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
+            <p className="text-muted-foreground mb-3">
+              Login redirects based on your role:
+            </p>
             <div className="flex items-start gap-2">
               <span className="font-medium text-muted-foreground min-w-[70px]">Admin:</span>
               <div className="flex-1">
-                <p className="font-mono text-xs">admin@test.com</p>
-                <p className="font-mono text-xs text-muted-foreground">password123</p>
+                <p className="text-xs">→ Admin Dashboard</p>
+                <p className="font-mono text-xs text-muted-foreground">admin@test.com / password123</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <span className="font-medium text-muted-foreground min-w-[70px]">Graduate:</span>
               <div className="flex-1">
-                <p className="font-mono text-xs">graduate@test.com</p>
-                <p className="font-mono text-xs text-muted-foreground">password123</p>
+                <p className="text-xs">→ Graduate Portal</p>
+                <p className="font-mono text-xs text-muted-foreground">graduate@test.com / password123</p>
               </div>
             </div>
           </CardContent>
         </Card>
+
+        {/* Register Link */}
+        <div className="text-center">
+          <p className="text-sm text-muted-foreground">
+            Don't have an account?{' '}
+            <a 
+              href="/register" 
+              className="text-primary hover:underline font-medium"
+            >
+              Register as Graduate
+            </a>
+          </p>
+        </div>
 
         {/* Footer */}
         <p className="text-center text-xs text-muted-foreground">
