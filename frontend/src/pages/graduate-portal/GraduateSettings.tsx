@@ -9,7 +9,6 @@ import axios from 'axios';
 
 export default function GraduateSettings() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState<any>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);

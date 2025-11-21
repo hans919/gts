@@ -283,7 +283,7 @@ export default function Dashboard() {
                   dataKey="count"
                   nameKey="employment_status"
                 >
-                  {data.employment_stats.map((entry, index) => (
+                  {data.employment_stats.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
