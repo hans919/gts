@@ -834,7 +834,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👨‍💻 Author
 
 **Your Name**
-- GitHub: [@yourusername](https://github.com/hans919)
+- GitHub: [@hans919](https://github.com/hans919)
 - Email: delossantoshanschristian@sjcbi.edu.ph
 
 ---
