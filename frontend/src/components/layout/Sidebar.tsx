@@ -81,7 +81,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-sm">GTS</span>
               </div>
-              <span className="font-semibold">GTS</span>
+              <span className="font-semibold">SJCB TRS</span>
             </div>
             <Button
               variant="ghost"

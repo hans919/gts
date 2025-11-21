@@ -37,7 +37,7 @@ export default function Header({ onMenuClick, user }: HeaderProps) {
             <Menu className="h-6 w-6" />
           </Button>
           <div>
-            <h1 className="text-xl font-bold">Graduate Tracer System</h1>
+            <h1 className="text-xl font-bold">SJCB Tracer System</h1>
             <p className="text-xs text-muted-foreground hidden sm:block">Track and manage alumni data</p>
           </div>
         </div>
