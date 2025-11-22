@@ -177,14 +177,14 @@ export default function Login() {
               <span className="font-medium text-muted-foreground min-w-[70px]">Admin:</span>
               <div className="flex-1">
                 <p className="text-xs">→ Admin Dashboard</p>
-                <p className="font-mono text-xs text-muted-foreground">admin@test.com / password123</p>
+                <p className="font-mono text-xs text-muted-foreground">admin@sjcb.edu.ph / admin123</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <span className="font-medium text-muted-foreground min-w-[70px]">Graduate:</span>
               <div className="flex-1">
                 <p className="text-xs">→ Graduate Portal</p>
-                <p className="font-mono text-xs text-muted-foreground">graduate@test.com / password123</p>
+                <p className="font-mono text-xs text-muted-foreground">hans@gmail.com / hans1234</p>
               </div>
             </div>
           </CardContent>
