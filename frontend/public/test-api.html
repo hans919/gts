@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Direct API Test</title>
+</head>
+<body>
+    <h1>Direct API Test</h1>
+    <button onclick="testLogin()">Test Login</button>
+    <div id="result"></div>
+
+    <script>
+        const API_URL = 'https://lightsteelblue-locust-816886.hostingersite.com/api';
+        
+        async function testLogin() {
+            const result = document.getElementById('result');
+            result.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'admin@sjcb.edu.ph',
+                        password: 'admin123'
+                    })
+                });
+                
+                const data = await response.json();
+                result.innerHTML = `
+                    <h3>Response:</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                    <p>Status: ${response.status}</p>
+                    <p>API URL: ${API_URL}</p>
+                `;
+            } catch (error) {
+                result.innerHTML = `
+                    <h3>Error:</h3>
+                    <p style="color: red;">${error.message}</p>
+                    <p>API URL: ${API_URL}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
