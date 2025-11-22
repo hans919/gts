@@ -41,7 +41,7 @@ export default function SurveyHistory() {
         return;
       }
 
-      const response = await axios.get('http://127.0.0.1:8000/api/graduate/survey-history', {
+      const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/survey-history', {
         headers: { Authorization: `Bearer ${token}` },
       });
 

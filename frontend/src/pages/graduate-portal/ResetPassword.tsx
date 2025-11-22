@@ -45,7 +45,7 @@ export default function ResetPassword() {
     }
 
     try {
-      await axios.post('http://127.0.0.1:8000/api/reset-password', {
+      await axios.post('https://lightsteelblue-locust-816886.hostingersite.com/api/reset-password', {
         token,
         email,
         password: formData.password,

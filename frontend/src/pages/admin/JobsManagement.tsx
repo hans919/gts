@@ -41,7 +41,7 @@ export default function JobsManagement() {
   const fetchJobs = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://127.0.0.1:8000/api/admin/jobs', {
+      const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/admin/jobs', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setJobs(response.data);
@@ -59,14 +59,14 @@ export default function JobsManagement() {
       
       if (editingJob) {
         await axios.put(
-          `http://127.0.0.1:8000/api/admin/jobs/${editingJob.id}`,
+          `https://lightsteelblue-locust-816886.hostingersite.com/api/admin/jobs/${editingJob.id}`,
           formData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         alert('Job updated successfully!');
       } else {
         await axios.post(
-          'http://127.0.0.1:8000/api/admin/jobs',
+          'https://lightsteelblue-locust-816886.hostingersite.com/api/admin/jobs',
           formData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -100,7 +100,7 @@ export default function JobsManagement() {
     
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://127.0.0.1:8000/api/admin/jobs/${id}`, {
+      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/admin/jobs/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert('Job deleted successfully!');

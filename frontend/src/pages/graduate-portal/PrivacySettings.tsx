@@ -44,7 +44,7 @@ export default function PrivacySettings() {
         return;
       }
 
-      const response = await axios.get('http://127.0.0.1:8000/api/graduate/privacy-settings', {
+      const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/privacy-settings', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -75,7 +75,7 @@ export default function PrivacySettings() {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        'http://127.0.0.1:8000/api/graduate/privacy-settings',
+        'https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/privacy-settings',
         settings,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -92,7 +92,7 @@ export default function PrivacySettings() {
   const exportData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://127.0.0.1:8000/api/graduate/export-data', {
+      const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/export-data', {
         headers: { Authorization: `Bearer ${token}` },
         responseType: 'blob',
       });
@@ -128,7 +128,7 @@ export default function PrivacySettings() {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete('http://127.0.0.1:8000/api/graduate/account', {
+      await axios.delete('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/account', {
         headers: { Authorization: `Bearer ${token}` },
       });
 

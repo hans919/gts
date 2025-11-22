@@ -29,7 +29,7 @@ export default function SurveyList() {
   const fetchSurveys = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://127.0.0.1:8000/api/surveys`, {
+      const response = await axios.get(`https://lightsteelblue-locust-816886.hostingersite.com/api/surveys`, {
         headers: { Authorization: `Bearer ${token}` },
         params: { search: searchTerm },
       });
@@ -46,7 +46,7 @@ export default function SurveyList() {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://127.0.0.1:8000/api/surveys/${id}`, {
+      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/surveys/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchSurveys();

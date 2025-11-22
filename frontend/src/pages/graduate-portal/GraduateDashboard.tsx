@@ -101,7 +101,7 @@ export default function GraduateDashboard() {
         return;
       }
 
-      const response = await axios.get('http://127.0.0.1:8000/api/graduate/profile', {
+      const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/profile', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -119,7 +119,7 @@ export default function GraduateDashboard() {
   const fetchNotifications = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://127.0.0.1:8000/api/graduate/notifications', {
+      const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/notifications', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNotifications(response.data);
@@ -134,7 +134,7 @@ export default function GraduateDashboard() {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://127.0.0.1:8000/api/graduate/notifications/${id}/read`,
+        `https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/notifications/${id}/read`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -147,7 +147,7 @@ export default function GraduateDashboard() {
   const deleteNotification = async (id: number) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://127.0.0.1:8000/api/graduate/notifications/${id}`, {
+      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/notifications/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchNotifications();
@@ -178,7 +178,7 @@ export default function GraduateDashboard() {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        'http://127.0.0.1:8000/api/graduate/profile',
+        'https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/profile',
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -51,7 +51,7 @@ export default function GraduateRegister() {
     }
 
     try {
-      await axios.post('http://127.0.0.1:8000/api/register', {
+      await axios.post('https://lightsteelblue-locust-816886.hostingersite.com/api/register', {
         ...formData,
         role: 'graduate' // Assign graduate role
       });

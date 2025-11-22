@@ -39,7 +39,7 @@ export default function SurveyForm() {
   const fetchSurvey = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://127.0.0.1:8000/api/surveys/${id}`, {
+      const response = await axios.get(`https://lightsteelblue-locust-816886.hostingersite.com/api/surveys/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFormData(response.data);
@@ -87,9 +87,9 @@ export default function SurveyForm() {
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
       if (id) {
-        await axios.put(`http://127.0.0.1:8000/api/surveys/${id}`, formData, config);
+        await axios.put(`https://lightsteelblue-locust-816886.hostingersite.com/api/surveys/${id}`, formData, config);
       } else {
-        await axios.post('http://127.0.0.1:8000/api/surveys', formData, config);
+        await axios.post('https://lightsteelblue-locust-816886.hostingersite.com/api/surveys', formData, config);
       }
 
       navigate('/surveys');

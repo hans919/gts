@@ -41,9 +41,9 @@ export default function Analytics() {
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
       const [dashboardRes, employmentRes, salaryRes] = await Promise.all([
-        axios.get('http://127.0.0.1:8000/api/analytics/dashboard', config),
-        axios.get('http://127.0.0.1:8000/api/analytics/employment-status', config),
-        axios.get('http://127.0.0.1:8000/api/analytics/salary-distribution', config),
+        axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/analytics/dashboard', config),
+        axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/analytics/employment-status', config),
+        axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/analytics/salary-distribution', config),
       ]);
 
       setStats(dashboardRes.data);

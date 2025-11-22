@@ -36,7 +36,7 @@ export default function Notifications() {
         return;
       }
 
-      const response = await axios.get('http://127.0.0.1:8000/api/graduate/notifications', {
+      const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/notifications', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -52,7 +52,7 @@ export default function Notifications() {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://127.0.0.1:8000/api/graduate/notifications/${notificationId}/read`,
+        `https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/notifications/${notificationId}/read`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -69,7 +69,7 @@ export default function Notifications() {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        'http://127.0.0.1:8000/api/graduate/notifications/read-all',
+        'https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/notifications/read-all',
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -84,7 +84,7 @@ export default function Notifications() {
     try {
       const token = localStorage.getItem('token');
       await axios.delete(
-        `http://127.0.0.1:8000/api/graduate/notifications/${notificationId}`,
+        `https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/notifications/${notificationId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 

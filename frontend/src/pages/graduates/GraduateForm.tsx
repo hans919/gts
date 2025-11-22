@@ -41,7 +41,7 @@ export default function GraduateForm() {
   const fetchGraduate = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://127.0.0.1:8000/api/graduates/${id}`, {
+      const response = await axios.get(`https://lightsteelblue-locust-816886.hostingersite.com/api/graduates/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFormData(response.data);
@@ -69,7 +69,7 @@ export default function GraduateForm() {
       const token = localStorage.getItem('token');
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
-      await axios.put(`http://127.0.0.1:8000/api/graduates/${id}`, formData, config);
+      await axios.put(`https://lightsteelblue-locust-816886.hostingersite.com/api/graduates/${id}`, formData, config);
 
       navigate('/graduates');
     } catch (err: any) {

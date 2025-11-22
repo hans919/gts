@@ -38,13 +38,13 @@ export default function SurveyResponses() {
       const token = localStorage.getItem('token');
       
       // Fetch survey details
-      const surveyRes = await axios.get(`http://127.0.0.1:8000/api/surveys/${id}`, {
+      const surveyRes = await axios.get(`https://lightsteelblue-locust-816886.hostingersite.com/api/surveys/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSurvey(surveyRes.data);
 
       // Fetch responses
-      const responsesRes = await axios.get(`http://127.0.0.1:8000/api/surveys/${id}/responses`, {
+      const responsesRes = await axios.get(`https://lightsteelblue-locust-816886.hostingersite.com/api/surveys/${id}/responses`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setResponses(responsesRes.data);

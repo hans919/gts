@@ -38,7 +38,7 @@ export default function TakeSurvey() {
   const fetchSurvey = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://127.0.0.1:8000/api/surveys/${id}`, {
+      const response = await axios.get(`https://lightsteelblue-locust-816886.hostingersite.com/api/surveys/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSurvey(response.data);
@@ -103,7 +103,7 @@ export default function TakeSurvey() {
       }));
 
       await axios.post(
-        'http://127.0.0.1:8000/api/graduate/submit-survey-response',
+        'https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/submit-survey-response',
         {
           survey_id: id,
           answers: formattedAnswers,

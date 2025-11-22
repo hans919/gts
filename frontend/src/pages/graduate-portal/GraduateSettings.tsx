@@ -28,12 +28,12 @@ export default function GraduateSettings() {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://127.0.0.1:8000/api/graduate/profile', {
+      const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/profile', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProfile(response.data);
       if (response.data.profile_photo) {
-        setPhotoPreview(`http://127.0.0.1:8000/storage/${response.data.profile_photo}`);
+        setPhotoPreview(`https://lightsteelblue-locust-816886.hostingersite.com/storage/${response.data.profile_photo}`);
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -61,7 +61,7 @@ export default function GraduateSettings() {
       const formData = new FormData();
       formData.append('profile_photo', photoFile);
 
-      const response = await axios.post('http://127.0.0.1:8000/api/graduate/profile-photo', formData, {
+      const response = await axios.post('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/profile-photo', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
@@ -83,7 +83,7 @@ export default function GraduateSettings() {
       }
       
       // Set preview to new photo URL
-      setPhotoPreview(`http://127.0.0.1:8000/storage/${response.data.profile_photo}`);
+      setPhotoPreview(`https://lightsteelblue-locust-816886.hostingersite.com/storage/${response.data.profile_photo}`);
       setPhotoFile(null);
       
       // Reload the page to update header
@@ -113,7 +113,7 @@ export default function GraduateSettings() {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        'http://127.0.0.1:8000/api/graduate/change-password',
+        'https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/change-password',
         {
           current_password: passwordData.current_password,
           new_password: passwordData.new_password,

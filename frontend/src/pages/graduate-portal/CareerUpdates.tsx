@@ -47,7 +47,7 @@ export default function CareerUpdates() {
         return;
       }
 
-      const response = await axios.get('http://127.0.0.1:8000/api/graduate/career-updates', {
+      const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/career-updates', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -74,7 +74,7 @@ export default function CareerUpdates() {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://127.0.0.1:8000/api/graduate/career-updates',
+        'https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/career-updates',
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

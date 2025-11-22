@@ -49,7 +49,7 @@ export default function AddGraduate() {
       const token = localStorage.getItem('token');
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
-      await axios.post('http://127.0.0.1:8000/api/graduates', formData, config);
+      await axios.post('https://lightsteelblue-locust-816886.hostingersite.com/api/graduates', formData, config);
 
       navigate('/graduates');
     } catch (err: any) {

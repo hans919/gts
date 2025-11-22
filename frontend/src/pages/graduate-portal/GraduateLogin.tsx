@@ -30,7 +30,7 @@ export default function GraduateLogin() {
     setError('');
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/graduate/login', formData);
+      const response = await axios.post('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/login', formData);
       
       // Store token and user data
       localStorage.setItem('graduate_token', response.data.token);

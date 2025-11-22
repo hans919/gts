@@ -49,7 +49,7 @@ export default function FeedbackSupport() {
         return;
       }
 
-      const response = await axios.get('http://127.0.0.1:8000/api/graduate/support-tickets', {
+      const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/support-tickets', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -79,7 +79,7 @@ export default function FeedbackSupport() {
       });
 
       await axios.post(
-        'http://127.0.0.1:8000/api/graduate/support-tickets',
+        'https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/support-tickets',
         formDataToSend,
         {
           headers: {

@@ -32,7 +32,7 @@ export default function GraduateList() {
   const fetchGraduates = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://127.0.0.1:8000/api/graduates`, {
+      const response = await axios.get(`https://lightsteelblue-locust-816886.hostingersite.com/api/graduates`, {
         headers: { Authorization: `Bearer ${token}` },
         params: { page: currentPage, search: searchTerm },
       });
@@ -50,7 +50,7 @@ export default function GraduateList() {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://127.0.0.1:8000/api/graduates/${id}`, {
+      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/graduates/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchGraduates();

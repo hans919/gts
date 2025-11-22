@@ -36,7 +36,7 @@ export default function SupportTicketsManagement() {
   const fetchTickets = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://127.0.0.1:8000/api/admin/support-tickets', {
+      const res = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/admin/support-tickets', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTickets(res.data);
@@ -59,7 +59,7 @@ export default function SupportTicketsManagement() {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://127.0.0.1:8000/api/admin/support-tickets/${selectedTicket.id}`,
+        `https://lightsteelblue-locust-816886.hostingersite.com/api/admin/support-tickets/${selectedTicket.id}`,
         {
           status,
           admin_response: response,
@@ -82,7 +82,7 @@ export default function SupportTicketsManagement() {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://127.0.0.1:8000/api/admin/support-tickets/${id}`, {
+      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/admin/support-tickets/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert('Ticket deleted successfully!');

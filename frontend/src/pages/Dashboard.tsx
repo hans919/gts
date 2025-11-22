@@ -61,7 +61,7 @@ export default function Dashboard() {
   const fetchDashboardData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://127.0.0.1:8000/api/analytics/dashboard', {
+      const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/analytics/dashboard', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setData(response.data);
@@ -75,7 +75,7 @@ export default function Dashboard() {
   const fetchGraduatesByYear = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://127.0.0.1:8000/api/analytics/graduates-by-year', {
+      const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/analytics/graduates-by-year', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setGraduatesByYear(response.data);

@@ -64,13 +64,13 @@ export default function AlumniResources() {
       }
 
       const [jobsRes, servicesRes, trainingRes] = await Promise.all([
-        axios.get('http://127.0.0.1:8000/api/graduate/jobs', {
+        axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/jobs', {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get('http://127.0.0.1:8000/api/graduate/career-services', {
+        axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/career-services', {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get('http://127.0.0.1:8000/api/graduate/training-programs', {
+        axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/training-programs', {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -89,7 +89,7 @@ export default function AlumniResources() {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        `http://127.0.0.1:8000/api/graduate/jobs/${jobId}/bookmark`,
+        `https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/jobs/${jobId}/bookmark`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

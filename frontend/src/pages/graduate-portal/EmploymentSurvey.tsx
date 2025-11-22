@@ -51,7 +51,7 @@ export default function EmploymentSurvey() {
         return;
       }
 
-      const response = await axios.get('http://127.0.0.1:8000/api/graduate/surveys', {
+      const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/surveys', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -78,7 +78,7 @@ export default function EmploymentSurvey() {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://127.0.0.1:8000/api/graduate/surveys',
+        'https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/surveys',
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -20,7 +20,7 @@ export default function ForgotPassword() {
     setSuccess('');
 
     try {
-      await axios.post('http://127.0.0.1:8000/api/forgot-password', { email });
+      await axios.post('https://lightsteelblue-locust-816886.hostingersite.com/api/forgot-password', { email });
       
       setSuccess('Password reset link has been sent to your email. Please check your inbox.');
       setEmail('');
