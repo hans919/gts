@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import MainLayout from './components/layout/MainLayout';
 import Dashboard from './pages/Dashboard';
+import ProtectedRoute from './components/ProtectedRoute';
 import GraduateList from './pages/graduates/GraduateList';
 import AddGraduate from './pages/graduates/AddGraduate';
 import GraduateForm from './pages/graduates/GraduateForm';
@@ -42,7 +43,7 @@ function App() {
       <Route path="/reset-password" element={<ResetPassword />} />
       
       {/* Admin Routes */}
-      <Route path="/" element={<MainLayout />}>
+      <Route path="/" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><MainLayout /></ProtectedRoute>}>
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="graduates" element={<GraduateList />} />
@@ -61,16 +62,16 @@ function App() {
       </Route>
 
       {/* Graduate Portal Routes */}
-      <Route path="/graduate/dashboard" element={<GraduateDashboard />} />
-      <Route path="/graduate/survey" element={<EmploymentSurvey />} />
-      <Route path="/graduate/career-updates" element={<CareerUpdates />} />
-      <Route path="/graduate/notifications" element={<Notifications />} />
-      <Route path="/graduate/survey-history" element={<SurveyHistory />} />
-      <Route path="/graduate/take-survey/:id" element={<TakeSurvey />} />
-      <Route path="/graduate/privacy" element={<PrivacySettings />} />
-      <Route path="/graduate/resources" element={<AlumniResources />} />
-      <Route path="/graduate/support" element={<FeedbackSupport />} />
-      <Route path="/graduate/settings" element={<GraduateSettings />} />
+      <Route path="/graduate/dashboard" element={<ProtectedRoute allowedRoles={['graduate']}><GraduateDashboard /></ProtectedRoute>} />
+      <Route path="/graduate/survey" element={<ProtectedRoute allowedRoles={['graduate']}><EmploymentSurvey /></ProtectedRoute>} />
+      <Route path="/graduate/career-updates" element={<ProtectedRoute allowedRoles={['graduate']}><CareerUpdates /></ProtectedRoute>} />
+      <Route path="/graduate/notifications" element={<ProtectedRoute allowedRoles={['graduate']}><Notifications /></ProtectedRoute>} />
+      <Route path="/graduate/survey-history" element={<ProtectedRoute allowedRoles={['graduate']}><SurveyHistory /></ProtectedRoute>} />
+      <Route path="/graduate/take-survey/:id" element={<ProtectedRoute allowedRoles={['graduate']}><TakeSurvey /></ProtectedRoute>} />
+      <Route path="/graduate/privacy" element={<ProtectedRoute allowedRoles={['graduate']}><PrivacySettings /></ProtectedRoute>} />
+      <Route path="/graduate/resources" element={<ProtectedRoute allowedRoles={['graduate']}><AlumniResources /></ProtectedRoute>} />
+      <Route path="/graduate/support" element={<ProtectedRoute allowedRoles={['graduate']}><FeedbackSupport /></ProtectedRoute>} />
+      <Route path="/graduate/settings" element={<ProtectedRoute allowedRoles={['graduate']}><GraduateSettings /></ProtectedRoute>} />
     </Routes>
   );
 }

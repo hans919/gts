@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Loader2, GraduationCap, Mail, Lock, Info } from 'lucide-react';
@@ -13,6 +13,24 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userStr = localStorage.getItem('user');
+    
+    if (token && userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        const redirectPath = user.role === 'graduate' ? '/graduate/dashboard' : '/dashboard';
+        navigate(redirectPath, { replace: true });
+      } catch (error) {
+        // Invalid user data, clear it
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,12 +52,12 @@ export default function Login() {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
 
-      // Redirect based on user role
+      // Redirect based on user role - use replace to prevent back navigation
       const userRole = response.data.user.role;
       if (userRole === 'graduate') {
-        navigate('/graduate/dashboard');
+        navigate('/graduate/dashboard', { replace: true });
       } else {
-        navigate('/dashboard'); // Admin, staff, or other roles
+        navigate('/dashboard', { replace: true }); // Admin, staff, or other roles
       }
     } catch (err: any) {
       console.error('Login error:', err.response?.data);

@@ -20,7 +20,12 @@ export default function Header({ onMenuClick, user }: HeaderProps) {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    navigate('/login');
+    // Clear session storage as well
+    sessionStorage.clear();
+    // Use replace to prevent back navigation
+    navigate('/login', { replace: true });
+    // Force reload to clear any cached state
+    window.location.reload();
   };
 
   return (
