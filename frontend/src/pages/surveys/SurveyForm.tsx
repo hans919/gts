@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import { api } from '@/services/api';
 import { ChevronLeft, Loader2, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -38,10 +38,7 @@ export default function SurveyForm() {
 
   const fetchSurvey = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`https://lightsteelblue-locust-816886.hostingersite.com/api/surveys/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await api.get(`/surveys/${id}`);
       setFormData(response.data);
     } catch (error) {
       console.error('Error fetching survey:', error);
@@ -83,13 +80,10 @@ export default function SurveyForm() {
     setError('');
 
     try {
-      const token = localStorage.getItem('token');
-      const config = { headers: { Authorization: `Bearer ${token}` } };
-
       if (id) {
-        await axios.put(`https://lightsteelblue-locust-816886.hostingersite.com/api/surveys/${id}`, formData, config);
+        await api.put(`/surveys/${id}`, formData);
       } else {
-        await axios.post('https://lightsteelblue-locust-816886.hostingersite.com/api/surveys', formData, config);
+        await api.post('/surveys', formData);
       }
 
       navigate('/surveys');

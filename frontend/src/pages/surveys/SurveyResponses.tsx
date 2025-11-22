@@ -4,7 +4,7 @@ import { Loader2, ArrowLeft, Users, FileText, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import axios from 'axios';
+import { api } from '@/services/api';
 
 interface Response {
   id: number;
@@ -35,18 +35,12 @@ export default function SurveyResponses() {
 
   const fetchData = async () => {
     try {
-      const token = localStorage.getItem('token');
-      
       // Fetch survey details
-      const surveyRes = await axios.get(`https://lightsteelblue-locust-816886.hostingersite.com/api/surveys/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const surveyRes = await api.get(`/surveys/${id}`);
       setSurvey(surveyRes.data);
 
       // Fetch responses
-      const responsesRes = await axios.get(`https://lightsteelblue-locust-816886.hostingersite.com/api/surveys/${id}/responses`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const responsesRes = await api.get(`/surveys/${id}/responses`);
       setResponses(responsesRes.data);
       
       setLoading(false);

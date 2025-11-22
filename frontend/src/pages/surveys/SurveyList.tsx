@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { api } from '@/services/api';
 import { Plus, Search, Calendar, Pencil, Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,9 +28,7 @@ export default function SurveyList() {
 
   const fetchSurveys = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`https://lightsteelblue-locust-816886.hostingersite.com/api/surveys`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const response = await api.get('/surveys', {
         params: { search: searchTerm },
       });
       setSurveys(response.data.data);
@@ -45,10 +43,7 @@ export default function SurveyList() {
     if (!confirm('Are you sure you want to delete this survey?')) return;
 
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/surveys/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.delete(`/surveys/${id}`);
       fetchSurveys();
     } catch (error) {
       console.error('Error deleting survey:', error);
