@@ -349,7 +349,7 @@ export default function GraduateDashboard() {
                   </div>
                   {profile.profile_photo ? (
                     <img
-                      src={`http://127.0.0.1:8000/storage/${profile.profile_photo}`}
+                      src={`https://lightsteelblue-locust-816886.hostingersite.com/storage/${profile.profile_photo}`}
                       alt="Profile"
                       className="h-10 w-10 rounded-full object-cover border-2 border-gray-200"
                     />
