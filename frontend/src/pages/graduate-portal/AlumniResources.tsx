@@ -4,7 +4,7 @@ import { Loader2, Briefcase, GraduationCap, Users, BookOpen, Calendar, MapPin, E
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import axios from 'axios';
+import { api } from '@/services/api';
 
 interface JobPosting {
   id: number;
@@ -57,22 +57,10 @@ export default function AlumniResources() {
 
   const fetchResources = async () => {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        navigate('/login');
-        return;
-      }
-
       const [jobsRes, servicesRes, trainingRes] = await Promise.all([
-        axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/jobs', {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/career-services', {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/training-programs', {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
+        api.get('/graduate/jobs'),
+        api.get('/graduate/career-services'),
+        api.get('/graduate/training-programs'),
       ]);
 
       setJobs(jobsRes.data);
@@ -87,12 +75,7 @@ export default function AlumniResources() {
 
   const toggleBookmark = async (jobId: number) => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.post(
-        `https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/jobs/${jobId}/bookmark`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.post(`/graduate/jobs/${jobId}/bookmark`);
 
       setJobs(jobs.map(job => 
         job.id === jobId ? { ...job, bookmarked: !job.bookmarked } : job
@@ -132,17 +115,17 @@ export default function AlumniResources() {
       {/* Header */}
       <header className="bg-white border-b shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={() => navigate('/graduate/dashboard')}>
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <div className="flex items-center space-x-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <BookOpen className="h-5 w-5 text-primary" />
               </div>
-              <div>
-                <h1 className="text-xl font-bold">Alumni Resources</h1>
-                <p className="text-sm text-muted-foreground">Career opportunities, services, and training</p>
+              <div className="min-w-0">
+                <h1 className="text-lg sm:text-xl font-bold truncate">Alumni Resources</h1>
+                <p className="text-xs sm:text-sm text-muted-foreground truncate">Career opportunities, services, and training</p>
               </div>
             </div>
           </div>
@@ -152,11 +135,11 @@ export default function AlumniResources() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Tabs */}
-        <div className="flex space-x-2 mb-6">
+        <div className="flex flex-col sm:flex-row gap-2 mb-6">
           <Button
             variant={activeTab === 'jobs' ? 'default' : 'outline'}
             onClick={() => setActiveTab('jobs')}
-            className="flex-1"
+            className="flex-1 justify-start sm:justify-center"
           >
             <Briefcase className="mr-2 h-4 w-4" />
             Job Board ({jobs.length})
@@ -164,7 +147,7 @@ export default function AlumniResources() {
           <Button
             variant={activeTab === 'services' ? 'default' : 'outline'}
             onClick={() => setActiveTab('services')}
-            className="flex-1"
+            className="flex-1 justify-start sm:justify-center"
           >
             <Users className="mr-2 h-4 w-4" />
             Career Services ({services.length})
@@ -172,7 +155,7 @@ export default function AlumniResources() {
           <Button
             variant={activeTab === 'training' ? 'default' : 'outline'}
             onClick={() => setActiveTab('training')}
-            className="flex-1"
+            className="flex-1 justify-start sm:justify-center"
           >
             <GraduationCap className="mr-2 h-4 w-4" />
             Training ({training.length})
@@ -180,7 +163,7 @@ export default function AlumniResources() {
         </div>
 
         {/* Search & Filter */}
-        <div className="flex gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -194,7 +177,7 @@ export default function AlumniResources() {
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="px-4 py-2 border rounded-md"
+              className="w-full sm:w-auto px-4 py-2 border rounded-md bg-background"
             >
               <option value="all">All Types</option>
               <option value="Full-time">Full-time</option>
