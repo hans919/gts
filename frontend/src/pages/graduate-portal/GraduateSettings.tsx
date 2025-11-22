@@ -33,7 +33,9 @@ export default function GraduateSettings() {
       });
       setProfile(response.data);
       if (response.data.profile_photo_url) {
-        setPhotoPreview(response.data.profile_photo_url);
+        // Ensure HTTPS URL for Hostinger
+        const photoUrl = response.data.profile_photo_url.replace('http://', 'https://');
+        setPhotoPreview(photoUrl);
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -70,11 +72,14 @@ export default function GraduateSettings() {
 
       alert('Profile photo updated successfully!');
       
+      // Ensure HTTPS URL for Hostinger
+      const photoUrl = response.data.profile_photo_url.replace('http://', 'https://');
+      
       // Update profile with new photo
       const updatedProfile = { 
         ...profile, 
         profile_photo: response.data.profile_photo,
-        profile_photo_url: response.data.profile_photo_url 
+        profile_photo_url: photoUrl
       };
       setProfile(updatedProfile);
       
@@ -83,12 +88,12 @@ export default function GraduateSettings() {
       if (userStr) {
         const user = JSON.parse(userStr);
         user.profile_photo = response.data.profile_photo;
-        user.profile_photo_url = response.data.profile_photo_url;
+        user.profile_photo_url = photoUrl;
         localStorage.setItem('user', JSON.stringify(user));
       }
       
-      // Set preview to new photo URL
-      setPhotoPreview(response.data.profile_photo_url);
+      // Set preview to new photo URL with cache buster
+      setPhotoPreview(photoUrl + '?t=' + Date.now());
       setPhotoFile(null);
       
       // Reload the page to update header
@@ -188,6 +193,10 @@ export default function GraduateSettings() {
                       src={photoPreview}
                       alt="Profile"
                       className="h-32 w-32 rounded-full object-cover border-4 border-gray-200"
+                      onError={() => {
+                        console.error('Failed to load profile photo:', photoPreview);
+                        setPhotoPreview(null);
+                      }}
                     />
                   ) : (
                     <div className="h-32 w-32 rounded-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center text-white text-4xl font-bold">

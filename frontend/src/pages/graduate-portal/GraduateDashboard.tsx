@@ -106,8 +106,14 @@ export default function GraduateDashboard() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setProfile(response.data);
-      setFormData(response.data);
+      // Ensure HTTPS URL for profile photo
+      const profileData = response.data;
+      if (profileData.profile_photo_url) {
+        profileData.profile_photo_url = profileData.profile_photo_url.replace('http://', 'https://');
+      }
+
+      setProfile(profileData);
+      setFormData(profileData);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -353,6 +359,11 @@ export default function GraduateDashboard() {
                       src={profile.profile_photo_url}
                       alt="Profile"
                       className="h-10 w-10 rounded-full object-cover border-2 border-gray-200"
+                      onError={() => {
+                        console.error('Failed to load profile photo in header:', profile.profile_photo_url);
+                        // Set to empty to show initials fallback
+                        setProfile({ ...profile, profile_photo_url: undefined });
+                      }}
                     />
                   ) : (
                     <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center text-white font-semibold">

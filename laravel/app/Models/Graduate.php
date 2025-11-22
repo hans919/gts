@@ -44,7 +44,9 @@ class Graduate extends Model
     public function getProfilePhotoUrlAttribute()
     {
         if ($this->profile_photo) {
-            return url('storage/' . $this->profile_photo);
+            // Ensure HTTPS URL for production (Hostinger)
+            $url = url('storage/' . $this->profile_photo);
+            return str_replace('http://', 'https://', $url);
         }
         return null;
     }

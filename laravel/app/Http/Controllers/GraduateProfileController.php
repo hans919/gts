@@ -793,8 +793,9 @@ class GraduateProfileController extends Controller
         $graduate->profile_photo = $path;
         $graduate->save();
 
-        // Return full URL
+        // Return full URL with HTTPS for production
         $fullUrl = url('storage/' . $path);
+        $fullUrl = str_replace('http://', 'https://', $fullUrl);
 
         return response()->json([
             'message' => 'Profile photo uploaded successfully',
