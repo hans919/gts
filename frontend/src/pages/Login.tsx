@@ -91,7 +91,7 @@ export default function Login() {
             <GraduationCap className="h-8 w-8 text-primary" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight">
-            Graduate Tracer System
+            SJCB Graduate Tracer System
           </h1>
           <p className="text-sm text-muted-foreground">
             Enter your credentials to access your account
