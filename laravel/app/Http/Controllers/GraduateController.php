@@ -12,13 +12,26 @@ class GraduateController extends Controller
         $query = Graduate::with(['user', 'currentEmployment']);
 
         // Filter by graduation year
-        if ($request->has('graduation_year')) {
+        if ($request->has('graduation_year') && $request->graduation_year !== '') {
             $query->where('graduation_year', $request->graduation_year);
         }
 
-        // Filter by program
-        if ($request->has('program')) {
+        // Filter by program (department)
+        if ($request->has('program') && $request->program !== '') {
             $query->where('program', $request->program);
+        }
+
+        // Filter by major
+        if ($request->has('major') && $request->major !== '') {
+            $query->where('major', $request->major);
+        }
+
+        // Filter by employment status
+        if ($request->has('employment_status') && $request->employment_status !== '') {
+            $query->whereHas('employments', function($q) use ($request) {
+                $q->where('employment_status', $request->employment_status)
+                  ->where('is_current', true);
+            });
         }
 
         // Search

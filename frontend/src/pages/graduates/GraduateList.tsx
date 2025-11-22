@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Plus, Search, Pencil, Trash } from 'lucide-react';
+import { Plus, Search, Pencil, Trash, Filter, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Select } from '@/components/ui/select';
 
 interface Graduate {
   id: number;
@@ -16,6 +17,11 @@ interface Graduate {
   program: string;
   graduation_year: number;
   current_status: string;
+  current_employment?: {
+    employment_status: string;
+    job_title: string;
+    company_name: string;
+  };
 }
 
 export default function GraduateList() {
@@ -24,17 +30,34 @@ export default function GraduateList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [showFilters, setShowFilters] = useState(false);
+  
+  // Filter states
+  const [yearFilter, setYearFilter] = useState('');
+  const [departmentFilter, setDepartmentFilter] = useState('');
+  const [programFilter, setProgramFilter] = useState('');
+  const [employmentStatusFilter, setEmploymentStatusFilter] = useState('');
 
   useEffect(() => {
     fetchGraduates();
-  }, [currentPage, searchTerm]);
+  }, [currentPage, searchTerm, yearFilter, departmentFilter, programFilter, employmentStatusFilter]);
 
   const fetchGraduates = async () => {
     try {
       const token = localStorage.getItem('token');
+      const params: any = { 
+        page: currentPage, 
+        search: searchTerm 
+      };
+      
+      if (yearFilter) params.graduation_year = yearFilter;
+      if (departmentFilter) params.program = departmentFilter;
+      if (programFilter) params.major = programFilter;
+      if (employmentStatusFilter) params.employment_status = employmentStatusFilter;
+      
       const response = await axios.get(`https://lightsteelblue-locust-816886.hostingersite.com/api/graduates`, {
         headers: { Authorization: `Bearer ${token}` },
-        params: { page: currentPage, search: searchTerm },
+        params,
       });
       setGraduates(response.data.data);
       setTotalPages(response.data.last_page);
@@ -44,6 +67,17 @@ export default function GraduateList() {
       setLoading(false);
     }
   };
+
+  const clearFilters = () => {
+    setYearFilter('');
+    setDepartmentFilter('');
+    setProgramFilter('');
+    setEmploymentStatusFilter('');
+    setSearchTerm('');
+    setCurrentPage(1);
+  };
+
+  const hasActiveFilters = yearFilter || departmentFilter || programFilter || employmentStatusFilter || searchTerm;
 
   const handleDelete = async (id: number) => {
     if (!confirm('Are you sure you want to delete this graduate?')) return;
@@ -87,16 +121,94 @@ export default function GraduateList() {
         </div>
       </div>
 
-      <div className="flex items-center py-4">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search graduates..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8"
-          />
+      <div className="flex flex-col gap-4 py-4">
+        <div className="flex items-center gap-2">
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search graduates..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-8"
+            />
+          </div>
+          <Button
+            variant={showFilters ? "default" : "outline"}
+            size="sm"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <Filter className="mr-2 h-4 w-4" />
+            Filters
+          </Button>
+          {hasActiveFilters && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearFilters}
+            >
+              <X className="mr-2 h-4 w-4" />
+              Clear
+            </Button>
+          )}
         </div>
+
+        {showFilters && (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-muted/50 rounded-lg">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Graduation Year</label>
+              <Select
+                value={yearFilter}
+                onChange={(e) => setYearFilter(e.target.value)}
+              >
+                <option value="">All Years</option>
+                {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Department</label>
+              <Select
+                value={departmentFilter}
+                onChange={(e) => setDepartmentFilter(e.target.value)}
+              >
+                <option value="">All Departments</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Business Administration">Business Administration</option>
+                <option value="Education">Education</option>
+                <option value="Nursing">Nursing</option>
+                <option value="Arts and Sciences">Arts and Sciences</option>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Program</label>
+              <Input
+                placeholder="Filter by program/major..."
+                value={programFilter}
+                onChange={(e) => setProgramFilter(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Employment Status</label>
+              <Select
+                value={employmentStatusFilter}
+                onChange={(e) => setEmploymentStatusFilter(e.target.value)}
+              >
+                <option value="">All Status</option>
+                <option value="employed">Employed</option>
+                <option value="self-employed">Self-Employed</option>
+                <option value="unemployed">Unemployed</option>
+                <option value="pursuing_higher_education">Pursuing Higher Education</option>
+                <option value="other">Other</option>
+              </Select>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="rounded-md border">
@@ -161,7 +273,9 @@ export default function GraduateList() {
                     <td className="p-4 align-middle">{graduate.graduation_year}</td>
                     <td className="p-4 align-middle">
                       <Badge variant="outline">
-                        {graduate.current_status || 'Active'}
+                        {graduate.current_employment?.employment_status 
+                          ? graduate.current_employment.employment_status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+                          : graduate.current_status || 'No Status'}
                       </Badge>
                     </td>
                     <td className="p-4 align-middle text-right">
