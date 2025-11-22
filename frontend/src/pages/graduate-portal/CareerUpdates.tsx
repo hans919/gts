@@ -138,9 +138,9 @@ export default function CareerUpdates() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b shadow-sm">
+      <header className="bg-card border-b shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -340,7 +340,7 @@ export default function CareerUpdates() {
         </Card>
 
         {/* Tips Card */}
-        <Card className="mt-6 bg-blue-50 border-blue-200">
+        <Card className="mt-6 bg-accent border-accent">
           <CardHeader>
             <CardTitle className="text-sm">💡 Keep Your Profile Updated</CardTitle>
           </CardHeader>

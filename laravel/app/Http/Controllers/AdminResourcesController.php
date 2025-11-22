@@ -369,4 +369,42 @@ class AdminResourcesController extends Controller
         DB::table('support_tickets')->where('id', $id)->delete();
         return response()->json(['message' => 'Support ticket deleted successfully']);
     }
+
+    // ============ EMPLOYMENT SURVEYS MANAGEMENT ============
+    
+    public function getEmploymentSurveys(Request $request)
+    {
+        $user = $request->user();
+        if ($user->role !== 'admin') {
+            return response()->json(['message' => 'Access denied.'], 403);
+        }
+
+        $surveys = DB::table('employment_surveys')
+            ->join('graduates', 'employment_surveys.graduate_id', '=', 'graduates.id')
+            ->select(
+                'employment_surveys.*',
+                'graduates.first_name',
+                'graduates.last_name',
+                'graduates.email',
+                'graduates.student_id',
+                'graduates.program',
+                'graduates.major',
+                'graduates.graduation_year'
+            )
+            ->orderBy('employment_surveys.created_at', 'desc')
+            ->get();
+
+        return response()->json($surveys);
+    }
+
+    public function deleteEmploymentSurvey(Request $request, $id)
+    {
+        $user = $request->user();
+        if ($user->role !== 'admin') {
+            return response()->json(['message' => 'Access denied.'], 403);
+        }
+
+        DB::table('employment_surveys')->where('id', $id)->delete();
+        return response()->json(['message' => 'Employment survey deleted successfully']);
+    }
 }

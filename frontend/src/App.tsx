@@ -27,11 +27,13 @@ import PrivacySettings from './pages/graduate-portal/PrivacySettings';
 import AlumniResources from './pages/graduate-portal/AlumniResources';
 import FeedbackSupport from './pages/graduate-portal/FeedbackSupport';
 import GraduateSettings from './pages/graduate-portal/GraduateSettings';
+import GraduatePortalLayout from './components/layout/GraduatePortalLayout';
 
 // Admin Management Pages
 import JobsManagement from './pages/admin/JobsManagement';
 import CareerServicesManagement from './pages/admin/CareerServicesManagement';
 import SupportTicketsManagement from './pages/admin/SupportTicketsManagement';
+import EmploymentSurveysManagement from './pages/admin/EmploymentSurveysManagement';
 
 function App() {
   return (
@@ -58,20 +60,21 @@ function App() {
         <Route path="jobs" element={<JobsManagement />} />
         <Route path="career-services" element={<CareerServicesManagement />} />
         <Route path="support-tickets" element={<SupportTicketsManagement />} />
+        <Route path="employment-surveys" element={<EmploymentSurveysManagement />} />
         <Route path="settings" element={<Settings />} />
       </Route>
 
       {/* Graduate Portal Routes */}
-      <Route path="/graduate/dashboard" element={<ProtectedRoute allowedRoles={['graduate']}><GraduateDashboard /></ProtectedRoute>} />
-      <Route path="/graduate/survey" element={<ProtectedRoute allowedRoles={['graduate']}><EmploymentSurvey /></ProtectedRoute>} />
-      <Route path="/graduate/career-updates" element={<ProtectedRoute allowedRoles={['graduate']}><CareerUpdates /></ProtectedRoute>} />
-      <Route path="/graduate/notifications" element={<ProtectedRoute allowedRoles={['graduate']}><Notifications /></ProtectedRoute>} />
-      <Route path="/graduate/survey-history" element={<ProtectedRoute allowedRoles={['graduate']}><SurveyHistory /></ProtectedRoute>} />
-      <Route path="/graduate/take-survey/:id" element={<ProtectedRoute allowedRoles={['graduate']}><TakeSurvey /></ProtectedRoute>} />
-      <Route path="/graduate/privacy" element={<ProtectedRoute allowedRoles={['graduate']}><PrivacySettings /></ProtectedRoute>} />
-      <Route path="/graduate/resources" element={<ProtectedRoute allowedRoles={['graduate']}><AlumniResources /></ProtectedRoute>} />
-      <Route path="/graduate/support" element={<ProtectedRoute allowedRoles={['graduate']}><FeedbackSupport /></ProtectedRoute>} />
-      <Route path="/graduate/settings" element={<ProtectedRoute allowedRoles={['graduate']}><GraduateSettings /></ProtectedRoute>} />
+      <Route path="/graduate/dashboard" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><GraduateDashboard /></GraduatePortalLayout></ProtectedRoute>} />
+      <Route path="/graduate/survey" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><EmploymentSurvey /></GraduatePortalLayout></ProtectedRoute>} />
+      <Route path="/graduate/career-updates" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><CareerUpdates /></GraduatePortalLayout></ProtectedRoute>} />
+      <Route path="/graduate/notifications" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><Notifications /></GraduatePortalLayout></ProtectedRoute>} />
+      <Route path="/graduate/survey-history" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><SurveyHistory /></GraduatePortalLayout></ProtectedRoute>} />
+      <Route path="/graduate/take-survey/:id" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><TakeSurvey /></GraduatePortalLayout></ProtectedRoute>} />
+      <Route path="/graduate/privacy" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><PrivacySettings /></GraduatePortalLayout></ProtectedRoute>} />
+      <Route path="/graduate/resources" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><AlumniResources /></GraduatePortalLayout></ProtectedRoute>} />
+      <Route path="/graduate/support" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><FeedbackSupport /></GraduatePortalLayout></ProtectedRoute>} />
+      <Route path="/graduate/settings" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><GraduateSettings /></GraduatePortalLayout></ProtectedRoute>} />
     </Routes>
   );
 }

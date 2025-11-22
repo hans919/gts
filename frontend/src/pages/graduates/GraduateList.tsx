@@ -22,6 +22,12 @@ interface Graduate {
     job_title: string;
     company_name: string;
   };
+  latest_employment_survey?: {
+    employment_status: string;
+    company_name: string;
+    job_title: string;
+    created_at: string;
+  };
 }
 
 export default function GraduateList() {
@@ -200,11 +206,14 @@ export default function GraduateList() {
                 onChange={(e) => setEmploymentStatusFilter(e.target.value)}
               >
                 <option value="">All Status</option>
-                <option value="employed">Employed</option>
-                <option value="self-employed">Self-Employed</option>
-                <option value="unemployed">Unemployed</option>
-                <option value="pursuing_higher_education">Pursuing Higher Education</option>
-                <option value="other">Other</option>
+                <option value="Employed">Employed</option>
+                <option value="Self-employed">Self-employed</option>
+                <option value="Unemployed">Unemployed</option>
+                <option value="Further Education">Further Education</option>
+                <option value="Freelancing">Freelancing</option>
+                <option value="employed">Employed (Old)</option>
+                <option value="self-employed">Self-Employed (Old)</option>
+                <option value="pursuing_higher_education">Pursuing Higher Education (Old)</option>
               </Select>
             </div>
           </div>
@@ -272,11 +281,19 @@ export default function GraduateList() {
                     <td className="p-4 align-middle">{graduate.program}</td>
                     <td className="p-4 align-middle">{graduate.graduation_year}</td>
                     <td className="p-4 align-middle">
-                      <Badge variant="outline">
-                        {graduate.current_employment?.employment_status 
-                          ? graduate.current_employment.employment_status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-                          : graduate.current_status || 'No Status'}
-                      </Badge>
+                      <div className="flex flex-col gap-1">
+                        <Badge variant="outline">
+                          {graduate.latest_employment_survey?.employment_status ||
+                           graduate.current_employment?.employment_status 
+                            ? (graduate.latest_employment_survey?.employment_status || graduate.current_employment?.employment_status || '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+                            : graduate.current_status || 'No Status'}
+                        </Badge>
+                        {graduate.latest_employment_survey && (
+                          <span className="text-xs text-muted-foreground">
+                            {graduate.latest_employment_survey.company_name || 'Survey submitted'}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="p-4 align-middle text-right">
                       <div className="flex items-center justify-end gap-2">

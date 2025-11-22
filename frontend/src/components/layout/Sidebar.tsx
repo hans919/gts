@@ -10,6 +10,7 @@ import {
   Briefcase,
   GraduationCap,
   MessageSquare,
+  FileCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -66,6 +67,11 @@ const navItems: NavItem[] = [
     icon: <MessageSquare className="h-5 w-5" />,
   },
   {
+    name: 'Employment Surveys',
+    path: '/employment-surveys',
+    icon: <FileCheck className="h-5 w-5" />,
+  },
+  {
     name: 'Settings',
     path: '/settings',
     icon: <Settings className="h-5 w-5" />,
@@ -87,7 +93,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       <aside
         className={`
           fixed lg:static inset-y-0 left-0 z-50
-          w-64 bg-white border-r border-gray-200
+          w-64 bg-card border-r border-border
           transform transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}

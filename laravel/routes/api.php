@@ -77,6 +77,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/support-tickets', [AdminResourcesController::class, 'getSupportTickets']);
         Route::put('/support-tickets/{id}', [AdminResourcesController::class, 'updateTicketStatus']);
         Route::delete('/support-tickets/{id}', [AdminResourcesController::class, 'deleteTicket']);
+        
+        // Employment Surveys Management
+        Route::get('/employment-surveys', [AdminResourcesController::class, 'getEmploymentSurveys']);
+        Route::delete('/employment-surveys/{id}', [AdminResourcesController::class, 'deleteEmploymentSurvey']);
     });
 
     // Graduate Portal routes (for authenticated graduates)

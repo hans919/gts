@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, Bell, User, LogOut, Settings, ChevronDown } from 'lucide-react';
+import { Menu, Bell, User, LogOut, Settings, ChevronDown, Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -16,6 +17,7 @@ interface HeaderProps {
 export default function Header({ onMenuClick, user }: HeaderProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -29,7 +31,12 @@ export default function Header({ onMenuClick, user }: HeaderProps) {
   };
 
   return (
-    <header className="border-b border-gray-200 sticky top-0 z-40" style={{ backgroundColor: '#457507' }}>
+    <header 
+      className="border-b border-border sticky top-0 z-40 transition-colors duration-200"
+      style={{ 
+        backgroundColor: theme === 'dark' ? 'hsl(240 10% 3.9%)' : '#457507'
+      }}
+    >
       <div className="flex items-center justify-between px-4 py-3">
         {/* Left Section */}
         <div className="flex items-center space-x-4">
@@ -49,6 +56,21 @@ export default function Header({ onMenuClick, user }: HeaderProps) {
 
         {/* Right Section */}
         <div className="flex items-center space-x-3">
+          {/* Dark Mode Toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            className="text-white hover:bg-white/10"
+            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          >
+            {theme === 'dark' ? (
+              <Sun className="h-5 w-5" />
+            ) : (
+              <Moon className="h-5 w-5" />
+            )}
+          </Button>
+
           {/* Notifications */}
           <Button variant="ghost" size="icon" className="relative text-white hover:bg-white/10">
             <Bell className="h-5 w-5" />

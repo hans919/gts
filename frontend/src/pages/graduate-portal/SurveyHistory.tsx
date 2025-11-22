@@ -97,9 +97,9 @@ export default function SurveyHistory() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b shadow-sm">
+      <header className="bg-card border-b shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center space-x-3">
             <Button variant="ghost" size="icon" onClick={() => navigate('/graduate/dashboard')}>
@@ -169,7 +169,7 @@ export default function SurveyHistory() {
 
         {/* Pending Surveys */}
         {pendingSurveys.length > 0 && (
-          <Card className="mb-6 border-orange-200 bg-orange-50/50">
+          <Card className="mb-6 border-orange-200 bg-accent">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Clock className="mr-2 h-5 w-5 text-orange-600" />
@@ -183,7 +183,7 @@ export default function SurveyHistory() {
               {pendingSurveys.map((survey, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-4 bg-white border rounded-lg"
+                  className="flex items-center justify-between p-4 bg-card border rounded-lg"
                 >
                   <div>
                     <h3 className="font-semibold">{survey.title}</h3>

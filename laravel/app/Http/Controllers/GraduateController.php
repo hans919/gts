@@ -26,11 +26,21 @@ class GraduateController extends Controller
             $query->where('major', $request->major);
         }
 
-        // Filter by employment status
+        // Filter by employment status - check both employments table and employment_surveys table
         if ($request->has('employment_status') && $request->employment_status !== '') {
-            $query->whereHas('employments', function($q) use ($request) {
-                $q->where('employment_status', $request->employment_status)
-                  ->where('is_current', true);
+            $query->where(function($q) use ($request) {
+                // Check in employments table
+                $q->whereHas('employments', function($subQ) use ($request) {
+                    $subQ->where('employment_status', $request->employment_status)
+                         ->where('is_current', true);
+                })
+                // OR check in employment_surveys table
+                ->orWhereExists(function($subQ) use ($request) {
+                    $subQ->select(\DB::raw(1))
+                         ->from('employment_surveys')
+                         ->whereColumn('employment_surveys.graduate_id', 'graduates.id')
+                         ->where('employment_surveys.employment_status', $request->employment_status);
+                });
             });
         }
 
@@ -45,7 +55,21 @@ class GraduateController extends Controller
             });
         }
 
-        return response()->json($query->paginate(15));
+        // Get paginated results
+        $graduates = $query->paginate(15);
+
+        // Add latest employment survey data to each graduate
+        $graduates->getCollection()->transform(function ($graduate) {
+            $latestSurvey = \DB::table('employment_surveys')
+                ->where('graduate_id', $graduate->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+            
+            $graduate->latest_employment_survey = $latestSurvey;
+            return $graduate;
+        });
+
+        return response()->json($graduates);
     }
 
     public function store(Request $request)

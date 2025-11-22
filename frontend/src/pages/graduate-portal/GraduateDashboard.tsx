@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, Calendar, GraduationCap, Briefcase, Edit, Save, X, Building, Bell, CheckCircle, Trash2, Settings, LogOut, ChevronDown } from 'lucide-react';
+import { Loader2, Calendar, GraduationCap, Briefcase, Edit, Save, X, Building, Bell, CheckCircle, Trash2, Settings, LogOut, ChevronDown, Moon, Sun } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -41,6 +42,7 @@ interface Notification {
 
 export default function GraduateDashboard() {
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -228,9 +230,12 @@ export default function GraduateDashboard() {
   if (!profile) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b shadow-sm" style={{ backgroundColor: '#457507' }}>
+      <header 
+        className="border-b shadow-sm sticky top-0 z-40 transition-colors duration-200"
+        style={{ backgroundColor: theme === 'dark' ? 'hsl(240 10% 3.9%)' : '#457507' }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -243,6 +248,18 @@ export default function GraduateDashboard() {
               </div>
             </div>
             <div className="flex items-center gap-3">
+              {/* Dark Mode Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-full hover:bg-white/10 transition-colors text-white"
+                title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              >
+                {theme === 'dark' ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </button>
               {/* Notifications */}
               <div className="relative" ref={notificationRef}>
                 <button
@@ -259,28 +276,28 @@ export default function GraduateDashboard() {
 
                 {/* Notifications Dropdown */}
                 {showNotifications && (
-                  <div className="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-xl border z-50 max-h-[500px] overflow-hidden flex flex-col">
-                    <div className="p-4 border-b bg-gray-50">
+                  <div className="absolute right-0 mt-2 w-96 bg-popover rounded-lg shadow-xl border z-50 max-h-[500px] overflow-hidden flex flex-col">
+                    <div className="p-4 border-b bg-muted">
                       <div className="flex items-center justify-between">
                         <h3 className="font-semibold text-lg">Notifications</h3>
                         {unreadCount > 0 && (
-                          <span className="text-xs text-gray-600">{unreadCount} unread</span>
+                          <span className="text-xs text-muted-foreground">{unreadCount} unread</span>
                         )}
                       </div>
                     </div>
                     <div className="overflow-y-auto flex-1">
                       {notifications.length === 0 ? (
                         <div className="p-8 text-center">
-                          <Bell className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                          <p className="text-sm text-gray-500">No notifications yet</p>
+                          <Bell className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
+                          <p className="text-sm text-muted-foreground">No notifications yet</p>
                         </div>
                       ) : (
                         <div className="divide-y">
                           {notifications.map((notification) => (
                             <div
                               key={notification.id}
-                              className={`p-4 hover:bg-gray-50 transition-colors ${
-                                !notification.read ? 'bg-blue-50' : ''
+                              className={`p-4 hover:bg-muted/50 transition-colors ${
+                                !notification.read ? 'bg-accent' : ''
                               }`}
                             >
                               <div className="flex items-start justify-between gap-2">
@@ -294,8 +311,8 @@ export default function GraduateDashboard() {
                                     )}
                                   </div>
                                   <h4 className="font-medium text-sm mb-1">{notification.title}</h4>
-                                  <p className="text-xs text-gray-600 mb-2">{notification.message}</p>
-                                  <p className="text-xs text-gray-400">
+                                  <p className="text-xs text-muted-foreground mb-2">{notification.message}</p>
+                                  <p className="text-xs text-muted-foreground">
                                     {new Date(notification.created_at).toLocaleDateString('en-US', {
                                       month: 'short',
                                       day: 'numeric',
@@ -308,7 +325,7 @@ export default function GraduateDashboard() {
                                   {!notification.read && (
                                     <button
                                       onClick={() => markAsRead(notification.id)}
-                                      className="p-1 hover:bg-gray-200 rounded"
+                                      className="p-1 hover:bg-muted rounded"
                                       title="Mark as read"
                                     >
                                       <CheckCircle className="h-4 w-4 text-green-600" />
@@ -316,7 +333,7 @@ export default function GraduateDashboard() {
                                   )}
                                   <button
                                     onClick={() => deleteNotification(notification.id)}
-                                    className="p-1 hover:bg-gray-200 rounded"
+                                    className="p-1 hover:bg-muted rounded"
                                     title="Delete"
                                   >
                                     <Trash2 className="h-4 w-4 text-red-600" />
@@ -328,7 +345,7 @@ export default function GraduateDashboard() {
                         </div>
                       )}
                     </div>
-                    <div className="p-3 border-t bg-gray-50">
+                    <div className="p-3 border-t bg-muted">
                       <Button
                         variant="link"
                         className="w-full text-sm"
@@ -375,8 +392,8 @@ export default function GraduateDashboard() {
 
                 {/* Dropdown Menu */}
                 {showProfileDropdown && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border z-50">
-                    <div className="p-3 border-b bg-gray-50">
+                  <div className="absolute right-0 mt-2 w-56 bg-popover rounded-lg shadow-xl border z-50">
+                    <div className="p-3 border-b bg-muted">
                       <p className="text-sm font-medium">{profile.first_name} {profile.last_name}</p>
                       <p className="text-xs text-muted-foreground mt-1">{profile.email}</p>
                     </div>

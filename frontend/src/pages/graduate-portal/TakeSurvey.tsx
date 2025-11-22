@@ -214,8 +214,8 @@ export default function TakeSurvey() {
 
   if (error && !survey) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <header className="bg-white border-b shadow-sm">
+      <div className="min-h-screen bg-background">
+        <header className="bg-card border-b shadow-sm">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center space-x-3">
               <Button variant="ghost" size="icon" onClick={() => navigate('/graduate/survey-history')}>
@@ -242,9 +242,9 @@ export default function TakeSurvey() {
   if (!survey) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b shadow-sm">
+      <header className="bg-card border-b shadow-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center space-x-3">
             <Button variant="ghost" size="icon" onClick={() => navigate('/graduate/survey-history')}>
