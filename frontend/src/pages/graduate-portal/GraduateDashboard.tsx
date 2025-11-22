@@ -27,6 +27,7 @@ interface GraduateProfile {
   postal_code: string;
   country: string;
   profile_photo?: string;
+  profile_photo_url?: string;
 }
 
 interface Notification {
@@ -347,9 +348,9 @@ export default function GraduateDashboard() {
                     <p className="text-sm font-medium text-white">{profile.first_name} {profile.last_name}</p>
                     <p className="text-xs text-white/80">{profile.email}</p>
                   </div>
-                  {profile.profile_photo ? (
+                  {profile.profile_photo_url ? (
                     <img
-                      src={`https://lightsteelblue-locust-816886.hostingersite.com/storage/${profile.profile_photo}`}
+                      src={profile.profile_photo_url}
                       alt="Profile"
                       className="h-10 w-10 rounded-full object-cover border-2 border-gray-200"
                     />

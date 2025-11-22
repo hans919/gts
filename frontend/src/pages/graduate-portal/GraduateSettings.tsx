@@ -32,8 +32,8 @@ export default function GraduateSettings() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProfile(response.data);
-      if (response.data.profile_photo) {
-        setPhotoPreview(`https://lightsteelblue-locust-816886.hostingersite.com/storage/${response.data.profile_photo}`);
+      if (response.data.profile_photo_url) {
+        setPhotoPreview(response.data.profile_photo_url);
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -71,7 +71,11 @@ export default function GraduateSettings() {
       alert('Profile photo updated successfully!');
       
       // Update profile with new photo
-      const updatedProfile = { ...profile, profile_photo: response.data.profile_photo };
+      const updatedProfile = { 
+        ...profile, 
+        profile_photo: response.data.profile_photo,
+        profile_photo_url: response.data.profile_photo_url 
+      };
       setProfile(updatedProfile);
       
       // Update localStorage user data
@@ -79,11 +83,12 @@ export default function GraduateSettings() {
       if (userStr) {
         const user = JSON.parse(userStr);
         user.profile_photo = response.data.profile_photo;
+        user.profile_photo_url = response.data.profile_photo_url;
         localStorage.setItem('user', JSON.stringify(user));
       }
       
       // Set preview to new photo URL
-      setPhotoPreview(`https://lightsteelblue-locust-816886.hostingersite.com/storage/${response.data.profile_photo}`);
+      setPhotoPreview(response.data.profile_photo_url);
       setPhotoFile(null);
       
       // Reload the page to update header

@@ -39,6 +39,16 @@ class Graduate extends Model
         'gpa' => 'decimal:2'
     ];
 
+    protected $appends = ['profile_photo_url'];
+
+    public function getProfilePhotoUrlAttribute()
+    {
+        if ($this->profile_photo) {
+            return url('storage/' . $this->profile_photo);
+        }
+        return null;
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

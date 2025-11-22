@@ -793,9 +793,13 @@ class GraduateProfileController extends Controller
         $graduate->profile_photo = $path;
         $graduate->save();
 
+        // Return full URL
+        $fullUrl = url('storage/' . $path);
+
         return response()->json([
             'message' => 'Profile photo uploaded successfully',
             'profile_photo' => $path,
+            'profile_photo_url' => $fullUrl,
         ]);
     }
 
