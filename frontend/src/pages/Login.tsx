@@ -255,25 +255,7 @@ export default function Login() {
           </p>
         </div>
 
-        {/* Footer */}
-        <p className="text-center text-xs text-muted-foreground">
-          By continuing, you agree to our{' '}
-          <button
-            type="button"
-            onClick={() => setShowTerms(true)}
-            className="text-primary hover:underline font-medium"
-          >
-            Terms of Service
-          </button>
-          {' '}and{' '}
-          <button
-            type="button"
-            onClick={() => setShowPrivacy(true)}
-            className="text-primary hover:underline font-medium"
-          >
-            Privacy Policy
-          </button>
-        </p>
+       
       </div>
 
       {/* Terms of Service Modal */}

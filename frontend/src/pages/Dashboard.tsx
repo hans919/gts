@@ -17,6 +17,7 @@ interface DashboardData {
   total_surveys: number;
   active_surveys: number;
   total_responses: number;
+  employed_count: number;
   employment_stats: Array<{ employment_status: string; count: number }>;
   recent_graduates: Array<{
     id: number;
@@ -44,6 +45,7 @@ export default function Dashboard() {
     total_surveys: 0,
     active_surveys: 0,
     total_responses: 0,
+    employed_count: 0,
     employment_stats: [],
     recent_graduates: [],
   });
@@ -86,7 +88,8 @@ export default function Dashboard() {
 
   const calculateEmploymentRate = () => {
     if (data.total_graduates === 0) return 0;
-    const employed = data.employment_stats.find(s => s.employment_status === 'employed')?.count || 0;
+    // Use employed_count from backend (more reliable)
+    const employed = data.employed_count || 0;
     return Math.round((employed / data.total_graduates) * 100);
   };
 
