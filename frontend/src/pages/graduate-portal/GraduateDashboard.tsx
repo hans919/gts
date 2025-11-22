@@ -276,10 +276,10 @@ export default function GraduateDashboard() {
 
                 {/* Notifications Dropdown */}
                 {showNotifications && (
-                  <div className="absolute right-0 mt-2 w-96 bg-popover rounded-lg shadow-xl border z-50 max-h-[500px] overflow-hidden flex flex-col">
-                    <div className="p-4 border-b bg-muted">
+                  <div className="fixed sm:absolute right-4 sm:right-0 left-4 sm:left-auto mt-2 sm:w-96 max-w-md bg-popover rounded-lg shadow-xl border z-50 max-h-[500px] overflow-hidden flex flex-col">
+                    <div className="p-3 sm:p-4 border-b bg-muted">
                       <div className="flex items-center justify-between">
-                        <h3 className="font-semibold text-lg">Notifications</h3>
+                        <h3 className="font-semibold text-base sm:text-lg">Notifications</h3>
                         {unreadCount > 0 && (
                           <span className="text-xs text-muted-foreground">{unreadCount} unread</span>
                         )}
@@ -287,8 +287,8 @@ export default function GraduateDashboard() {
                     </div>
                     <div className="overflow-y-auto flex-1">
                       {notifications.length === 0 ? (
-                        <div className="p-8 text-center">
-                          <Bell className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
+                        <div className="p-6 sm:p-8 text-center">
+                          <Bell className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-3 text-muted-foreground" />
                           <p className="text-sm text-muted-foreground">No notifications yet</p>
                         </div>
                       ) : (
@@ -296,22 +296,72 @@ export default function GraduateDashboard() {
                           {notifications.map((notification) => (
                             <div
                               key={notification.id}
-                              className={`p-4 hover:bg-muted/50 transition-colors ${
+                              className={`p-3 sm:p-4 hover:bg-muted/50 transition-colors ${
                                 !notification.read ? 'bg-accent' : ''
                               }`}
                             >
                               <div className="flex items-start justify-between gap-2">
-                                <div className="flex-1 min-w-0">
+                                <div 
+                                  className="flex-1 min-w-0 cursor-pointer"
+                                  onClick={() => {
+                                    if (!notification.read) {
+                                      markAsRead(notification.id);
+                                    }
+                                    setShowNotifications(false);
+                                    
+                                    // Route based on notification type and content
+                                    const notifType = notification.type.toLowerCase();
+                                    const notifTitle = notification.title.toLowerCase();
+                                    const notifMessage = notification.message.toLowerCase();
+                                    
+                                    // Check for career service/resource keywords
+                                    if (notifTitle.includes('career service') || 
+                                        notifTitle.includes('job') || 
+                                        notifTitle.includes('training') ||
+                                        notifMessage.includes('career service') ||
+                                        notifType === 'resource' ||
+                                        notifType === 'alumni') {
+                                      navigate('/graduate/resources');
+                                    }
+                                    // Check notification type
+                                    else {
+                                      switch (notifType) {
+                                        case 'job':
+                                        case 'job posting':
+                                        case 'career':
+                                        case 'training':
+                                          navigate('/graduate/career-updates');
+                                          break;
+                                        case 'survey':
+                                        case 'employment survey':
+                                          navigate('/graduate/survey');
+                                          break;
+                                        case 'profile':
+                                        case 'update':
+                                          navigate('/graduate/dashboard');
+                                          setEditing(true);
+                                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                                          break;
+                                        case 'event':
+                                        case 'announcement':
+                                          navigate('/graduate/dashboard');
+                                          break;
+                                        default:
+                                          navigate('/graduate/notifications');
+                                      }
+                                    }
+                                  }}
+                                >
                                   <div className="flex items-center gap-2 mb-1">
-                                    <span className={`text-xs px-2 py-0.5 rounded-full ${getNotificationColor(notification.type)}`}>
+                                    <span className={`text-xs px-2 py-0.5 rounded-full whitespace-nowrap ${getNotificationColor(notification.type)}`}>
                                       {notification.type}
                                     </span>
                                     {!notification.read && (
-                                      <span className="h-2 w-2 bg-blue-500 rounded-full"></span>
+                                      <span className="h-2 w-2 bg-blue-500 rounded-full flex-shrink-0"></span>
                                     )}
                                   </div>
-                                  <h4 className="font-medium text-sm mb-1">{notification.title}</h4>
-                                  <p className="text-xs text-muted-foreground mb-2">{notification.message}</p>
+                                  <h4 className="font-medium text-sm mb-1 break-words">{notification.title}</h4>
+                                  <p className="text-xs text-muted-foreground mb-2 break-words">{notification.message}</p>
                                   <p className="text-xs text-muted-foreground">
                                     {new Date(notification.created_at).toLocaleDateString('en-US', {
                                       month: 'short',
@@ -321,22 +371,28 @@ export default function GraduateDashboard() {
                                     })}
                                   </p>
                                 </div>
-                                <div className="flex flex-col gap-1">
+                                <div className="flex flex-col gap-1 flex-shrink-0">
                                   {!notification.read && (
                                     <button
-                                      onClick={() => markAsRead(notification.id)}
-                                      className="p-1 hover:bg-muted rounded"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        markAsRead(notification.id);
+                                      }}
+                                      className="p-1 sm:p-1.5 hover:bg-muted rounded"
                                       title="Mark as read"
                                     >
-                                      <CheckCircle className="h-4 w-4 text-green-600" />
+                                      <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
                                     </button>
                                   )}
                                   <button
-                                    onClick={() => deleteNotification(notification.id)}
-                                    className="p-1 hover:bg-muted rounded"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      deleteNotification(notification.id);
+                                    }}
+                                    className="p-1 sm:p-1.5 hover:bg-muted rounded"
                                     title="Delete"
                                   >
-                                    <Trash2 className="h-4 w-4 text-red-600" />
+                                    <Trash2 className="h-4 w-4 sm:h-5 sm:w-5 text-red-600" />
                                   </button>
                                 </div>
                               </div>
@@ -468,7 +524,7 @@ export default function GraduateDashboard() {
           )}
 
           {/* Quick Actions */}
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/graduate/survey')}>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center">
