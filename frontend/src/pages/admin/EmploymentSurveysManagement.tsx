@@ -500,7 +500,7 @@ export default function EmploymentSurveysManagement() {
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
                           <AlertDialogAction
                             onClick={handleDelete}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            className="bg-red-600 hover:bg-red-700"
                           >
                             <Trash2 className="h-4 w-4 mr-2" />
                             Delete Survey

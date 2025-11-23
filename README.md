@@ -24,7 +24,7 @@ A comprehensive web-based platform designed for educational institutions to effi
 
 ## 📋 Overview
 
-The **Graduate Tracking System (GTS)** is a modern, full-stack web application that streamlines the process of tracking and analyzing graduate employment outcomes. Built for San Jose Community College, it provides a dual-interface platform serving both administrators and graduates.
+The **Graduate Tracking System (GTS)** is a modern, full-stack web application that streamlines the process of tracking and analyzing graduate employment outcomes. Built for Saint Joseph College of Baggao, it provides a dual-interface platform serving both administrators and graduates.
 
 ### 🎯 System Purpose
 
@@ -69,6 +69,9 @@ Real-time updates on surveys, events, and opportunities
 
 <img src="https://img.shields.io/badge/-Privacy_Control-607D8B?style=flat-square&logo=shield&logoColor=white" />  
 Manage data sharing preferences and account settings
+
+<img src="https://img.shields.io/badge/-AI_Assistant-9D4EDD?style=flat-square&logo=openai&logoColor=white" />  
+24/7 intelligent chatbot powered by Groq AI for instant support
 
 </td>
 </tr>
@@ -134,6 +137,14 @@ cd frontend && npm install && npm run dev
 - **Resource Center** - Access training programs and career services
 - **Privacy Dashboard** - Control data sharing and notification preferences
 
+### <img src="https://img.shields.io/badge/-AI_Chatbot-9D4EDD?style=flat-square&logo=openai&logoColor=white" /> Intelligent AI Assistant
+- **Multi-Provider Support** - Groq (Llama 3.1), Google Gemini, HuggingFace, and Cohere
+- **Hybrid Intelligence** - Rule-based responses with AI enhancement fallback
+- **Contextual Understanding** - Maintains conversation context for natural interactions
+- **Quick Actions** - Instant navigation to surveys, jobs, and profile updates
+- **24/7 Availability** - Always-on support for graduate inquiries
+- **Free Tier Integration** - 100% free AI APIs with generous usage limits
+
 ### <img src="https://img.shields.io/badge/-Modern_UI-A8E6CF?style=flat-square&logo=tailwindcss&logoColor=black" /> User Interface
 - **Component Library** - Built with ShadCN UI for consistency and accessibility
 - **Responsive Design** - Optimized for desktop, tablet, and mobile devices
@@ -192,6 +203,18 @@ cd frontend && npm install && npm run dev
 </td>
 <td>
 
+### <img src="https://img.shields.io/badge/-AI_&_Integrations-9D4EDD?style=flat-square&logo=openai&logoColor=white" />
+- **AI Providers:** Groq (Llama 3.1), Gemini
+- **Fallback System:** Multi-provider support
+- **Context Manager:** Conversation memory
+- **Rate Limiting:** Built-in throttling
+- **Free Tier:** 100% free AI APIs
+
+</td>
+</tr>
+<tr>
+<td>
+
 ### <img src="https://img.shields.io/badge/-DevOps_&_Tools-4285F4?style=flat-square&logo=googlecloud&logoColor=white" />
 - **Version Control:** Git & GitHub
 - **Package Manager:** Composer, npm
@@ -213,6 +236,7 @@ cd frontend && npm install && npm run dev
 | [API Reference](API_REFERENCE.md) | Complete API documentation |
 | [Deployment Guide](DEPLOYMENT_GUIDE.md) | Production deployment steps |
 | [Graduate Portal Guide](GRADUATE_PORTAL_GUIDE.md) | User documentation |
+| [AI Setup Guide](AI_SETUP_GUIDE.md) | Chatbot AI integration |
 | [Quick Start](QUICK_START.md) | Get running in 5 minutes |
 
 ---
@@ -246,9 +270,33 @@ PUT    /api/graduate/profile
 POST   /api/graduate/profile-photo
 GET    /api/graduate/notifications
 POST   /api/graduate/submit-survey-response
+
+// AI Chatbot
+POST   /api/chatbot/message
+GET    /api/chatbot/context/{session}
+DELETE /api/chatbot/context/{session}
 ```
 
-**Full API docs:** [API_REFERENCE.md](API_REFERENCE.md)
+**AI Configuration:**
+```env
+# Enable AI chatbot features
+VITE_USE_AI=true
+
+# Add at least one provider (all free!)
+VITE_GROQ_API_KEY=gsk_xxxxx              # Recommended - Ultra fast
+VITE_GEMINI_API_KEY=AIzaSyxxxxx          # Google's Gemini
+VITE_HUGGINGFACE_API_KEY=hf_xxxxx        # Open source models
+VITE_COHERE_API_KEY=xxxxx                # Cohere AI
+
+# Get free API keys:
+# Groq: https://console.groq.com (Fastest, Llama 3.1)
+# Gemini: https://makersuite.google.com/app/apikey
+# HuggingFace: https://huggingface.co/settings/tokens
+# Cohere: https://dashboard.cohere.com/api-keys
+```
+
+**Full API docs:** [API_REFERENCE.md](API_REFERENCE.md)  
+**AI Setup:** [AI_SETUP_GUIDE.md](AI_SETUP_GUIDE.md)
 
 ---
 
@@ -312,7 +360,7 @@ MIT License - see [LICENSE](LICENSE) file.
 ## 👨‍💻 Author
 
 **Hans Christian Delos Santos**  
-<img src="https://img.shields.io/badge/-San_Jose_Community_College-2563EB?style=flat-square&logo=googlescholar&logoColor=white" />  
+<img src="https://img.shields.io/badge/-Saint_Joseph_College_of_Baggao-2563EB?style=flat-square&logo=googlescholar&logoColor=white" />  
 <img src="https://img.shields.io/badge/-Email-EA4335?style=flat-square&logo=gmail&logoColor=white" /> delossantoshanschristian@sjcbi.edu.ph  
 <img src="https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github&logoColor=white" /> [@hans919](https://github.com/hans919)
 
@@ -338,6 +386,6 @@ MIT License - see [LICENSE](LICENSE) file.
 [![TailwindCSS](https://img.shields.io/badge/Built_with-TailwindCSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![MySQL](https://img.shields.io/badge/Built_with-MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)](https://mysql.com)
 
-**Graduate Tracking System © 2025 - San Jose Community College**
+**Graduate Tracking System © 2025 - Saint Joseph College of Baggao**
 
 </div>

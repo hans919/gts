@@ -3,6 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { GraduationCap, Bell, ChevronDown, Moon, Sun, CheckCircle, Trash2, Settings, LogOut, Edit } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import axios from 'axios';
 
 interface GraduateProfile {
@@ -52,6 +62,7 @@ export default function GraduatePortalHeader({ title, subtitle, profile: externa
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -178,6 +189,8 @@ export default function GraduatePortalHeader({ title, subtitle, profile: externa
   };
 
   const handleLogout = () => {
+    setShowLogoutDialog(false);
+    setShowProfileDropdown(false);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     sessionStorage.clear();
@@ -254,7 +267,7 @@ export default function GraduatePortalHeader({ title, subtitle, profile: externa
 
               {/* Notifications Dropdown */}
               {showNotifications && (
-                <div className="absolute right-0 mt-2 w-96 max-w-[calc(100vw-2rem)] bg-popover rounded-lg shadow-xl border z-[60] max-h-[500px] overflow-hidden flex flex-col">
+                <div className="fixed sm:absolute left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 mt-2 w-auto sm:w-96 bg-popover rounded-lg shadow-xl border z-[60] max-h-[500px] overflow-hidden flex flex-col">
                   <div className="p-3 sm:p-4 border-b bg-muted">
                     <div className="flex items-center justify-between">
                       <h3 className="font-semibold text-base sm:text-lg">Notifications</h3>
@@ -463,7 +476,10 @@ export default function GraduatePortalHeader({ title, subtitle, profile: externa
                     <div className="my-1 h-px bg-gray-200" />
                     
                     <button
-                      onClick={handleLogout}
+                      onClick={() => {
+                        setShowProfileDropdown(false);
+                        setShowLogoutDialog(true);
+                      }}
                       className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded transition-colors"
                     >
                       <LogOut className="h-4 w-4" />
@@ -476,6 +492,24 @@ export default function GraduatePortalHeader({ title, subtitle, profile: externa
           </div>
         </div>
       </div>
+
+      {/* Logout Confirmation Dialog */}
+      <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure you want to logout?</AlertDialogTitle>
+            <AlertDialogDescription>
+              You will be redirected to the login page and will need to sign in again to access your account.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleLogout} className="bg-red-600 hover:bg-red-700">
+              Logout
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </header>
   );
 }

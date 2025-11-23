@@ -483,7 +483,7 @@ export default function PrivacySettings() {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel onClick={() => setDeleteConfirmation('')}>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={deleteAccount} className="bg-destructive hover:bg-destructive/90">
+                    <AlertDialogAction onClick={deleteAccount} className="bg-red-600 hover:bg-red-700">
                       Delete Account
                     </AlertDialogAction>
                   </AlertDialogFooter>
