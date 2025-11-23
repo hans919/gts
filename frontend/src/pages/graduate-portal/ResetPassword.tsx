@@ -5,10 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
 import axios from 'axios';
 
 export default function ResetPassword() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const email = searchParams.get('email');
@@ -52,7 +54,11 @@ export default function ResetPassword() {
         password_confirmation: formData.password_confirmation,
       });
 
-      alert('Password reset successful! You can now login with your new password.');
+      toast({
+        title: "Success!",
+        description: "Password reset successful! You can now login with your new password.",
+        variant: "success",
+      });
       navigate('/login');
     } catch (err: any) {
       console.error('Reset password error:', err.response?.data);

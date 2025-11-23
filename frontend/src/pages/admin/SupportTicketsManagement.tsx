@@ -1,9 +1,21 @@
 import { useState, useEffect } from 'react';
-import { Loader2, MessageSquare, Clock, CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
+import { Loader2, MessageSquare, Clock, CheckCircle, AlertCircle, Trash2, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { useToast } from '@/hooks/use-toast';
 import axios from 'axios';
 
 interface SupportTicket {
@@ -23,8 +35,10 @@ interface SupportTicket {
 }
 
 export default function SupportTicketsManagement() {
+  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [tickets, setTickets] = useState<SupportTicket[]>([]);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
   const [selectedTicket, setSelectedTicket] = useState<SupportTicket | null>(null);
   const [response, setResponse] = useState('');
   const [status, setStatus] = useState('open');
@@ -67,29 +81,47 @@ export default function SupportTicketsManagement() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      alert('Response submitted successfully!');
+      toast({
+        title: "Success!",
+        description: "Response submitted successfully!",
+        variant: "success",
+      });
       setSelectedTicket(null);
       setResponse('');
       fetchTickets();
     } catch (error: any) {
       console.error('Error submitting response:', error);
-      alert(error.response?.data?.message || 'Failed to submit response');
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || 'Failed to submit response',
+        variant: "destructive",
+      });
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this ticket?')) return;
+  const handleDelete = async () => {
+    if (!deleteId) return;
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/admin/support-tickets/${id}`, {
+      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/admin/support-tickets/${deleteId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert('Ticket deleted successfully!');
+      toast({
+        title: "Success!",
+        description: "Ticket deleted successfully!",
+        variant: "success",
+      });
       fetchTickets();
+      setDeleteId(null);
     } catch (error) {
       console.error('Error deleting ticket:', error);
-      alert('Failed to delete ticket');
+      toast({
+        title: "Error",
+        description: "Failed to delete ticket",
+        variant: "destructive",
+      });
+      setDeleteId(null);
     }
   };
 
@@ -281,14 +313,30 @@ export default function SupportTicketsManagement() {
                       <MessageSquare className="h-4 w-4 mr-2" />
                       {ticket.admin_response ? 'Update Response' : 'Respond'}
                     </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDelete(ticket.id)}
-                    >
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Delete
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => setDeleteId(ticket.id)}
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Delete
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete Support Ticket</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete this support ticket? This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel onClick={() => setDeleteId(null)}>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </div>
               </CardContent>

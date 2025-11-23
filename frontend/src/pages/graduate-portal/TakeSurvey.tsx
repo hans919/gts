@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import axios from 'axios';
 
 interface Question {
@@ -25,6 +26,7 @@ interface Survey {
 export default function TakeSurvey() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [survey, setSurvey] = useState<Survey | null>(null);
@@ -78,7 +80,11 @@ export default function TakeSurvey() {
     for (let i = 0; i < survey.questions.length; i++) {
       const question = survey.questions[i];
       if (question.required && !answers[i]) {
-        alert(`Please answer question ${i + 1}: ${question.text}`);
+        toast({
+          title: "Required Field",
+          description: `Please answer question ${i + 1}: ${question.text}`,
+          variant: "destructive",
+        });
         return false;
       }
     }
@@ -113,7 +119,11 @@ export default function TakeSurvey() {
         }
       );
 
-      alert('Survey submitted successfully!');
+      toast({
+        title: "Success!",
+        description: "Survey submitted successfully!",
+        variant: "success",
+      });
       navigate('/graduate/survey-history');
     } catch (error: any) {
       console.error('Error submitting survey:', error);

@@ -1,10 +1,22 @@
 import { useState, useEffect } from 'react';
-import { Loader2, Plus, Edit, Trash2, Users } from 'lucide-react';
+import { Loader2, Plus, Edit, Trash2, Users, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { useToast } from '@/hooks/use-toast';
 import axios from 'axios';
 
 interface CareerService {
@@ -18,8 +30,10 @@ interface CareerService {
 }
 
 export default function CareerServicesManagement() {
+  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [services, setServices] = useState<CareerService[]>([]);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [editingService, setEditingService] = useState<CareerService | null>(null);
   const [formData, setFormData] = useState({
@@ -60,21 +74,33 @@ export default function CareerServicesManagement() {
           formData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        alert('Service updated successfully!');
+        toast({
+          title: "Success!",
+          description: "Service updated successfully!",
+          variant: "success",
+        });
       } else {
         await axios.post(
           'https://lightsteelblue-locust-816886.hostingersite.com/api/admin/career-services',
           formData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        alert('Service created successfully!');
+        toast({
+          title: "Success!",
+          description: "Service created successfully!",
+          variant: "success",
+        });
       }
       
       resetForm();
       fetchServices();
     } catch (error: any) {
       console.error('Error saving service:', error);
-      alert(error.response?.data?.message || 'Failed to save service');
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || 'Failed to save service',
+        variant: "destructive",
+      });
     }
   };
 
@@ -91,19 +117,29 @@ export default function CareerServicesManagement() {
     setShowForm(true);
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this service?')) return;
+  const handleDelete = async () => {
+    if (!deleteId) return;
     
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/admin/career-services/${id}`, {
+      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/admin/career-services/${deleteId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert('Service deleted successfully!');
+      toast({
+        title: "Success!",
+        description: "Service deleted successfully!",
+        variant: "success",
+      });
       fetchServices();
+      setDeleteId(null);
     } catch (error) {
       console.error('Error deleting service:', error);
-      alert('Failed to delete service');
+      toast({
+        title: "Error",
+        description: "Failed to delete service",
+        variant: "destructive",
+      });
+      setDeleteId(null);
     }
   };
 
@@ -251,9 +287,25 @@ export default function CareerServicesManagement() {
                   <Button variant="outline" size="sm" onClick={() => handleEdit(service)}>
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button variant="destructive" size="sm" onClick={() => handleDelete(service.id)}>
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive" size="sm" onClick={() => setDeleteId(service.id)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete Career Service</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to delete this career service? This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel onClick={() => setDeleteId(null)}>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
             </CardHeader>

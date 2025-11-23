@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, GraduationCap, Plus, Briefcase, TrendingUp, Calendar, Building, ArrowLeft } from 'lucide-react';
+import { Loader2, Plus, Briefcase, TrendingUp, Calendar, Building, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import GraduatePortalHeader from '@/components/graduate/GraduatePortalHeader';
 import axios from 'axios';
 
 interface CareerUpdate {
@@ -21,6 +23,7 @@ interface CareerUpdate {
 
 export default function CareerUpdates() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState('');
@@ -88,17 +91,17 @@ export default function CareerUpdates() {
         effective_date: '',
       });
       setShowForm(false);
-      alert('Career update added successfully!');
+      toast({
+        title: "Success!",
+        description: "Career update added successfully!",
+        variant: "success",
+      });
     } catch (err: any) {
       console.error('Error adding career update:', err.response?.data);
       setError(err.response?.data?.message || 'Failed to add career update');
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleBack = () => {
-    navigate('/graduate/dashboard');
   };
 
   const getUpdateIcon = (type: string) => {
@@ -140,33 +143,35 @@ export default function CareerUpdates() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-card border-b shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Button variant="ghost" size="icon" onClick={handleBack}>
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <div className="flex items-center space-x-3">
-                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <GraduationCap className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold">Career Status Updates</h1>
-                  <p className="text-sm text-muted-foreground">Track your professional journey</p>
-                </div>
-              </div>
-            </div>
-            <Button onClick={() => setShowForm(!showForm)}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Update
-            </Button>
-          </div>
-        </div>
-      </header>
+      <GraduatePortalHeader 
+        title="Career Status Updates"
+        subtitle="Track your professional journey"
+      />
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back Button */}
+        <Button 
+          variant="ghost" 
+          onClick={() => navigate('/graduate/dashboard')}
+          className="mb-4"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Dashboard
+        </Button>
+
+        {/* Page Header with Add Button */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold">Your Career Timeline</h2>
+            <p className="text-sm text-muted-foreground mt-1">Track your professional journey</p>
+          </div>
+          <Button onClick={() => setShowForm(!showForm)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Add Update
+          </Button>
+        </div>
+
         {/* Add Update Form */}
         {showForm && (
           <Card className="mb-6">

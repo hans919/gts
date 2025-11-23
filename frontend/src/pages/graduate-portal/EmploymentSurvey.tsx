@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, GraduationCap, Briefcase, DollarSign, ArrowLeft, Send } from 'lucide-react';
+import { Loader2, Briefcase, DollarSign, Send, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import GraduatePortalHeader from '@/components/graduate/GraduatePortalHeader';
 import axios from 'axios';
 
 export default function EmploymentSurvey() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState('');
@@ -83,7 +85,11 @@ export default function EmploymentSurvey() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      alert('Survey submitted successfully! Thank you for your response.');
+      toast({
+        title: "Success!",
+        description: "Survey submitted successfully! Thank you for your response.",
+        variant: "success",
+      });
       navigate('/graduate/dashboard');
     } catch (err: any) {
       console.error('Error submitting survey:', err.response?.data);
@@ -107,27 +113,23 @@ export default function EmploymentSurvey() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-card border-b shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="icon" onClick={handleBack}>
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div className="flex items-center space-x-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <GraduationCap className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold">Employment Tracer Survey</h1>
-                <p className="text-sm text-muted-foreground">Help us track your career progress</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <GraduatePortalHeader 
+        title="Employment Tracer Survey"
+        subtitle="Help us track your career progress"
+      />
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back Button */}
+        <Button 
+          variant="ghost" 
+          onClick={() => navigate('/graduate/dashboard')}
+          className="mb-4"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Dashboard
+        </Button>
+
         {/* Survey History */}
         {surveyHistory.length > 0 && (
           <Card className="mb-6">

@@ -1,9 +1,23 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, Shield, Eye, EyeOff, Lock, Download, Trash2, ArrowLeft, Save } from 'lucide-react';
+import { Loader2, Shield, Eye, EyeOff, Lock, Download, Trash2, Save, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import GraduatePortalHeader from '@/components/graduate/GraduatePortalHeader';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { useToast } from '@/hooks/use-toast';
 import axios from 'axios';
 
 interface PrivacySettings {
@@ -18,9 +32,12 @@ interface PrivacySettings {
 }
 
 export default function PrivacySettings() {
+  const { toast } = useToast();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState('');
   const [settings, setSettings] = useState<PrivacySettings>({
     share_employment_data: true,
     share_contact_info: false,
@@ -80,10 +97,18 @@ export default function PrivacySettings() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      alert('Privacy settings updated successfully!');
+      toast({
+        title: "Success!",
+        description: "Privacy settings updated successfully!",
+        variant: "success",
+      });
     } catch (error: any) {
       console.error('Error updating privacy settings:', error);
-      alert(error.response?.data?.message || 'Failed to update settings');
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || 'Failed to update settings',
+        variant: "destructive",
+      });
     } finally {
       setSaving(false);
     }
@@ -106,23 +131,21 @@ export default function PrivacySettings() {
       link.remove();
     } catch (error) {
       console.error('Error exporting data:', error);
-      alert('Failed to export data');
+      toast({
+        title: "Error",
+        description: "Failed to export data",
+        variant: "destructive",
+      });
     }
   };
 
   const deleteAccount = async () => {
-    const confirmed = window.confirm(
-      'Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently deleted.'
-    );
-
-    if (!confirmed) return;
-
-    const doubleConfirm = window.prompt(
-      'Type "DELETE" to confirm account deletion:'
-    );
-
-    if (doubleConfirm !== 'DELETE') {
-      alert('Account deletion cancelled');
+    if (deleteConfirmation !== 'DELETE') {
+      toast({
+        title: "Error",
+        description: 'Please type "DELETE" to confirm',
+        variant: "destructive",
+      });
       return;
     }
 
@@ -132,12 +155,23 @@ export default function PrivacySettings() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      alert('Your account has been deleted');
+      toast({
+        title: "Account Deleted",
+        description: "Your account has been deleted",
+        variant: "success",
+      });
       localStorage.clear();
       navigate('/login');
     } catch (error) {
       console.error('Error deleting account:', error);
-      alert('Failed to delete account');
+      toast({
+        title: "Error",
+        description: "Failed to delete account",
+        variant: "destructive",
+      });
+    } finally {
+      setShowDeleteDialog(false);
+      setDeleteConfirmation('');
     }
   };
 
@@ -152,33 +186,27 @@ export default function PrivacySettings() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-card border-b shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Button variant="ghost" size="icon" onClick={() => navigate('/graduate/dashboard')}>
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <div className="flex items-center space-x-3">
-                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Shield className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold">Privacy & Data Settings</h1>
-                  <p className="text-sm text-muted-foreground">Manage your privacy preferences</p>
-                </div>
-              </div>
-            </div>
-            <Button onClick={handleSave} disabled={saving}>
-              {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-              Save Changes
-            </Button>
-          </div>
-        </div>
-      </header>
+      <GraduatePortalHeader 
+        title="Privacy & Data Settings"
+        subtitle="Manage your privacy preferences"
+      />
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        {/* Back Button and Save Button Section */}
+        <div className="flex justify-between items-center">
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate('/graduate/dashboard')}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Dashboard
+          </Button>
+          <Button onClick={handleSave} disabled={saving}>
+            {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+            Save Changes
+          </Button>
+        </div>
         {/* Data Sharing */}
         <Card>
           <CardHeader>
@@ -428,10 +456,39 @@ export default function PrivacySettings() {
             </p>
 
             <div className="pt-4 border-t">
-              <Button variant="destructive" className="w-full justify-start" onClick={deleteAccount}>
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete My Account
-              </Button>
+              <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" className="w-full justify-start">
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete My Account
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete Account</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently deleted.
+                      <div className="mt-4">
+                        <Label htmlFor="delete-confirm">Type "DELETE" to confirm:</Label>
+                        <Input
+                          id="delete-confirm"
+                          type="text"
+                          value={deleteConfirmation}
+                          onChange={(e) => setDeleteConfirmation(e.target.value)}
+                          placeholder="Type DELETE"
+                          className="mt-2"
+                        />
+                      </div>
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel onClick={() => setDeleteConfirmation('')}>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={deleteAccount} className="bg-destructive hover:bg-destructive/90">
+                      Delete Account
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
               <p className="text-xs text-destructive px-1 mt-2">
                 ⚠️ Warning: This action is permanent and cannot be undone
               </p>

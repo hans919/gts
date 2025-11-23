@@ -3,21 +3,65 @@ import { X, Send, Loader2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { 
+  getAIEnhancedChatbotService, 
+  getChatbotDebugger, 
+  createAIProviderManager,
+  GeminiProvider,
+  GroqProvider,
+  HuggingFaceProvider,
+  CohereProvider,
+  type Message,
+  type ChatbotResponse
+} from './chatbot/index';
 
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: Date;
+// Initialize AI provider manager
+const aiManager = createAIProviderManager();
+
+// Add AI providers (only if API keys are available)
+if (import.meta.env.VITE_GEMINI_API_KEY) {
+  aiManager.addProvider(new GeminiProvider(import.meta.env.VITE_GEMINI_API_KEY));
+  console.log('✅ Gemini AI provider initialized');
 }
 
-const quickQuestions = [
-  "How do I submit an employment survey?",
-  "Where can I find job opportunities?",
-  "How do I update my profile?",
-  "What are career services?",
-  "How do I contact support?"
-];
+if (import.meta.env.VITE_GROQ_API_KEY) {
+  aiManager.addProvider(new GroqProvider(import.meta.env.VITE_GROQ_API_KEY));
+  console.log('✅ Groq AI provider initialized');
+}
+
+if (import.meta.env.VITE_HUGGINGFACE_API_KEY) {
+  aiManager.addProvider(new HuggingFaceProvider(import.meta.env.VITE_HUGGINGFACE_API_KEY));
+  console.log('✅ HuggingFace AI provider initialized');
+}
+
+if (import.meta.env.VITE_COHERE_API_KEY) {
+  aiManager.addProvider(new CohereProvider(import.meta.env.VITE_COHERE_API_KEY));
+  console.log('✅ Cohere AI provider initialized');
+}
+
+// Initialize AI-enhanced chatbot service
+const chatbotService = getAIEnhancedChatbotService({
+  useAI: import.meta.env.VITE_USE_AI === 'true',
+  aiConfidenceThreshold: 0.5,  // Use AI when rule-based confidence < 0.5
+  hybridMode: true,             // Enhance rule-based responses with AI
+  minConfidence: 0.4,
+  maxSuggestions: 3,
+  enableContextAwareness: true,
+  enableFuzzyMatching: true,
+  debugMode: false // Set to true for development
+}, aiManager);
+
+const chatbotDebugger = getChatbotDebugger();
+
+// Log AI status
+if (import.meta.env.VITE_USE_AI === 'true') {
+  console.log('🤖 AI-enhanced chatbot enabled');
+  chatbotService.getAIStatus().then(status => {
+    console.log('AI Status:', status);
+  });
+} else {
+  console.log('📝 Rule-based chatbot (AI disabled)');
+}
 
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +69,11 @@ export default function ChatBot() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [sessionId] = useState(`session_${Date.now()}`);
+  const [showDebug, setShowDebug] = useState(false);
+  const [quickQuestions, setQuickQuestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [quickActions, setQuickActions] = useState<any[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Add custom animation styles
@@ -59,15 +108,12 @@ export default function ChatBot() {
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
-      // Add welcome message
-      setMessages([{
-        id: Date.now().toString(),
-        role: 'assistant',
-        content: "Hi! 👋 I'm your Graduate Tracer System assistant. I can help you navigate the system, submit surveys, find resources, and more. What would you like to know?",
-        timestamp: new Date()
-      }]);
+      // Get welcome message from chatbot service
+      const welcomeMsg = chatbotService.getWelcomeMessage(sessionId);
+      setMessages([welcomeMsg]);
+      setQuickQuestions(chatbotService.getQuickQuestions());
     }
-  }, [isOpen]);
+  }, [isOpen, sessionId]);
 
   useEffect(() => {
     scrollToBottom();
@@ -77,85 +123,55 @@ export default function ChatBot() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const getAIResponse = async (userMessage: string): Promise<string> => {
-    // Simple rule-based responses for common queries
-    const lowerMessage = userMessage.toLowerCase();
 
-    if (lowerMessage.includes('employment survey') || lowerMessage.includes('submit survey')) {
-      return "To submit an employment survey:\n\n1. Click on 'Employment Survey' in the sidebar or dashboard\n2. Fill out your current employment status\n3. If employed, provide company name, job title, and salary (optional)\n4. Share details about how you found the job\n5. Add information about skills and trainings\n6. Click 'Submit Survey'\n\nYour responses help improve our programs and support future graduates!";
-    }
-
-    if (lowerMessage.includes('job') && (lowerMessage.includes('find') || lowerMessage.includes('search') || lowerMessage.includes('opportunities'))) {
-      return "To find job opportunities:\n\n1. Go to 'Alumni Resources' from the sidebar\n2. Browse the Jobs section\n3. You'll see job listings with details like:\n   - Job title and company\n   - Location and salary range\n   - Job type (Full-time, Part-time, etc.)\n4. Click on jobs to view full details\n5. Some jobs have external application links\n\nYou can also bookmark jobs for later!";
-    }
-
-    if (lowerMessage.includes('profile') || lowerMessage.includes('update information')) {
-      return "To update your profile:\n\n1. Click on your profile icon in the header\n2. Select 'Settings' from the dropdown\n3. In the Profile tab, you can update:\n   - Personal information\n   - Contact details\n   - Profile photo\n4. Remember to click 'Save Changes' when done\n\nYou can also change your password in the Security tab.";
-    }
-
-    if (lowerMessage.includes('career service') || lowerMessage.includes('career help')) {
-      return "Career Services provide professional support:\n\n1. Go to 'Alumni Resources' > Career Services\n2. Browse available services like:\n   - Resume writing assistance\n   - Interview preparation\n   - Career counseling\n   - Networking events\n3. Each service shows contact info and website\n\nThese services are here to support your career growth!";
-    }
-
-    if (lowerMessage.includes('support') || lowerMessage.includes('help') || lowerMessage.includes('problem') || lowerMessage.includes('issue')) {
-      return "To get support:\n\n1. Go to 'Feedback & Support' in the sidebar\n2. Click 'Submit New Ticket'\n3. Choose a category:\n   - Technical issues\n   - Account problems\n   - Survey questions\n   - General inquiry\n4. Select priority level\n5. Describe your issue\n6. Submit the ticket\n\nYou'll receive a response from the admin team. You can track your tickets in the same section.";
-    }
-
-    if (lowerMessage.includes('notification')) {
-      return "To manage notifications:\n\n1. Click the bell icon in the header to view notifications\n2. You'll see:\n   - System updates\n   - New surveys\n   - Job postings\n   - Career events\n3. Click on a notification to view details\n4. Mark as read or delete old notifications\n\nNotifications keep you updated on opportunities and important announcements!";
-    }
-
-    if (lowerMessage.includes('privacy') || lowerMessage.includes('data') || lowerMessage.includes('delete account')) {
-      return "Privacy & Data Settings:\n\n1. Go to 'Privacy Settings' in the sidebar\n2. You can:\n   - Control who sees your profile\n   - Manage data sharing preferences\n   - Export your data\n   - Request account deletion\n\nWe respect your privacy and give you full control over your information.";
-    }
-
-    if (lowerMessage.includes('training') || lowerMessage.includes('course') || lowerMessage.includes('program')) {
-      return "Training Programs:\n\n1. Visit 'Alumni Resources' > Training Programs\n2. Browse available programs:\n   - Professional certifications\n   - Skills development courses\n   - Workshops and seminars\n3. View details like duration, schedule, and registration\n4. Click registration links to enroll\n\nThese programs help you develop new skills and advance your career!";
-    }
-
-    if (lowerMessage.includes('dashboard')) {
-      return "The Dashboard is your home page with:\n\n1. Profile Overview - Your basic info and status\n2. Quick Actions - Easy access to common tasks\n3. Recent Activities - Your latest updates\n4. System Stats - Survey completion, updates posted\n5. Shortcuts to:\n   - Submit Employment Survey\n   - Post Career Update\n   - Browse Jobs\n   - Access Resources\n\nIt's designed to give you quick access to everything you need!";
-    }
-
-    // Default response
-    return "I can help you with:\n\n• Submitting employment surveys\n• Finding job opportunities\n• Updating your profile\n• Accessing career services\n• Getting technical support\n• Managing notifications\n• Understanding privacy settings\n\nWhat specific topic would you like to know more about?";
-  };
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: 'user',
-      content: input,
-      timestamp: new Date()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
+    const userInput = input;
     setInput('');
     setLoading(true);
     setIsTyping(true);
 
     try {
+      console.log('🔍 Processing message:', userInput);
+      
       // Simulate typing delay for more natural feel
-      await new Promise(resolve => setTimeout(resolve, 800));
-      const response = await getAIResponse(input);
+      await new Promise(resolve => setTimeout(resolve, 600));
       
-      // Add another small delay before showing response
-      await new Promise(resolve => setTimeout(resolve, 400));
+      // Process message through chatbot service
+      const response: ChatbotResponse = await chatbotService.processMessage(
+        userInput,
+        sessionId
+      );
       
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: response,
-        timestamp: new Date()
-      };
+      console.log('📥 Response received:', {
+        intent: response.intent,
+        confidence: response.confidence,
+        contentLength: response.content.length
+      });
+      
+      // Get updated messages from service
+      const updatedMessages = chatbotService.getHistory(sessionId);
+      setMessages(updatedMessages);
 
-      setMessages(prev => [...prev, assistantMessage]);
+      // Update suggestions and quick actions
+      if (response.suggestions && response.suggestions.length > 0) {
+        setSuggestions(response.suggestions);
+      } else {
+        setSuggestions([]);
+      }
+
+      if (response.quickActions) {
+        setQuickActions(response.quickActions);
+      } else {
+        setQuickActions([]);
+      }
+
     } catch (error) {
-      console.error('Error getting response:', error);
+      console.error('❌ Error getting response:', error);
       const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
+        id: `msg_${Date.now()}`,
         role: 'assistant',
         content: "I'm sorry, I encountered an error. Please try asking your question again or contact support if the issue persists.",
         timestamp: new Date()
@@ -170,6 +186,33 @@ export default function ChatBot() {
   const handleQuickQuestion = (question: string) => {
     setInput(question);
     setTimeout(() => handleSend(), 100);
+  };
+
+  const handleClearChat = () => {
+    chatbotService.clearConversation(sessionId);
+    const welcomeMsg = chatbotService.getWelcomeMessage(sessionId);
+    setMessages([welcomeMsg]);
+    setQuickQuestions(chatbotService.getQuickQuestions());
+    setSuggestions([]);
+    setQuickActions([]);
+  };
+
+  const handleExportConversation = () => {
+    const conversation = chatbotService.exportConversation(sessionId);
+    const blob = new Blob([JSON.stringify(conversation, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `chatbot-conversation-${sessionId}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleShowDebug = () => {
+    const report = chatbotDebugger.generateReport(sessionId);
+    console.log(report);
+    chatbotDebugger.logConversationFlow(sessionId);
+    setShowDebug(true);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -370,9 +413,9 @@ export default function ChatBot() {
           </div>
         )}
 
-        {messages.length === 1 && (
+        {messages.length === 1 && quickQuestions.length > 0 && (
           <div className="space-y-2">
-            <p className="text-xs text-muted-foreground">Quick questions:</p>
+            <p className="text-xs text-muted-foreground font-medium">💡 Quick questions:</p>
             {quickQuestions.map((question, idx) => (
               <Button
                 key={idx}
@@ -383,6 +426,43 @@ export default function ChatBot() {
                 onClick={() => handleQuickQuestion(question)}
               >
                 {question}
+              </Button>
+            ))}
+          </div>
+        )}
+
+        {!isTyping && suggestions.length > 0 && messages.length > 1 && (
+          <div className="space-y-2">
+            <p className="text-xs text-muted-foreground font-medium">🔍 You might also want to know:</p>
+            {suggestions.map((suggestion, idx) => (
+              <Button
+                key={idx}
+                variant="outline"
+                size="sm"
+                className="w-full text-left justify-start text-xs h-auto py-2 hover:bg-primary hover:text-primary-foreground transition-all animate-in fade-in-up"
+                style={{ animationDelay: `${idx * 100}ms` }}
+                onClick={() => handleQuickQuestion(suggestion)}
+              >
+                {suggestion}
+              </Button>
+            ))}
+          </div>
+        )}
+
+        {!isTyping && quickActions.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-xs text-muted-foreground font-medium">⚡ Quick actions:</p>
+            {quickActions.map((action, idx) => (
+              <Button
+                key={idx}
+                variant="secondary"
+                size="sm"
+                className="w-full text-left justify-start text-xs h-auto py-2 transition-all animate-in fade-in-up"
+                style={{ animationDelay: `${idx * 100}ms` }}
+                onClick={() => window.location.hash = action.action}
+              >
+                <span className="mr-2">{action.icon}</span>
+                {action.label}
               </Button>
             ))}
           </div>

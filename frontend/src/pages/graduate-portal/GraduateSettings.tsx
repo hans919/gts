@@ -5,10 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
 import axios from 'axios';
 
 export default function GraduateSettings() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [profile, setProfile] = useState<any>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
@@ -70,7 +72,11 @@ export default function GraduateSettings() {
         },
       });
 
-      alert('Profile photo updated successfully!');
+      toast({
+        title: "Success!",
+        description: "Profile photo updated successfully!",
+        variant: "success",
+      });
       
       // Ensure HTTPS URL for Hostinger
       const photoUrl = response.data.profile_photo_url.replace('http://', 'https://');
@@ -100,7 +106,11 @@ export default function GraduateSettings() {
       window.location.reload();
     } catch (error: any) {
       console.error('Error uploading photo:', error);
-      alert(error.response?.data?.message || 'Failed to upload photo');
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || 'Failed to upload photo',
+        variant: "destructive",
+      });
     } finally {
       setUploadingPhoto(false);
     }
@@ -110,12 +120,20 @@ export default function GraduateSettings() {
     e.preventDefault();
 
     if (passwordData.new_password !== passwordData.confirm_password) {
-      alert('New passwords do not match!');
+      toast({
+        title: "Error",
+        description: "New passwords do not match!",
+        variant: "destructive",
+      });
       return;
     }
 
     if (passwordData.new_password.length < 8) {
-      alert('Password must be at least 8 characters long!');
+      toast({
+        title: "Error",
+        description: "Password must be at least 8 characters long!",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -132,7 +150,11 @@ export default function GraduateSettings() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      alert('Password changed successfully!');
+      toast({
+        title: "Success!",
+        description: "Password changed successfully!",
+        variant: "success",
+      });
       setPasswordData({
         current_password: '',
         new_password: '',
@@ -140,7 +162,11 @@ export default function GraduateSettings() {
       });
     } catch (error: any) {
       console.error('Error changing password:', error);
-      alert(error.response?.data?.message || 'Failed to change password');
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || 'Failed to change password',
+        variant: "destructive",
+      });
     } finally {
       setChangingPassword(false);
     }

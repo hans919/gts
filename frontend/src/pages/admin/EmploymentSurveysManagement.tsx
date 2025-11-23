@@ -1,8 +1,19 @@
 import { useState, useEffect } from 'react';
-import { Loader2, Briefcase, Building2, MapPin, DollarSign, Calendar, Trash2, Eye } from 'lucide-react';
+import { Loader2, Briefcase, Building2, MapPin, DollarSign, Calendar, Trash2, Eye, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import axios from 'axios';
 
 interface EmploymentSurvey {
@@ -44,6 +55,7 @@ export default function EmploymentSurveysManagement() {
   const [selectedSurvey, setSelectedSurvey] = useState<EmploymentSurvey | null>(null);
   const [filter, setFilter] = useState<string>('all');
   const [error, setError] = useState<string>('');
+  const [deleteId, setDeleteId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchSurveys();
@@ -74,19 +86,19 @@ export default function EmploymentSurveysManagement() {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this survey?')) return;
+  const handleDelete = async () => {
+    if (!deleteId) return;
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/admin/employment-surveys/${id}`, {
+      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/admin/employment-surveys/${deleteId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert('Survey deleted successfully!');
+      setDeleteId(null);
       fetchSurveys();
     } catch (error) {
       console.error('Error deleting survey:', error);
-      alert('Failed to delete survey');
+      setError('Failed to delete survey');
     }
   };
 
@@ -456,14 +468,46 @@ export default function EmploymentSurveysManagement() {
                       <Eye className="h-4 w-4 mr-2" />
                       View Details
                     </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDelete(survey.id)}
-                    >
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Delete
-                    </Button>
+                    <AlertDialog open={deleteId === survey.id} onOpenChange={(open) => !open && setDeleteId(null)}>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => setDeleteId(survey.id)}
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Delete
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
+                              <AlertTriangle className="h-6 w-6 text-destructive" />
+                            </div>
+                            <div>
+                              <AlertDialogTitle className="text-left">Delete Employment Survey</AlertDialogTitle>
+                              <AlertDialogDescription className="text-left pt-1">
+                                {survey.first_name} {survey.last_name} ({survey.student_id})
+                              </AlertDialogDescription>
+                            </div>
+                          </div>
+                        </AlertDialogHeader>
+                        <AlertDialogDescription className="pt-2">
+                          This will permanently delete this employment survey response. This action cannot be undone.
+                        </AlertDialogDescription>
+                        <AlertDialogFooter className="mt-4">
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={handleDelete}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete Survey
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </div>
               </CardContent>

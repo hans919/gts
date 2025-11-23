@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, FileText, CheckCircle, Clock, AlertCircle, Plus, ArrowLeft, Calendar } from 'lucide-react';
+import { Loader2, FileText, CheckCircle, Clock, AlertCircle, Plus, Calendar, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import GraduatePortalHeader from '@/components/graduate/GraduatePortalHeader';
 import axios from 'axios';
 
 interface Survey {
@@ -99,27 +100,23 @@ export default function SurveyHistory() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-card border-b shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="icon" onClick={() => navigate('/graduate/dashboard')}>
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div className="flex items-center space-x-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <FileText className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold">Survey History</h1>
-                <p className="text-sm text-muted-foreground">Track your survey completion progress</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <GraduatePortalHeader 
+        title="Survey History"
+        subtitle="Track your survey completion progress"
+      />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back Button */}
+        <Button 
+          variant="ghost" 
+          onClick={() => navigate('/graduate/dashboard')}
+          className="mb-4"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Dashboard
+        </Button>
+
         {/* Statistics */}
         <div className="grid gap-4 md:grid-cols-4 mb-8">
           <Card>

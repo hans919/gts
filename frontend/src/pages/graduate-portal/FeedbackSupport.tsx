@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, MessageSquare, Send, CheckCircle, Clock, AlertCircle, ArrowLeft, Paperclip, X } from 'lucide-react';
+import { Loader2, MessageSquare, Send, CheckCircle, Clock, AlertCircle, Paperclip, X, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
+import GraduatePortalHeader from '@/components/graduate/GraduatePortalHeader';
 import axios from 'axios';
 
 interface SupportTicket {
@@ -22,6 +24,7 @@ interface SupportTicket {
 
 export default function FeedbackSupport() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -89,7 +92,11 @@ export default function FeedbackSupport() {
         }
       );
 
-      alert('Support ticket submitted successfully!');
+      toast({
+        title: "Success!",
+        description: "Support ticket submitted successfully!",
+        variant: "success",
+      });
       setShowForm(false);
       setFormData({
         subject: '',
@@ -101,7 +108,11 @@ export default function FeedbackSupport() {
       fetchTickets();
     } catch (error: any) {
       console.error('Error submitting ticket:', error);
-      alert(error.response?.data?.message || 'Failed to submit ticket');
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || 'Failed to submit ticket',
+        variant: "destructive",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -157,33 +168,34 @@ export default function FeedbackSupport() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-card border-b shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Button variant="ghost" size="icon" onClick={() => navigate('/graduate/dashboard')}>
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <div className="flex items-center space-x-3">
-                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <MessageSquare className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold">Feedback & Support</h1>
-                  <p className="text-sm text-muted-foreground">Get help and submit feedback</p>
-                </div>
-              </div>
-            </div>
-            <Button onClick={() => setShowForm(!showForm)}>
-              <Send className="mr-2 h-4 w-4" />
-              New Ticket
-            </Button>
-          </div>
-        </div>
-      </header>
+      <GraduatePortalHeader 
+        title="Feedback & Support"
+        subtitle="Get help and submit feedback"
+      />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back Button */}
+        <Button 
+          variant="ghost" 
+          onClick={() => navigate('/graduate/dashboard')}
+          className="mb-4"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Dashboard
+        </Button>
+
+        {/* New Ticket Button */}
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h2 className="text-2xl font-bold">Support Tickets</h2>
+            <p className="text-sm text-muted-foreground mt-1">View and manage your support requests</p>
+          </div>
+          <Button onClick={() => setShowForm(!showForm)}>
+            <Send className="mr-2 h-4 w-4" />
+            New Ticket
+          </Button>
+        </div>
         {/* New Ticket Form */}
         {showForm && (
           <Card className="mb-6">

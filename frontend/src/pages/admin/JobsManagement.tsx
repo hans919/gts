@@ -1,10 +1,22 @@
 import { useState, useEffect } from 'react';
-import { Loader2, Plus, Edit, Trash2, Briefcase } from 'lucide-react';
+import { Loader2, Plus, Edit, Trash2, Briefcase, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { useToast } from '@/hooks/use-toast';
 import axios from 'axios';
 
 interface Job {
@@ -20,8 +32,10 @@ interface Job {
 }
 
 export default function JobsManagement() {
+  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [formData, setFormData] = useState({
@@ -63,21 +77,33 @@ export default function JobsManagement() {
           formData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        alert('Job updated successfully!');
+        toast({
+          title: "Success!",
+          description: "Job updated successfully!",
+          variant: "success",
+        });
       } else {
         await axios.post(
           'https://lightsteelblue-locust-816886.hostingersite.com/api/admin/jobs',
           formData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        alert('Job created successfully!');
+        toast({
+          title: "Success!",
+          description: "Job created successfully!",
+          variant: "success",
+        });
       }
       
       resetForm();
       fetchJobs();
     } catch (error: any) {
       console.error('Error saving job:', error);
-      alert(error.response?.data?.message || 'Failed to save job');
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || 'Failed to save job',
+        variant: "destructive",
+      });
     }
   };
 
@@ -95,19 +121,28 @@ export default function JobsManagement() {
     setShowForm(true);
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this job posting?')) return;
-    
+  const handleDelete = async () => {
+    if (!deleteId) return;
+
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/admin/jobs/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/admin/jobs/${deleteId}`, {
+        headers: { Authorization: `Bearer ${token}` }
       });
-      alert('Job deleted successfully!');
+      toast({
+        title: "Success!",
+        description: "Job deleted successfully!",
+        variant: "success",
+      });
+      setDeleteId(null);
       fetchJobs();
     } catch (error) {
       console.error('Error deleting job:', error);
-      alert('Failed to delete job');
+      toast({
+        title: "Error",
+        description: "Failed to delete job",
+        variant: "destructive",
+      });
     }
   };
 
@@ -264,9 +299,25 @@ export default function JobsManagement() {
                   <Button variant="outline" size="sm" onClick={() => handleEdit(job)}>
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button variant="destructive" size="sm" onClick={() => handleDelete(job.id)}>
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive" size="sm" onClick={() => setDeleteId(job.id)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete Job Posting</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to delete this job posting? This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel onClick={() => setDeleteId(null)}>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
             </CardHeader>

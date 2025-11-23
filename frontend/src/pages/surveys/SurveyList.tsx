@@ -1,11 +1,23 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '@/services/api';
-import { Plus, Search, Calendar, Pencil, Trash } from 'lucide-react';
+import { Plus, Search, Calendar, Pencil, Trash, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useToast } from '@/hooks/use-toast';
 
 interface Survey {
   id: number;
@@ -18,9 +30,11 @@ interface Survey {
 }
 
 export default function SurveyList() {
+  const { toast } = useToast();
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [deleteId, setDeleteId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchSurveys();
@@ -39,15 +53,26 @@ export default function SurveyList() {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this survey?')) return;
+  const handleDelete = async () => {
+    if (!deleteId) return;
 
     try {
-      await api.delete(`/surveys/${id}`);
+      await api.delete(`/surveys/${deleteId}`);
+      toast({
+        title: "Success!",
+        description: "Survey deleted successfully!",
+        variant: "success",
+      });
       fetchSurveys();
+      setDeleteId(null);
     } catch (error) {
       console.error('Error deleting survey:', error);
-      alert('Failed to delete survey');
+      toast({
+        title: "Error",
+        description: "Failed to delete survey",
+        variant: "destructive",
+      });
+      setDeleteId(null);
     }
   };
 
@@ -150,13 +175,39 @@ export default function SurveyList() {
                     <Pencil className="h-4 w-4" />
                   </Link>
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleDelete(survey.id)}
-                >
-                  <Trash className="h-4 w-4" />
-                </Button>
+                <AlertDialog open={deleteId === survey.id} onOpenChange={(open) => !open && setDeleteId(null)}>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setDeleteId(survey.id)}
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <div className="flex items-center gap-2">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-destructive/10">
+                          <AlertTriangle className="h-5 w-5 text-destructive" />
+                        </div>
+                        <AlertDialogTitle>Delete Survey</AlertDialogTitle>
+                      </div>
+                      <AlertDialogDescription className="pt-3">
+                        Are you sure you want to delete this survey? This action cannot be undone and will permanently remove all associated data and responses.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={handleDelete}
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      >
+                        Delete Survey
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </CardFooter>
             </Card>
           ))}

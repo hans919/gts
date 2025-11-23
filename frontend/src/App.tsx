@@ -3,6 +3,7 @@ import Login from './pages/Login';
 import MainLayout from './components/layout/MainLayout';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import { Toaster } from './components/ui/toaster';
 import GraduateList from './pages/graduates/GraduateList';
 import AddGraduate from './pages/graduates/AddGraduate';
 import GraduateForm from './pages/graduates/GraduateForm';
@@ -37,6 +38,7 @@ import EmploymentSurveysManagement from './pages/admin/EmploymentSurveysManageme
 
 function App() {
   return (
+    <>
     <Routes>
       {/* Unified Authentication Routes */}
       <Route path="/login" element={<Login />} />
@@ -76,6 +78,8 @@ function App() {
       <Route path="/graduate/support" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><FeedbackSupport /></GraduatePortalLayout></ProtectedRoute>} />
       <Route path="/graduate/settings" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><GraduateSettings /></GraduatePortalLayout></ProtectedRoute>} />
     </Routes>
+    <Toaster />
+  </>
   );
 }
 

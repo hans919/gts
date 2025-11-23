@@ -13,7 +13,14 @@ export const authService = {
   },
 
   async logout(): Promise<void> {
-    await api.post('/logout');
+    try {
+      await api.post('/logout');
+    } catch (error) {
+      console.error('Logout API error:', error);
+    } finally {
+      // Always clear local data even if API fails
+      this.removeToken();
+    }
   },
 
   async getCurrentUser(): Promise<User> {
@@ -23,6 +30,9 @@ export const authService = {
 
   setToken(token: string): void {
     localStorage.setItem('token', token);
+    // Set token expiry to 24 hours from now
+    const expiry = Date.now() + (24 * 60 * 60 * 1000);
+    localStorage.setItem('token_expiry', expiry.toString());
   },
 
   getToken(): string | null {
@@ -32,6 +42,7 @@ export const authService = {
   removeToken(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('token_expiry');
   },
 
   setUser(user: User): void {

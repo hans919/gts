@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, Briefcase, GraduationCap, Users, BookOpen, Calendar, MapPin, ExternalLink, Search, Bookmark, ArrowLeft } from 'lucide-react';
+import { Loader2, Briefcase, Users, BookOpen, Calendar, MapPin, ExternalLink, Search, Bookmark, GraduationCap, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import GraduatePortalHeader from '@/components/graduate/GraduatePortalHeader';
 import { api } from '@/services/api';
 
 interface JobPosting {
@@ -113,27 +114,23 @@ export default function AlumniResources() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-card border-b shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => navigate('/graduate/dashboard')}>
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div className="flex items-center gap-3 min-w-0 flex-1">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <BookOpen className="h-5 w-5 text-primary" />
-              </div>
-              <div className="min-w-0">
-                <h1 className="text-lg sm:text-xl font-bold truncate">Alumni Resources</h1>
-                <p className="text-xs sm:text-sm text-muted-foreground truncate">Career opportunities, services, and training</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <GraduatePortalHeader 
+        title="Alumni Resources"
+        subtitle="Career opportunities, services, and training"
+      />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back Button */}
+        <Button 
+          variant="ghost" 
+          onClick={() => navigate('/graduate/dashboard')}
+          className="mb-4"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Dashboard
+        </Button>
+
         {/* Tabs */}
         <div className="flex flex-col sm:flex-row gap-2 mb-6">
           <Button

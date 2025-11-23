@@ -7,8 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
 
 export default function Login() {
+  const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -17,7 +19,17 @@ export default function Login() {
   const [showTerms, setShowTerms] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [sessionExpiredMsg, setSessionExpiredMsg] = useState('');
   const navigate = useNavigate();
+
+  // Check for session expiry message
+  useEffect(() => {
+    const sessionExpired = sessionStorage.getItem('session_expired');
+    if (sessionExpired) {
+      setSessionExpiredMsg('Your session has expired due to inactivity. Please login again.');
+      sessionStorage.removeItem('session_expired');
+    }
+  }, []);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -53,9 +65,23 @@ export default function Login() {
         },
       });
 
-      // Save token to localStorage
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      // Save token with expiry
+      const token = response.data.token;
+      const user = response.data.user;
+      
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      // Set token expiry to 24 hours from now
+      const expiry = Date.now() + (24 * 60 * 60 * 1000);
+      localStorage.setItem('token_expiry', expiry.toString());
+
+      // Show success toast
+      const userName = user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email || 'User';
+      toast({
+        title: "Welcome back!",
+        description: `Successfully logged in as ${userName}`,
+        variant: "success",
+      });
 
       // Redirect based on user role - use replace to prevent back navigation
       const userRole = response.data.user.role;
@@ -108,6 +134,20 @@ export default function Login() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
+              {sessionExpiredMsg && (
+                <div className="rounded-lg border border-yellow-500/50 bg-yellow-50 dark:bg-yellow-900/20 p-4">
+                  <div className="flex gap-2">
+                    <Info className="h-4 w-4 text-yellow-600 dark:text-yellow-500 mt-0.5 flex-shrink-0" />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-yellow-800 dark:text-yellow-400">Session Expired</p>
+                      <p className="text-sm text-yellow-700 dark:text-yellow-500 mt-1">
+                        {sessionExpiredMsg}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {error && (
                 <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4">
                   <div className="flex gap-2">

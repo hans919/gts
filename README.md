@@ -2,45 +2,73 @@
 
 <img src="https://img.shields.io/badge/GTS-Graduate_Tracker-2563eb?style=for-the-badge" alt="GTS" height="60"/>
 
-# SJCB Graduate Tracking System
+# 🎓 SJCB Graduate Tracking System
 
 **Track alumni careers. Drive outcomes. Make data-driven decisions.**
 
-Modern platform for educational institutions to manage graduate data, track employment, and analyze career outcomes.
+A comprehensive web-based platform designed for educational institutions to efficiently manage graduate data, monitor employment outcomes, conduct surveys, and generate insightful analytics for continuous program improvement.
 
 [![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=flat-square&logo=laravel)](https://laravel.com)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat-square&logo=mysql&logoColor=white)](https://mysql.com)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind-3-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
-[Quick Start](#-quick-start) · [Features](#-features) · [Docs](#-documentation) · [Demo](#-demo)
+[Quick Start](#-quick-start) · [Features](#-features) · [Documentation](#-documentation) · [Tech Stack](#-tech-stack)
 
 </div>
 
 ---
 
-## 🎯 What It Does
+## 📋 Overview
+
+The **Graduate Tracking System (GTS)** is a modern, full-stack web application that streamlines the process of tracking and analyzing graduate employment outcomes. Built for San Jose Community College, it provides a dual-interface platform serving both administrators and graduates.
+
+### 🎯 System Purpose
 
 <table>
 <tr>
 <td width="50%">
 
-### For Administrators
-✅ Manage graduate records with advanced search  
-✅ Create custom surveys with 5+ question types  
-✅ View real-time analytics & employment trends  
-✅ Post jobs, resources, and training programs  
-✅ Export reports (CSV, PDF)  
+### 👨‍💼 For Administrators
+<img src="https://img.shields.io/badge/-Graduate_Management-4CAF50?style=flat-square&logo=database&logoColor=white" />  
+Complete CRUD operations for graduate records with advanced filtering and search
+
+<img src="https://img.shields.io/badge/-Survey_Builder-2196F3?style=flat-square&logo=checkmarx&logoColor=white" />  
+Create dynamic surveys with multiple question types and auto-distribution
+
+<img src="https://img.shields.io/badge/-Analytics_Dashboard-FF9800?style=flat-square&logo=chartdotjs&logoColor=white" />  
+Real-time insights into employment rates, salaries, and trends
+
+<img src="https://img.shields.io/badge/-Resource_Management-9C27B0?style=flat-square&logo=briefcase&logoColor=white" />  
+Post job opportunities, training programs, and career services
+
+<img src="https://img.shields.io/badge/-Data_Export-F44336?style=flat-square&logo=microsoftexcel&logoColor=white" />  
+Generate comprehensive reports in CSV and PDF formats
 
 </td>
 <td width="50%">
 
-### For Graduates
-✅ Update profile & employment status  
-✅ Complete surveys & track history  
-✅ Browse job opportunities & resources  
-✅ Receive real-time notifications  
-✅ Manage privacy settings  
+### 🎓 For Graduates
+<img src="https://img.shields.io/badge/-Profile_Management-3F51B5?style=flat-square&logo=user&logoColor=white" />  
+Update personal information and employment status with photo upload
+
+<img src="https://img.shields.io/badge/-Survey_Participation-00BCD4?style=flat-square&logo=clipboard&logoColor=white" />  
+Complete employment surveys and track submission history
+
+<img src="https://img.shields.io/badge/-Career_Updates-8BC34A?style=flat-square&logo=trendingup&logoColor=white" />  
+Log job changes, promotions, and career milestones
+
+<img src="https://img.shields.io/badge/-Resource_Access-FF5722?style=flat-square&logo=compass&logoColor=white" />  
+Browse job postings, training programs, and alumni services
+
+<img src="https://img.shields.io/badge/-Notifications-FFC107?style=flat-square&logo=bell&logoColor=white" />  
+Real-time updates on surveys, events, and opportunities
+
+<img src="https://img.shields.io/badge/-Privacy_Control-607D8B?style=flat-square&logo=shield&logoColor=white" />  
+Manage data sharing preferences and account settings
 
 </td>
 </tr>
@@ -66,61 +94,114 @@ cd laravel && composer install && cp .env.example .env && php artisan key:genera
 cd frontend && npm install && npm run dev
 ```
 
-**Access:**  
-🔹 Frontend: `http://localhost:5173`  
-🔹 Backend: `http://127.0.0.1:8000`
+**Access Points:**  
+<img src="https://img.shields.io/badge/-Frontend-61DAFB?style=flat-square&logo=react&logoColor=black" /> `http://localhost:5173`  
+<img src="https://img.shields.io/badge/-Backend-FF2D20?style=flat-square&logo=laravel&logoColor=white" /> `http://127.0.0.1:8000`
 
-**Default Login:**  
-📧 `admin@test.com` / 🔑 `password123`
+**Default Credentials:**  
+<img src="https://img.shields.io/badge/-Admin_Login-000000?style=flat-square&logo=gmail&logoColor=white" /> `admin@test.com` / `password123`
 
 ---
 
-## ✨ Features
+## ✨ Key Features
 
-### 📊 Analytics Dashboard
-- Live employment rate tracking
-- Salary distribution charts
-- Graduate trends by year
-- Interactive visualizations (Recharts)
+### <img src="https://img.shields.io/badge/-Analytics_Dashboard-FF6B6B?style=flat-square&logo=graphql&logoColor=white" /> Analytics Dashboard
+- **Live Employment Tracking** - Real-time employment status monitoring across all graduates
+- **Salary Insights** - Distribution charts showing salary ranges by industry and position
+- **Trend Analysis** - Year-over-year graduate outcome comparisons
+- **Interactive Charts** - Powered by Recharts for dynamic data visualization
+- **Exportable Reports** - Download analytics in PDF and CSV formats
 
-### 📝 Dynamic Survey System
-- Multiple question types (text, radio, checkbox, select, textarea)
-- Auto-notifications to graduates
-- Response tracking & analytics
-- Export capabilities
+### <img src="https://img.shields.io/badge/-Survey_System-4ECDC4?style=flat-square&logo=wpforms&logoColor=white" /> Dynamic Survey Management
+- **Flexible Question Types** - Text, radio, checkbox, select dropdown, and textarea options
+- **Automated Distribution** - Auto-send notifications to target graduate groups
+- **Response Tracking** - Monitor completion rates and individual responses
+- **Custom Templates** - Save and reuse survey templates for efficiency
+- **Analytics Integration** - Survey responses feed directly into analytics dashboard
 
-### 🔔 Real-Time Notifications
-- Auto-refresh every 10 seconds
-- Clickable notifications (route to relevant pages)
-- Mark as read/delete functionality
-- Badge indicators for unread count
+### <img src="https://img.shields.io/badge/-Notifications-FFE66D?style=flat-square&logo=notifications&logoColor=black" /> Real-Time Notification System
+- **Auto-Refresh** - Background polling every 10 seconds for instant updates
+- **Smart Routing** - Clickable notifications navigate to relevant pages
+- **Action Controls** - Mark as read, delete, or archive notifications
+- **Badge Counters** - Unread notification count visible in header
+- **Type-Based Categorization** - Surveys, jobs, events, and general announcements
 
-### 🎨 Modern UI
-- ShadCN UI components
-- Tailwind CSS styling
-- Fully responsive (mobile, tablet, desktop)
-- Dark mode support
-- Smooth animations
+### <img src="https://img.shields.io/badge/-Graduate_Portal-95E1D3?style=flat-square&logo=passport&logoColor=black" /> Graduate Self-Service Portal
+- **Profile Editor** - Update contact info, employment status, and upload photos
+- **Employment Survey** - Submit detailed employment information and career progress
+- **Career Timeline** - Track job changes, promotions, and milestones
+- **Job Board** - Browse curated job opportunities from employers
+- **Resource Center** - Access training programs and career services
+- **Privacy Dashboard** - Control data sharing and notification preferences
 
-### 🔐 Security
-- Laravel Sanctum authentication
-- Role-based access control
-- Bcrypt password hashing
-- CORS protection
-- API rate limiting
+### <img src="https://img.shields.io/badge/-Modern_UI-A8E6CF?style=flat-square&logo=tailwindcss&logoColor=black" /> User Interface
+- **Component Library** - Built with ShadCN UI for consistency and accessibility
+- **Responsive Design** - Optimized for desktop, tablet, and mobile devices
+- **Dark Mode** - System-wide theme toggle with preference persistence
+- **Icon System** - Lucide React icons throughout for visual clarity
+- **Smooth Animations** - Framer Motion for delightful interactions
+
+### <img src="https://img.shields.io/badge/-Security-FF6B9D?style=flat-square&logo=lock&logoColor=white" /> Security & Authentication
+- **Token-Based Auth** - Laravel Sanctum SPA authentication
+- **Role-Based Access** - Administrator and graduate permission levels
+- **Password Security** - Bcrypt hashing with Laravel's encryption
+- **CORS Protection** - Configured cross-origin resource sharing
+- **Rate Limiting** - API throttling to prevent abuse
+- **Session Management** - Secure session handling and automatic timeout
 
 ---
 
 ## 🛠 Tech Stack
 
-| Layer | Technologies |
-|-------|-------------|
-| **Backend** | Laravel 12, PHP 8.2+, MySQL/SQLite |
-| **Frontend** | React 18, TypeScript, Vite 5 |
-| **UI** | ShadCN UI, Tailwind CSS, Lucide Icons |
-| **Charts** | Recharts |
-| **Auth** | Laravel Sanctum |
-| **Forms** | React Hook Form, Zod |
+<table>
+<tr>
+<td>
+
+### <img src="https://img.shields.io/badge/-Backend-FF2D20?style=flat-square&logo=laravel&logoColor=white" />
+- **Framework:** Laravel 12
+- **Language:** PHP 8.2+
+- **Database:** MySQL 8.0 / SQLite
+- **Authentication:** Laravel Sanctum
+- **API:** RESTful Architecture
+- **ORM:** Eloquent
+
+</td>
+<td>
+
+### <img src="https://img.shields.io/badge/-Frontend-61DAFB?style=flat-square&logo=react&logoColor=black" />
+- **Framework:** React 18
+- **Language:** TypeScript 5
+- **Build Tool:** Vite 5
+- **State:** React Hooks + Context API
+- **Routing:** React Router v6
+- **HTTP Client:** Axios
+
+</td>
+</tr>
+<tr>
+<td>
+
+### <img src="https://img.shields.io/badge/-UI_&_Styling-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" />
+- **Component Library:** ShadCN UI
+- **CSS Framework:** Tailwind CSS 3
+- **Icons:** Lucide React
+- **Charts:** Recharts
+- **Forms:** React Hook Form
+- **Validation:** Zod Schema
+
+</td>
+<td>
+
+### <img src="https://img.shields.io/badge/-DevOps_&_Tools-4285F4?style=flat-square&logo=googlecloud&logoColor=white" />
+- **Version Control:** Git & GitHub
+- **Package Manager:** Composer, npm
+- **Development:** XAMPP / Laravel Serve
+- **Deployment:** Hostinger, cPanel
+- **Environment:** .env Configuration
+
+</td>
+</tr>
+</table>
 
 ---
 
@@ -231,30 +312,32 @@ MIT License - see [LICENSE](LICENSE) file.
 ## 👨‍💻 Author
 
 **Hans Christian Delos Santos**  
-🎓 San Jose Community College  
-📧 delossantoshanschristian@sjcbi.edu.ph  
-💼 [@hans919](https://github.com/hans919)
+<img src="https://img.shields.io/badge/-San_Jose_Community_College-2563EB?style=flat-square&logo=googlescholar&logoColor=white" />  
+<img src="https://img.shields.io/badge/-Email-EA4335?style=flat-square&logo=gmail&logoColor=white" /> delossantoshanschristian@sjcbi.edu.ph  
+<img src="https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github&logoColor=white" /> [@hans919](https://github.com/hans919)
 
 ---
 
 ## 🌟 Support
 
-⭐ Star this repo if you find it useful!
+<img src="https://img.shields.io/badge/-Star_this_repo-FFD700?style=flat-square&logo=github&logoColor=black" /> If you find this project useful!
 
-- 🐛 [Report Bug](https://github.com/hans919/gts/issues)
-- 💡 [Request Feature](https://github.com/hans919/gts/issues)
-- 💬 [Discussions](https://github.com/hans919/gts/discussions)
+- <img src="https://img.shields.io/badge/-Report_Bug-DC143C?style=flat-square&logo=bugcrowd&logoColor=white" /> [Submit an Issue](https://github.com/hans919/gts/issues)
+- <img src="https://img.shields.io/badge/-Request_Feature-32CD32?style=flat-square&logo=rocket&logoColor=white" /> [Feature Request](https://github.com/hans919/gts/issues)
+- <img src="https://img.shields.io/badge/-Discussions-9370DB?style=flat-square&logo=discourse&logoColor=white" /> [Community Forum](https://github.com/hans919/gts/discussions)
 
 ---
 
 <div align="center">
 
-**Built with ❤️ for Educational Excellence**
+**Built for Educational Excellence**
 
-[![Laravel](https://img.shields.io/badge/Built_with-Laravel-FF2D20?style=flat-square&logo=laravel)](https://laravel.com)
-[![React](https://img.shields.io/badge/Built_with-React-61DAFB?style=flat-square&logo=react)](https://react.dev)
-[![TypeScript](https://img.shields.io/badge/Built_with-TypeScript-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
+[![Laravel](https://img.shields.io/badge/Built_with-Laravel-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
+[![React](https://img.shields.io/badge/Built_with-React-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/Built_with-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
+[![TailwindCSS](https://img.shields.io/badge/Built_with-TailwindCSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![MySQL](https://img.shields.io/badge/Built_with-MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)](https://mysql.com)
 
-Graduate Tracking System © 2025
+**Graduate Tracking System © 2025 - San Jose Community College**
 
 </div>

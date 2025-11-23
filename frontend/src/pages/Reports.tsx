@@ -1,8 +1,10 @@
 import { Download, FileText, Table, PieChart, TrendingUp, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
 
 export default function Reports() {
+  const { toast } = useToast();
   const reports = [
     {
       id: 1,
@@ -31,7 +33,10 @@ export default function Reports() {
   ];
 
   const handleExport = (format: string, reportId: number) => {
-    alert(`Exporting report ${reportId} as ${format}. This feature will be implemented soon!`);
+    toast({
+      title: "Export Coming Soon",
+      description: `Exporting report ${reportId} as ${format}. This feature will be implemented soon!`,
+    });
   };
 
   return (

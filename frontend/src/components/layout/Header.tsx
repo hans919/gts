@@ -4,6 +4,16 @@ import { Menu, Bell, User, LogOut, Settings, ChevronDown, Moon, Sun } from 'luci
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from '@/contexts/ThemeContext';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -16,6 +26,7 @@ interface HeaderProps {
 
 export default function Header({ onMenuClick, user }: HeaderProps) {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
 
@@ -31,6 +42,7 @@ export default function Header({ onMenuClick, user }: HeaderProps) {
   };
 
   return (
+    <>
     <header 
       className="border-b border-border sticky top-0 z-40 transition-colors duration-200"
       style={{ 
@@ -118,7 +130,10 @@ export default function Header({ onMenuClick, user }: HeaderProps) {
                 
                 <Button
                   variant="ghost"
-                  onClick={handleLogout}
+                  onClick={() => {
+                    setShowDropdown(false);
+                    setShowLogoutDialog(true);
+                  }}
                   className="w-full justify-start gap-2 font-normal text-destructive hover:text-destructive hover:bg-destructive/10"
                 >
                   <LogOut className="h-4 w-4" />
@@ -129,6 +144,24 @@ export default function Header({ onMenuClick, user }: HeaderProps) {
           </div>
         </div>
       </div>
+      
     </header>
+    
+    {/* Logout Confirmation Dialog - Outside header to prevent unmounting */}
+    <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to logout? You will need to sign in again to access your account.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleLogout}>Logout</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    </>
   );
 }

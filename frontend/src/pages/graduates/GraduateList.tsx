@@ -6,6 +6,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select } from '@/components/ui/select';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { useToast } from '@/hooks/use-toast';
 
 interface Graduate {
   id: number;
@@ -31,12 +43,14 @@ interface Graduate {
 }
 
 export default function GraduateList() {
+  const { toast } = useToast();
   const [graduates, setGraduates] = useState<Graduate[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
   
   // Filter states
   const [yearFilter, setYearFilter] = useState('');
@@ -85,18 +99,29 @@ export default function GraduateList() {
 
   const hasActiveFilters = yearFilter || departmentFilter || programFilter || employmentStatusFilter || searchTerm;
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this graduate?')) return;
+  const handleDelete = async () => {
+    if (!deleteId) return;
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/graduates/${id}`, {
+      await axios.delete(`https://lightsteelblue-locust-816886.hostingersite.com/api/graduates/${deleteId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      toast({
+        title: "Success!",
+        description: "Graduate deleted successfully!",
+        variant: "success",
+      });
       fetchGraduates();
+      setDeleteId(null);
     } catch (error) {
       console.error('Error deleting graduate:', error);
-      alert('Failed to delete graduate');
+      toast({
+        title: "Error",
+        description: "Failed to delete graduate",
+        variant: "destructive",
+      });
+      setDeleteId(null);
     }
   };
 
@@ -302,13 +327,29 @@ export default function GraduateList() {
                             <Pencil className="h-4 w-4" />
                           </Link>
                         </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDelete(graduate.id)}
-                        >
-                          <Trash className="h-4 w-4" />
-                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => setDeleteId(graduate.id)}
+                            >
+                              <Trash className="h-4 w-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete Graduate</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to delete this graduate? This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel onClick={() => setDeleteId(null)}>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </div>
                     </td>
                   </tr>
