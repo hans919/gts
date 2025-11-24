@@ -8,7 +8,7 @@
 
 A comprehensive web-based platform designed for educational institutions to efficiently manage graduate data, monitor employment outcomes, conduct surveys, and generate insightful analytics for continuous program improvement.
 
-[![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=flat-square&logo=laravel)](https://laravel.com)
+[![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?style=flat-square&logo=laravel)](https://laravel.com)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat-square&logo=mysql&logoColor=white)](https://mysql.com)
@@ -24,13 +24,13 @@ A comprehensive web-based platform designed for educational institutions to effi
 
 ## 📋 Overview
 
-The **Graduate Tracking System (GTS)** is a modern, full-stack web application that streamlines the process of tracking and analyzing graduate employment outcomes. Built for Saint Joseph College of Baggao, it provides a dual-interface platform serving both administrators and graduates.
+The **Graduate Tracking System (GTS)** is a modern, full-stack web application that streamlines the process of tracking and analyzing graduate employment outcomes. Built for Saint Joseph College of Baggao, it provides a triple-interface platform serving administrators, graduates, and super administrators with comprehensive features for institutional assessment and alumni engagement.
 
 ### 🎯 System Purpose
 
 <table>
 <tr>
-<td width="50%">
+<td width="33%">
 
 ### 👨‍💼 For Administrators
 <img src="https://img.shields.io/badge/-Graduate_Management-4CAF50?style=flat-square&logo=database&logoColor=white" />  
@@ -43,26 +43,29 @@ Create dynamic surveys with multiple question types and auto-distribution
 Real-time insights into employment rates, salaries, and trends
 
 <img src="https://img.shields.io/badge/-Resource_Management-9C27B0?style=flat-square&logo=briefcase&logoColor=white" />  
-Post job opportunities, training programs, and career services
+Manage job postings, training programs, career services, and support tickets
 
 <img src="https://img.shields.io/badge/-Data_Export-F44336?style=flat-square&logo=microsoftexcel&logoColor=white" />  
 Generate comprehensive reports in CSV and PDF formats
 
+<img src="https://img.shields.io/badge/-Dark_Mode-1E1E1E?style=flat-square&logo=moon&logoColor=white" />  
+Toggle between light and dark themes for comfortable viewing
+
 </td>
-<td width="50%">
+<td width="34%">
 
 ### 🎓 For Graduates
 <img src="https://img.shields.io/badge/-Profile_Management-3F51B5?style=flat-square&logo=user&logoColor=white" />  
 Update personal information and employment status with photo upload
 
-<img src="https://img.shields.io/badge/-Survey_Participation-00BCD4?style=flat-square&logo=clipboard&logoColor=white" />  
+<img src="https://img.shields.io/badge/-Employment_Survey-00BCD4?style=flat-square&logo=clipboard&logoColor=white" />  
 Complete employment surveys and track submission history
 
 <img src="https://img.shields.io/badge/-Career_Updates-8BC34A?style=flat-square&logo=trendingup&logoColor=white" />  
 Log job changes, promotions, and career milestones
 
-<img src="https://img.shields.io/badge/-Resource_Access-FF5722?style=flat-square&logo=compass&logoColor=white" />  
-Browse job postings, training programs, and alumni services
+<img src="https://img.shields.io/badge/-Alumni_Resources-FF5722?style=flat-square&logo=compass&logoColor=white" />  
+Browse job postings, training programs, and career services
 
 <img src="https://img.shields.io/badge/-Notifications-FFC107?style=flat-square&logo=bell&logoColor=white" />  
 Real-time updates on surveys, events, and opportunities
@@ -71,7 +74,32 @@ Real-time updates on surveys, events, and opportunities
 Manage data sharing preferences and account settings
 
 <img src="https://img.shields.io/badge/-AI_Assistant-9D4EDD?style=flat-square&logo=openai&logoColor=white" />  
-24/7 intelligent chatbot powered by Groq AI for instant support
+24/7 intelligent chatbot powered by AI for instant support
+
+<img src="https://img.shields.io/badge/-Resume_Builder-E91E63?style=flat-square&logo=document&logoColor=white" />  
+Create professional resumes with Oxford template and PDF export
+
+</td>
+<td width="33%">
+
+### 🔐 For Super Administrators
+<img src="https://img.shields.io/badge/-User_Management-DC143C?style=flat-square&logo=users&logoColor=white" />  
+Complete control over all user accounts, roles, and permissions
+
+<img src="https://img.shields.io/badge/-Admin_Oversight-FF6347?style=flat-square&logo=eye&logoColor=white" />  
+Monitor admin activities and system usage patterns
+
+<img src="https://img.shields.io/badge/-System_Statistics-32CD32?style=flat-square&logo=graph&logoColor=white" />  
+Comprehensive system-wide analytics and metrics
+
+<img src="https://img.shields.io/badge/-Database_Management-4169E1?style=flat-square&logo=database&logoColor=white" />  
+Backup, restore, export, and database maintenance tools
+
+<img src="https://img.shields.io/badge/-Security_Monitoring-8B0000?style=flat-square&logo=shield&logoColor=white" />  
+Security logs, access control, and threat monitoring
+
+<img src="https://img.shields.io/badge/-System_Settings-696969?style=flat-square&logo=settings&logoColor=white" />  
+Configure system-wide settings and preferences
 
 </td>
 </tr>
@@ -133,32 +161,63 @@ cd frontend && npm install && npm run dev
 - **Profile Editor** - Update contact info, employment status, and upload photos
 - **Employment Survey** - Submit detailed employment information and career progress
 - **Career Timeline** - Track job changes, promotions, and milestones
-- **Job Board** - Browse curated job opportunities from employers
-- **Resource Center** - Access training programs and career services
+- **Survey History** - View all completed and pending surveys with statistics
+- **Alumni Resources** - Browse job postings, career services, and training programs
 - **Privacy Dashboard** - Control data sharing and notification preferences
+- **Data Export** - Download all personal data in JSON format
+- **Feedback System** - Submit support tickets and contact administrators
 
 ### <img src="https://img.shields.io/badge/-AI_Chatbot-9D4EDD?style=flat-square&logo=openai&logoColor=white" /> Intelligent AI Assistant
 - **Multi-Provider Support** - Groq (Llama 3.1), Google Gemini, HuggingFace, and Cohere
 - **Hybrid Intelligence** - Rule-based responses with AI enhancement fallback
 - **Contextual Understanding** - Maintains conversation context for natural interactions
+- **11 Intent Categories** - Survey, Job, Profile, Career, Support, Notifications, Privacy, Training, Dashboard, Alumni, and General
 - **Quick Actions** - Instant navigation to surveys, jobs, and profile updates
 - **24/7 Availability** - Always-on support for graduate inquiries
 - **Free Tier Integration** - 100% free AI APIs with generous usage limits
+- **Debug Console** - Real-time testing and monitoring tools
 
-### <img src="https://img.shields.io/badge/-Modern_UI-A8E6CF?style=flat-square&logo=tailwindcss&logoColor=black" /> User Interface
+### <img src="https://img.shields.io/badge/-Resume_Builder-E91E63?style=flat-square&logo=document&logoColor=white" /> Professional Resume Builder
+- **Oxford Template** - Professional, ATS-friendly resume design
+- **Live Preview** - Real-time preview as you type
+- **Multiple Sections** - Personal info, summary, work history, skills, education
+- **PDF Export** - High-quality PDF download for applications
+- **Image Export** - PNG format for quick sharing
+- **Save Progress** - LocalStorage auto-save functionality
+- **Print Optimized** - A4 format perfect for printing
+
+### <img src="https://img.shields.io/badge/-Admin_Resources-A8E6CF?style=flat-square&logo=briefcase&logoColor=black" /> Admin Resource Management
+- **Job Postings** - Create and manage job opportunities for graduates
+- **Career Services** - Advertise counseling, resume help, and career guidance
+- **Training Programs** - Post available training and certification programs
+- **Support Tickets** - Manage graduate inquiries and technical support requests
+- **Employment Surveys** - View and manage graduate employment submissions
+
+### <img src="https://img.shields.io/badge/-Super_Admin-DC143C?style=flat-square&logo=shield&logoColor=white" /> Super Administrator Module
+- **User Management** - Create, update, delete users; change roles and permissions
+- **Admin Activities** - Monitor all admin actions and system modifications
+- **System Statistics** - Real-time metrics on users, graduates, surveys, and engagement
+- **Database Tools** - Backup, restore, export data, and database maintenance
+- **Security Monitoring** - Access logs, security events, and threat detection
+- **System Settings** - Configure application-wide settings and preferences
+- **Cache Management** - Clear system cache and optimize performance
+
+### <img src="https://img.shields.io/badge/-Modern_UI-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" /> User Interface
 - **Component Library** - Built with ShadCN UI for consistency and accessibility
 - **Responsive Design** - Optimized for desktop, tablet, and mobile devices
-- **Dark Mode** - System-wide theme toggle with preference persistence
+- **Dark Mode** - System-wide theme toggle with preference persistence (Admin Portal)
 - **Icon System** - Lucide React icons throughout for visual clarity
 - **Smooth Animations** - Framer Motion for delightful interactions
+- **Toast Notifications** - Non-intrusive success/error messages
 
 ### <img src="https://img.shields.io/badge/-Security-FF6B9D?style=flat-square&logo=lock&logoColor=white" /> Security & Authentication
 - **Token-Based Auth** - Laravel Sanctum SPA authentication
-- **Role-Based Access** - Administrator and graduate permission levels
+- **Role-Based Access** - Three-tier system: Super Admin, Admin, Graduate
 - **Password Security** - Bcrypt hashing with Laravel's encryption
 - **CORS Protection** - Configured cross-origin resource sharing
 - **Rate Limiting** - API throttling to prevent abuse
 - **Session Management** - Secure session handling and automatic timeout
+- **Middleware Protection** - Route-level authorization checks
 
 ---
 
@@ -235,9 +294,13 @@ cd frontend && npm install && npm run dev
 | [Installation Guide](INSTALLATION.md) | Detailed setup instructions |
 | [API Reference](API_REFERENCE.md) | Complete API documentation |
 | [Deployment Guide](DEPLOYMENT_GUIDE.md) | Production deployment steps |
-| [Graduate Portal Guide](GRADUATE_PORTAL_GUIDE.md) | User documentation |
-| [AI Setup Guide](AI_SETUP_GUIDE.md) | Chatbot AI integration |
+| [Graduate Portal Guide](GRADUATE_PORTAL_GUIDE.md) | Graduate user documentation |
+| [AI Setup Guide](AI_SETUP_GUIDE.md) | Chatbot AI integration guide |
+| [Resume Builder Guide](RESUME_BUILDER_GUIDE.md) | Resume builder features |
+| [Dark Mode Guide](DARK_MODE_GUIDE.md) | Dark theme implementation |
+| [Super Admin Module](SUPERADMIN_MODULE.md) | Super admin documentation |
 | [Quick Start](QUICK_START.md) | Get running in 5 minutes |
+| [Architecture](ARCHITECTURE.md) | System architecture overview |
 
 ---
 
@@ -246,35 +309,117 @@ cd frontend && npm install && npm run dev
 ```javascript
 // Authentication
 POST   /api/login
+POST   /api/register
 POST   /api/logout
+POST   /api/forgot-password
+POST   /api/reset-password
 
-// Graduates
+// Graduates Management (Admin)
 GET    /api/graduates
 POST   /api/graduates
 PUT    /api/graduates/{id}
 DELETE /api/graduates/{id}
+GET    /api/graduates/export
+GET    /api/graduates/{id}/employments
+GET    /api/graduates/{id}/survey-responses
 
-// Surveys
+// Surveys Management (Admin)
 GET    /api/surveys
 POST   /api/surveys
+PUT    /api/surveys/{id}
+DELETE /api/surveys/{id}
 GET    /api/surveys/{id}/responses
+POST   /api/surveys/{id}/duplicate
 
-// Analytics
+// Survey Responses
+GET    /api/survey-responses
+POST   /api/survey-responses
+PUT    /api/survey-responses/{id}
+DELETE /api/survey-responses/{id}
+POST   /api/survey-responses/{id}/submit
+
+// Employment Management
+GET    /api/employments
+POST   /api/employments
+PUT    /api/employments/{id}
+DELETE /api/employments/{id}
+
+// Analytics Dashboard
 GET    /api/analytics/dashboard
 GET    /api/analytics/employment-status
+GET    /api/analytics/job-relevance
 GET    /api/analytics/salary-distribution
+GET    /api/analytics/industry-distribution
+GET    /api/analytics/program-outcomes
+GET    /api/analytics/survey-completion
+GET    /api/analytics/graduates-by-year
+
+// Admin Resource Management
+GET    /api/admin/jobs
+POST   /api/admin/jobs
+PUT    /api/admin/jobs/{id}
+DELETE /api/admin/jobs/{id}
+GET    /api/admin/career-services
+POST   /api/admin/career-services
+PUT    /api/admin/career-services/{id}
+DELETE /api/admin/career-services/{id}
+GET    /api/admin/training-programs
+POST   /api/admin/training-programs
+PUT    /api/admin/training-programs/{id}
+DELETE /api/admin/training-programs/{id}
+GET    /api/admin/support-tickets
+PUT    /api/admin/support-tickets/{id}
+DELETE /api/admin/support-tickets/{id}
+GET    /api/admin/employment-surveys
+DELETE /api/admin/employment-surveys/{id}
 
 // Graduate Portal
 GET    /api/graduate/profile
 PUT    /api/graduate/profile
 POST   /api/graduate/profile-photo
+PUT    /api/graduate/change-password
+GET    /api/graduate/surveys
+POST   /api/graduate/surveys
+GET    /api/graduate/career-updates
+POST   /api/graduate/career-updates
 GET    /api/graduate/notifications
+PUT    /api/graduate/notifications/{id}/read
+DELETE /api/graduate/notifications/{id}
+GET    /api/graduate/survey-history
+GET    /api/graduate/privacy-settings
+PUT    /api/graduate/privacy-settings
+GET    /api/graduate/export-data
+DELETE /api/graduate/account
+GET    /api/graduate/jobs
+POST   /api/graduate/jobs/{id}/bookmark
+GET    /api/graduate/career-services
+GET    /api/graduate/training-programs
+GET    /api/graduate/support-tickets
+POST   /api/graduate/support-tickets
 POST   /api/graduate/submit-survey-response
 
-// AI Chatbot
-POST   /api/chatbot/message
-GET    /api/chatbot/context/{session}
-DELETE /api/chatbot/context/{session}
+// Super Admin Module
+GET    /api/superadmin/users
+POST   /api/superadmin/users
+PUT    /api/superadmin/users/{id}
+DELETE /api/superadmin/users/{id}
+PUT    /api/superadmin/users/{id}/role
+PUT    /api/superadmin/users/{id}/status
+PUT    /api/superadmin/users/{id}/reset-password
+GET    /api/superadmin/admin-activities
+GET    /api/superadmin/statistics
+GET    /api/superadmin/system-health
+GET    /api/superadmin/user-engagement
+GET    /api/superadmin/security-logs
+GET    /api/superadmin/activity-timeline
+GET    /api/superadmin/settings
+PUT    /api/superadmin/settings
+POST   /api/superadmin/backup
+GET    /api/superadmin/backups
+POST   /api/superadmin/restore
+DELETE /api/superadmin/backups/{filename}
+POST   /api/superadmin/export
+POST   /api/superadmin/clear-cache
 ```
 
 **AI Configuration:**
@@ -304,20 +449,135 @@ VITE_COHERE_API_KEY=xxxxx                # Cohere AI
 
 ```
 gts/
-├── laravel/              # Backend API
-│   ├── app/Http/Controllers/
-│   ├── app/Models/
-│   ├── database/migrations/
-│   ├── routes/api.php
-│   └── .env
-├── frontend/             # React frontend
+├── laravel/                  # Backend API (Laravel 11)
+│   ├── app/
+│   │   ├── Http/
+│   │   │   └── Controllers/
+│   │   │       ├── AuthController.php              # Authentication
+│   │   │       ├── GraduateController.php          # Graduate CRUD
+│   │   │       ├── SurveyController.php            # Survey management
+│   │   │       ├── SurveyResponseController.php    # Survey responses
+│   │   │       ├── EmploymentController.php        # Employment data
+│   │   │       ├── AnalyticsController.php         # Analytics & reports
+│   │   │       ├── GraduateProfileController.php   # Graduate portal
+│   │   │       ├── AdminResourcesController.php    # Admin resources
+│   │   │       └── SuperAdminController.php        # Super admin
+│   │   └── Models/
+│   │       ├── User.php                            # User model
+│   │       ├── Graduate.php                        # Graduate model
+│   │       ├── Survey.php                          # Survey model
+│   │       ├── SurveyResponse.php                  # Response model
+│   │       └── Employment.php                      # Employment model
+│   ├── database/
+│   │   ├── migrations/                             # Database migrations
+│   │   └── seeders/                                # Database seeders
+│   ├── routes/
+│   │   └── api.php                                 # API routes (100+ endpoints)
+│   └── .env                                        # Backend environment
+│
+├── frontend/                 # React Frontend (TypeScript)
 │   ├── src/
-│   │   ├── pages/       # Admin & graduate pages
-│   │   ├── components/  # ShadCN UI components
-│   │   └── services/    # API service
-│   ├── package.json
-│   └── vite.config.ts
-└── docs/                 # Documentation
+│   │   ├── pages/
+│   │   │   ├── Dashboard.tsx                       # Admin dashboard
+│   │   │   ├── Analytics.tsx                       # Analytics page
+│   │   │   ├── Reports.tsx                         # Reports page
+│   │   │   ├── Settings.tsx                        # Settings page
+│   │   │   ├── Login.tsx                           # Unified login
+│   │   │   ├── graduates/                          # Graduate pages
+│   │   │   │   ├── GraduateList.tsx
+│   │   │   │   ├── GraduateForm.tsx
+│   │   │   │   └── AddGraduate.tsx
+│   │   │   ├── surveys/                            # Survey pages
+│   │   │   │   ├── SurveyList.tsx
+│   │   │   │   ├── SurveyForm.tsx
+│   │   │   │   └── SurveyResponses.tsx
+│   │   │   ├── admin/                              # Admin resource mgmt
+│   │   │   │   ├── JobsManagement.tsx
+│   │   │   │   ├── CareerServicesManagement.tsx
+│   │   │   │   ├── SupportTicketsManagement.tsx
+│   │   │   │   └── EmploymentSurveysManagement.tsx
+│   │   │   ├── graduate-portal/                    # Graduate portal
+│   │   │   │   ├── GraduateDashboard.tsx
+│   │   │   │   ├── GraduateRegister.tsx
+│   │   │   │   ├── EmploymentSurvey.tsx
+│   │   │   │   ├── CareerUpdates.tsx
+│   │   │   │   ├── Notifications.tsx
+│   │   │   │   ├── SurveyHistory.tsx
+│   │   │   │   ├── TakeSurvey.tsx
+│   │   │   │   ├── PrivacySettings.tsx
+│   │   │   │   ├── AlumniResources.tsx
+│   │   │   │   ├── FeedbackSupport.tsx
+│   │   │   │   ├── GraduateSettings.tsx
+│   │   │   │   ├── ResumeBuilder.tsx
+│   │   │   │   └── ForgotPassword.tsx
+│   │   │   └── superadmin/                         # Super admin
+│   │   │       ├── SuperAdminDashboard.tsx
+│   │   │       ├── UserManagement.tsx
+│   │   │       ├── AdminManagement.tsx
+│   │   │       ├── DatabaseManagement.tsx
+│   │   │       └── SystemSettings.tsx
+│   │   ├── components/
+│   │   │   ├── layout/                             # Layout components
+│   │   │   │   ├── MainLayout.tsx
+│   │   │   │   ├── Header.tsx
+│   │   │   │   ├── Sidebar.tsx
+│   │   │   │   └── GraduatePortalLayout.tsx
+│   │   │   ├── graduate/                           # Graduate components
+│   │   │   │   ├── GraduatePortalHeader.tsx
+│   │   │   │   ├── ChatBot.tsx
+│   │   │   │   └── chatbot/                        # AI Chatbot
+│   │   │   │       ├── chatbotService.ts
+│   │   │   │       ├── intentDetector.ts
+│   │   │   │       ├── knowledgeBase.ts
+│   │   │   │       ├── conversationManager.ts
+│   │   │   │       ├── aiProviders.ts
+│   │   │   │       ├── aiEnhancedService.ts
+│   │   │   │       ├── types.ts
+│   │   │   │       └── debugger.ts
+│   │   │   ├── resume/                             # Resume builder
+│   │   │   │   └── OxfordResumeTemplate.tsx
+│   │   │   ├── ui/                                 # ShadCN UI components
+│   │   │   │   ├── button.tsx
+│   │   │   │   ├── card.tsx
+│   │   │   │   ├── input.tsx
+│   │   │   │   ├── table.tsx
+│   │   │   │   ├── dialog.tsx
+│   │   │   │   ├── toast.tsx
+│   │   │   │   └── ... (20+ components)
+│   │   │   └── ProtectedRoute.tsx                  # Route protection
+│   │   ├── services/                               # API services
+│   │   │   ├── api.ts                              # Axios instance
+│   │   │   ├── auth.service.ts                     # Auth API
+│   │   │   ├── graduate.service.ts                 # Graduate API
+│   │   │   ├── survey.service.ts                   # Survey API
+│   │   │   └── analytics.service.ts                # Analytics API
+│   │   ├── types/                                  # TypeScript types
+│   │   │   ├── auth.types.ts
+│   │   │   ├── graduate.types.ts
+│   │   │   ├── survey.types.ts
+│   │   │   └── analytics.types.ts
+│   │   ├── contexts/                               # React contexts
+│   │   │   ├── AuthContext.tsx                     # Auth state
+│   │   │   └── ThemeContext.tsx                    # Dark mode
+│   │   ├── hooks/                                  # Custom hooks
+│   │   │   └── use-toast.ts
+│   │   ├── App.tsx                                 # Main app
+│   │   └── main.tsx                                # Entry point
+│   ├── package.json                                # Dependencies
+│   ├── vite.config.ts                              # Vite config
+│   ├── tailwind.config.js                          # Tailwind config
+│   └── .env                                        # Frontend environment
+│
+└── docs/                     # Documentation
+    ├── README.md                                   # This file
+    ├── INSTALLATION.md
+    ├── API_REFERENCE.md
+    ├── DEPLOYMENT_GUIDE.md
+    ├── AI_SETUP_GUIDE.md
+    ├── RESUME_BUILDER_GUIDE.md
+    ├── DARK_MODE_GUIDE.md
+    ├── SUPERADMIN_MODULE.md
+    └── ARCHITECTURE.md
 ```
 
 ---
