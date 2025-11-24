@@ -14,12 +14,14 @@ class AuthController extends Controller
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users|regex:/^[a-zA-Z0-9._%+-]+@sjcbi\.edu\.ph$/',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'string|in:admin,graduate',
             'student_id' => 'required_if:role,graduate|string|max:50|unique:graduates,student_id',
             'phone' => 'nullable|string|max:20',
             'date_of_birth' => 'nullable|date',
+        ], [
+            'email.regex' => 'Email must be a valid @sjcbi.edu.ph address',
         ]);
 
         // Create user account
@@ -65,8 +67,10 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => ['required', 'email', 'regex:/^[a-zA-Z0-9._%+-]+@sjcbi\.edu\.ph$/'],
             'password' => 'required'
+        ], [
+            'email.regex' => 'Email must be a valid @sjcbi.edu.ph address',
         ]);
 
         $user = User::where('email', $request->email)->first();

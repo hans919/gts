@@ -71,4 +71,20 @@ class User extends Authenticatable
     {
         return $this->role === 'graduate';
     }
+
+    /**
+     * Check if user is a super admin
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
+    /**
+     * Check if user has admin privileges (admin or super_admin)
+     */
+    public function hasAdminAccess(): bool
+    {
+        return in_array($this->role, ['admin', 'super_admin']);
+    }
 }

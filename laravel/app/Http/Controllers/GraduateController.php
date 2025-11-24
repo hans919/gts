@@ -150,4 +150,138 @@ class GraduateController extends Controller
     {
         return response()->json($graduate->surveyResponses()->with('survey')->get());
     }
+
+    public function export(Request $request)
+    {
+        $query = Graduate::with(['currentEmployment']);
+
+        // Apply same filters as index method
+        if ($request->has('graduation_year') && $request->graduation_year !== '') {
+            $query->where('graduation_year', $request->graduation_year);
+        }
+
+        if ($request->has('program') && $request->program !== '') {
+            $query->where('program', $request->program);
+        }
+
+        if ($request->has('major') && $request->major !== '') {
+            $query->where('major', $request->major);
+        }
+
+        if ($request->has('employment_status') && $request->employment_status !== '') {
+            $query->where(function($q) use ($request) {
+                $q->whereHas('employments', function($subQ) use ($request) {
+                    $subQ->where('employment_status', $request->employment_status)
+                         ->where('is_current', true);
+                })
+                ->orWhereExists(function($subQ) use ($request) {
+                    $subQ->select(\DB::raw(1))
+                         ->from('employment_surveys')
+                         ->whereColumn('employment_surveys.graduate_id', 'graduates.id')
+                         ->where('employment_surveys.employment_status', $request->employment_status);
+                });
+            });
+        }
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('student_id', 'like', "%{$search}%");
+            });
+        }
+
+        // Get all filtered graduates (no pagination for export)
+        $graduates = $query->get();
+
+        // Add latest employment survey data
+        $graduates->transform(function ($graduate) {
+            $latestSurvey = \DB::table('employment_surveys')
+                ->where('graduate_id', $graduate->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+            
+            $graduate->latest_employment_survey = $latestSurvey;
+            return $graduate;
+        });
+
+        // Generate CSV
+        $csvData = [];
+        
+        // CSV Headers
+        $csvData[] = [
+            'Student ID',
+            'First Name',
+            'Last Name',
+            'Email',
+            'Phone',
+            'Program',
+            'Major',
+            'Degree Level',
+            'Graduation Year',
+            'Employment Status',
+            'Company Name',
+            'Job Title',
+            'Monthly Salary',
+            'City',
+            'Country',
+        ];
+
+        // CSV Rows
+        foreach ($graduates as $graduate) {
+            $employmentStatus = '';
+            $companyName = '';
+            $jobTitle = '';
+            $monthlySalary = '';
+
+            // Priority: latest employment survey, then current employment
+            if ($graduate->latest_employment_survey) {
+                $employmentStatus = $graduate->latest_employment_survey->employment_status ?? '';
+                $companyName = $graduate->latest_employment_survey->company_name ?? '';
+                $jobTitle = $graduate->latest_employment_survey->job_title ?? '';
+                $monthlySalary = $graduate->latest_employment_survey->monthly_salary ?? '';
+            } elseif ($graduate->currentEmployment) {
+                $employmentStatus = $graduate->currentEmployment->employment_status ?? '';
+                $companyName = $graduate->currentEmployment->company_name ?? '';
+                $jobTitle = $graduate->currentEmployment->job_title ?? '';
+                $monthlySalary = $graduate->currentEmployment->monthly_salary ?? '';
+            }
+
+            $csvData[] = [
+                $graduate->student_id ?? '',
+                $graduate->first_name ?? '',
+                $graduate->last_name ?? '',
+                $graduate->email ?? '',
+                $graduate->phone ?? '',
+                $graduate->program ?? '',
+                $graduate->major ?? '',
+                $graduate->degree_level ?? '',
+                $graduate->graduation_year ?? '',
+                $employmentStatus,
+                $companyName,
+                $jobTitle,
+                $monthlySalary,
+                $graduate->city ?? '',
+                $graduate->country ?? '',
+            ];
+        }
+
+        // Create CSV content
+        $callback = function() use ($csvData) {
+            $file = fopen('php://output', 'w');
+            foreach ($csvData as $row) {
+                fputcsv($file, $row);
+            }
+            fclose($file);
+        };
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="graduates_export.csv"',
+        ];
+
+        return response()->stream($callback, 200, $headers);
+    }
 }

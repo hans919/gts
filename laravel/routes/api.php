@@ -10,6 +10,7 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GraduateProfileController;
 use App\Http\Controllers\AdminResourcesController;
+use App\Http\Controllers\SuperAdminController;
 
 // Public routes - Authentication
 Route::post('/register', [AuthController::class, 'register']);
@@ -25,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Graduate routes
+    Route::get('graduates/export', [GraduateController::class, 'export']);
     Route::apiResource('graduates', GraduateController::class);
     Route::get('graduates/{graduate}/employments', [GraduateController::class, 'employments']);
     Route::get('graduates/{graduate}/survey-responses', [GraduateController::class, 'surveyResponses']);
@@ -122,5 +124,41 @@ Route::middleware('auth:sanctum')->group(function () {
         // Settings
         Route::post('/profile-photo', [GraduateProfileController::class, 'uploadProfilePhoto']);
         Route::put('/change-password', [GraduateProfileController::class, 'changePassword']);
+    });
+
+    // Super Admin exclusive routes
+    Route::middleware(['super_admin'])->prefix('superadmin')->group(function () {
+        // User Management - Full Access Control
+        Route::get('/users', [SuperAdminController::class, 'getAllUsers']);
+        Route::post('/users', [SuperAdminController::class, 'createUser']);
+        Route::put('/users/{id}', [SuperAdminController::class, 'updateUser']);
+        Route::delete('/users/{id}', [SuperAdminController::class, 'deleteUser']);
+        Route::put('/users/{id}/role', [SuperAdminController::class, 'changeUserRole']);
+        Route::put('/users/{id}/status', [SuperAdminController::class, 'toggleUserStatus']);
+        Route::put('/users/{id}/reset-password', [SuperAdminController::class, 'resetUserPassword']);
+        
+        // Admin Activities
+        Route::get('/admin-activities', [SuperAdminController::class, 'getAdminActivities']);
+        
+        // System Statistics
+        Route::get('/statistics', [SuperAdminController::class, 'getSystemStatistics']);
+        
+        // Analytics & Monitoring
+        Route::get('/system-health', [SuperAdminController::class, 'getSystemHealth']);
+        Route::get('/user-engagement', [SuperAdminController::class, 'getUserEngagement']);
+        Route::get('/security-logs', [SuperAdminController::class, 'getSecurityLogs']);
+        Route::get('/activity-timeline', [SuperAdminController::class, 'getActivityTimeline']);
+        
+        // System Settings
+        Route::get('/settings', [SuperAdminController::class, 'getSettings']);
+        Route::put('/settings', [SuperAdminController::class, 'updateSettings']);
+        
+        // Database Operations
+        Route::post('/backup', [SuperAdminController::class, 'createBackup']);
+        Route::get('/backups', [SuperAdminController::class, 'listBackups']);
+        Route::post('/restore', [SuperAdminController::class, 'restoreBackup']);
+        Route::delete('/backups/{filename}', [SuperAdminController::class, 'deleteBackup']);
+        Route::post('/export', [SuperAdminController::class, 'exportData']);
+        Route::post('/clear-cache', [SuperAdminController::class, 'clearCache']);
     });
 });

@@ -24,9 +24,19 @@ class GraduateProfileController extends Controller
         $graduate = Graduate::where('email', $user->email)->first();
 
         if (!$graduate) {
-            return response()->json([
-                'message' => 'Graduate profile not found'
-            ], 404);
+            // If no graduate record exists, create a basic profile from user data
+            $nameParts = explode(' ', $user->name ?? '');
+            $firstName = $user->first_name ?? ($nameParts[0] ?? '');
+            $lastName = $user->last_name ?? (isset($nameParts[1]) ? $nameParts[1] : '');
+            
+            $graduate = Graduate::create([
+                'email' => $user->email,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'student_id' => $user->student_id ?? 'N/A',
+                'program' => 'Not specified',
+                'graduation_year' => date('Y'),
+            ]);
         }
 
         return response()->json($graduate);

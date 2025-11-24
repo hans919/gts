@@ -86,7 +86,7 @@ export default function SurveyForm() {
         await api.post('/surveys', formData);
       }
 
-      navigate('/surveys');
+      navigate('/admin/surveys');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to save survey');
       setLoading(false);
@@ -98,7 +98,7 @@ export default function SurveyForm() {
       <div className="flex items-center justify-between space-y-2">
         <div className="flex items-center space-x-2">
           <Button variant="ghost" size="icon" asChild>
-            <Link to="/surveys">
+            <Link to="/admin/surveys">
               <ChevronLeft className="h-4 w-4" />
             </Link>
           </Button>
@@ -313,7 +313,7 @@ export default function SurveyForm() {
             {loading ? 'Saving...' : 'Save Survey'}
           </Button>
           <Button type="button" variant="outline" asChild>
-            <Link to="/surveys">Cancel</Link>
+            <Link to="/admin/surveys">Cancel</Link>
           </Button>
         </div>
       </form>

@@ -28,52 +28,52 @@ interface NavItem {
 const navItems: NavItem[] = [
   {
     name: 'Dashboard',
-    path: '/dashboard',
+    path: '/admin/dashboard',
     icon: <LayoutDashboard className="h-5 w-5" />,
   },
   {
     name: 'Graduates',
-    path: '/graduates',
+    path: '/admin/graduates',
     icon: <Users className="h-5 w-5" />,
   },
   {
     name: 'Surveys',
-    path: '/surveys',
+    path: '/admin/surveys',
     icon: <ClipboardList className="h-5 w-5" />,
   },
   {
     name: 'Analytics',
-    path: '/analytics',
+    path: '/admin/analytics',
     icon: <BarChart3 className="h-5 w-5" />,
   },
   {
     name: 'Reports',
-    path: '/reports',
+    path: '/admin/reports',
     icon: <FileText className="h-5 w-5" />,
   },
   {
     name: 'Jobs',
-    path: '/jobs',
+    path: '/admin/jobs',
     icon: <Briefcase className="h-5 w-5" />,
   },
   {
     name: 'Services',
-    path: '/career-services',
+    path: '/admin/career-services',
     icon: <GraduationCap className="h-5 w-5" />,
   },
   {
     name: 'Support',
-    path: '/support-tickets',
+    path: '/admin/support-tickets',
     icon: <MessageSquare className="h-5 w-5" />,
   },
   {
     name: 'Employment Surveys',
-    path: '/employment-surveys',
+    path: '/admin/employment-surveys',
     icon: <FileCheck className="h-5 w-5" />,
   },
   {
     name: 'Settings',
-    path: '/settings',
+    path: '/admin/settings',
     icon: <Settings className="h-5 w-5" />,
   },
 ];

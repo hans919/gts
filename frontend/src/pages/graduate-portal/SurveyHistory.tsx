@@ -79,7 +79,7 @@ export default function SurveyHistory() {
         );
       case 'expired':
         return (
-          <Badge className="bg-red-100 text-red-800">
+          <Badge className="bg-green-100 text-green-800">
             <AlertCircle className="mr-1 h-3 w-3" />
             Expired
           </Badge>

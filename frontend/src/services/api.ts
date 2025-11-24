@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
-// Production API URL - Hardcoded to bypass env variable issues
-const API_URL = 'https://lightsteelblue-locust-816886.hostingersite.com/api';
+// Get API URL from environment variable, fallback to Hostinger
+const API_URL = import.meta.env.VITE_API_URL || 'https://lightsteelblue-locust-816886.hostingersite.com/api';
 
 // Create axios instance
 export const api: AxiosInstance = axios.create({

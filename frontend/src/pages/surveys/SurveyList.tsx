@@ -104,7 +104,7 @@ export default function SurveyList() {
         </div>
         <div className="flex items-center space-x-2">
           <Button asChild>
-            <Link to="/surveys/new">
+            <Link to="/admin/surveys/new">
               <Plus className="mr-2 h-4 w-4" />
               Create Survey
             </Link>
@@ -135,7 +135,7 @@ export default function SurveyList() {
               You have not created any surveys yet. Get started by creating one.
             </p>
             <Button asChild>
-              <Link to="/surveys/new">Create Survey</Link>
+              <Link to="/admin/surveys/new">Create Survey</Link>
             </Button>
           </CardContent>
         </Card>
@@ -166,12 +166,12 @@ export default function SurveyList() {
               </CardContent>
               <CardFooter className="flex gap-2 mt-auto">
                 <Button variant="default" size="sm" className="flex-1" asChild>
-                  <Link to={`/surveys/${survey.id}/responses`}>
+                  <Link to={`/admin/surveys/${survey.id}/responses`}>
                     View Responses
                   </Link>
                 </Button>
                 <Button variant="outline" size="sm" asChild>
-                  <Link to={`/surveys/${survey.id}/edit`}>
+                  <Link to={`/admin/surveys/${survey.id}/edit`}>
                     <Pencil className="h-4 w-4" />
                   </Link>
                 </Button>
@@ -181,6 +181,7 @@ export default function SurveyList() {
                       variant="outline"
                       size="sm"
                       onClick={() => setDeleteId(survey.id)}
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
                     >
                       <Trash className="h-4 w-4" />
                     </Button>

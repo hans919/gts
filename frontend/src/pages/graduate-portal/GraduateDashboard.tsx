@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, Calendar, GraduationCap, Briefcase, Save, X, Building } from 'lucide-react';
+import { Loader2, Calendar, GraduationCap, Briefcase, Save, X, Building, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
 import GraduatePortalHeader from '@/components/graduate/GraduatePortalHeader';
 import axios from 'axios';
 
@@ -33,6 +34,7 @@ interface GraduateProfile {
 
 export default function GraduateDashboard() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -72,8 +74,31 @@ export default function GraduateDashboard() {
       setProfile(profileData);
       setFormData(profileData);
       setLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching profile:', error);
+      
+      // If profile not found (404 or 500), create a basic profile from user data
+      if (error.response?.status === 404 || error.response?.status === 500) {
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+          const user = JSON.parse(userStr);
+          const basicProfile = {
+            id: 0,
+            email: user.email,
+            first_name: user.first_name || user.name?.split(' ')[0] || '',
+            last_name: user.last_name || user.name?.split(' ')[1] || '',
+            student_id: user.student_id || 'N/A',
+            program: 'Not specified',
+            graduation_year: new Date().getFullYear(),
+          };
+          setProfile(basicProfile);
+          setFormData(basicProfile);
+          setLoading(false);
+          return;
+        }
+      }
+      
+      // For other errors, logout and redirect
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       navigate('/login');
@@ -91,18 +116,26 @@ export default function GraduateDashboard() {
     setSaving(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.put(
+      await axios.put(
         'https://lightsteelblue-locust-816886.hostingersite.com/api/graduate/profile',
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setProfile(response.data);
+      // Refetch the profile to get the complete updated data
+      await fetchProfile();
       setEditing(false);
-      alert('Profile updated successfully!');
+      toast({
+        title: "Success!",
+        description: "Profile updated successfully!",
+      });
     } catch (error: any) {
       console.error('Error updating profile:', error);
-      alert(error.response?.data?.message || 'Failed to update profile');
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || 'Failed to update profile',
+        variant: "destructive",
+      });
     } finally {
       setSaving(false);
     }
@@ -128,7 +161,7 @@ export default function GraduateDashboard() {
       {/* Header */}
       <GraduatePortalHeader 
         title="Graduate Portal"
-        subtitle={`Welcome back, ${profile.first_name}!`}
+        subtitle={`Welcome back, ${profile?.first_name || 'Guest'}!`}
         profile={profile}
         onProfileUpdate={() => setEditing(true)}
       />
@@ -138,7 +171,7 @@ export default function GraduateDashboard() {
         <div className="grid gap-6">
           {/* Edit Profile Alert */}
           {editing && (
-            <Card className="border-blue-500 bg-blue-50">
+            <Card className="border-green-500 bg-green-50">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -230,6 +263,18 @@ export default function GraduateDashboard() {
                 </CardTitle>
                 <CardDescription>
                   Get help and submit feedback
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/graduate/resume-builder')}>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center">
+                  <FileText className="mr-2 h-5 w-5 text-primary" />
+                  Resume Builder
+                </CardTitle>
+                <CardDescription>
+                  Create your professional resume
                 </CardDescription>
               </CardHeader>
             </Card>

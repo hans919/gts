@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { api } from '@/services/api';
 import { Loader2, GraduationCap, Mail, Lock, Info, Eye, EyeOff, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -39,7 +39,11 @@ export default function Login() {
     if (token && userStr) {
       try {
         const user = JSON.parse(userStr);
-        const redirectPath = user.role === 'graduate' ? '/graduate/dashboard' : '/dashboard';
+        const redirectPath = user.role === 'graduate' 
+          ? '/graduate/dashboard' 
+          : user.role === 'super_admin'
+          ? '/superadmin/dashboard'
+          : '/admin/dashboard';
         navigate(redirectPath, { replace: true });
       } catch (error) {
         // Invalid user data, clear it
@@ -54,15 +58,17 @@ export default function Login() {
     setError('');
     setLoading(true);
 
+    // Validate email domain
+    if (!email.endsWith('@sjcbi.edu.ph')) {
+      setError('Email must be a valid @sjcbi.edu.ph address');
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await axios.post('https://lightsteelblue-locust-816886.hostingersite.com/api/login', {
+      const response = await api.post('/login', {
         email,
         password,
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
       });
 
       // Save token with expiry
@@ -87,8 +93,10 @@ export default function Login() {
       const userRole = response.data.user.role;
       if (userRole === 'graduate') {
         navigate('/graduate/dashboard', { replace: true });
+      } else if (userRole === 'super_admin') {
+        navigate('/superadmin/dashboard', { replace: true });
       } else {
-        navigate('/dashboard', { replace: true }); // Admin, staff, or other roles
+        navigate('/admin/dashboard', { replace: true }); // Admin or other roles
       }
     } catch (err: any) {
       console.error('Login error:', err.response?.data);
@@ -171,13 +179,14 @@ export default function Login() {
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="admin@test.com"
+                      placeholder="yourname@sjcbi.edu.ph"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="pl-9"
                       required
                     />
                   </div>
+                  <p className="text-xs text-muted-foreground">Must use @sjcbi.edu.ph email address</p>
                 </div>
 
                 <div className="grid gap-2">
@@ -265,6 +274,13 @@ export default function Login() {
             <p className="text-muted-foreground mb-3">
               Login redirects based on your role:
             </p>
+            <div className="flex items-start gap-2">
+              <span className="font-medium text-muted-foreground min-w-[70px]">Super Admin:</span>
+              <div className="flex-1">
+                <p className="text-xs">→ Super Admin</p>
+                <p className="font-mono text-xs text-muted-foreground">superadmin@sjcbi.edu.ph / SuperAdmin@2025</p>
+              </div>
+            </div>
             <div className="flex items-start gap-2">
               <span className="font-medium text-muted-foreground min-w-[70px]">Admin:</span>
               <div className="flex-1">

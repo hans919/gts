@@ -180,11 +180,11 @@ export default function GraduatePortalHeader({ title, subtitle, profile: externa
 
   const getNotificationColor = (type: string) => {
     switch (type) {
-      case 'survey': return 'bg-blue-100 text-blue-800';
+      case 'survey': return 'bg-green-100 text-green-800';
       case 'event': return 'bg-green-100 text-green-800';
-      case 'reminder': return 'bg-orange-100 text-orange-800';
-      case 'job': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'reminder': return 'bg-green-100 text-green-800';
+      case 'job': return 'bg-green-100 text-green-800';
+      default: return 'bg-green-100 text-green-800';
     }
   };
 
@@ -350,7 +350,7 @@ export default function GraduatePortalHeader({ title, subtitle, profile: externa
                                     {notification.type}
                                   </span>
                                   {!notification.read && (
-                                    <span className="h-2 w-2 bg-blue-500 rounded-full flex-shrink-0"></span>
+                                    <span className="h-2 w-2 bg-green-500 rounded-full flex-shrink-0"></span>
                                   )}
                                 </div>
                                 <h4 className="font-medium text-sm mb-1 break-words">{notification.title}</h4>
@@ -432,7 +432,7 @@ export default function GraduatePortalHeader({ title, subtitle, profile: externa
                   />
                 ) : (
                   <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center text-white font-semibold">
-                    {profile.first_name[0]}{profile.last_name[0]}
+                    {profile.first_name?.[0] || ''}{profile.last_name?.[0] || ''}
                   </div>
                 )}
                 <ChevronDown className="h-4 w-4 text-white" />

@@ -236,7 +236,7 @@ export default function Notifications() {
             {filteredNotifications.map((notification) => (
               <Card 
                 key={notification.id} 
-                className={`${!notification.read ? 'border-l-4 border-l-primary bg-blue-50/50' : ''} hover:shadow-md transition-shadow`}
+                className={`${!notification.read ? 'border-l-4 border-l-primary bg-green-50/50' : ''} hover:shadow-md transition-shadow`}
               >
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">

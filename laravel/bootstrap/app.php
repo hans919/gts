@@ -19,6 +19,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'api/*',
         ]);
+
+        $middleware->alias([
+            'super_admin' => \App\Http\Middleware\EnsureSuperAdmin::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

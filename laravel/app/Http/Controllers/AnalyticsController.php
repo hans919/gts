@@ -11,54 +11,91 @@ use Illuminate\Support\Facades\DB;
 
 class AnalyticsController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        $totalGraduates = Graduate::count();
+        // Build base query with filters
+        $graduatesQuery = Graduate::query();
+        
+        if ($request->has('graduation_year') && $request->graduation_year) {
+            $graduatesQuery->where('graduation_year', $request->graduation_year);
+        }
+        
+        if ($request->has('program') && $request->program) {
+            $graduatesQuery->where('program', $request->program);
+        }
+        
+        if ($request->has('major') && $request->major) {
+            $graduatesQuery->where('major', 'like', '%' . $request->major . '%');
+        }
+        
+        $graduateIds = $graduatesQuery->pluck('id');
+        $totalGraduates = $graduatesQuery->count();
         
         // Count employed from both employments and employment_surveys tables
-        $employedFromEmployments = Employment::where('is_current', true)
+        $employedFromEmploymentsQuery = Employment::where('is_current', true)
             ->where('employment_status', 'employed')
-            ->count();
+            ->whereIn('graduate_id', $graduateIds);
             
-        $employedFromSurveys = DB::table('employment_surveys')
+        $employedFromSurveysQuery = DB::table('employment_surveys')
             ->where('employment_status', 'employed')
-            ->count();
+            ->whereIn('graduate_id', $graduateIds);
             
+        if ($request->has('employment_status') && $request->employment_status) {
+            $employedFromEmploymentsQuery->where('employment_status', $request->employment_status);
+            $employedFromSurveysQuery->where('employment_status', $request->employment_status);
+        }
+            
+        $employedFromEmployments = $employedFromEmploymentsQuery->count();
+        $employedFromSurveys = $employedFromSurveysQuery->count();
         $employedCount = max($employedFromEmployments, $employedFromSurveys);
         
         // Calculate average salary from both tables
         $avgSalaryEmployments = Employment::where('is_current', true)
             ->where('employment_status', 'employed')
+            ->whereIn('graduate_id', $graduateIds)
             ->whereNotNull('monthly_salary')
             ->avg('monthly_salary');
             
         $avgSalarySurveys = DB::table('employment_surveys')
             ->where('employment_status', 'employed')
+            ->whereIn('graduate_id', $graduateIds)
             ->whereNotNull('monthly_salary')
             ->avg('monthly_salary');
             
         $averageSalary = $avgSalarySurveys ?: $avgSalaryEmployments ?: 0;
         
         // Survey response rate from employment_surveys
-        $surveysSubmitted = DB::table('employment_surveys')->count();
+        $surveysSubmitted = DB::table('employment_surveys')->whereIn('graduate_id', $graduateIds)->count();
         $surveyResponseRate = $totalGraduates > 0 ? round(($surveysSubmitted / $totalGraduates) * 100, 1) : 0;
 
         // Employment stats for chart - from employment_surveys table
-        $employmentStats = DB::table('employment_surveys')
+        $employmentStatsQuery = DB::table('employment_surveys')
+            ->whereIn('graduate_id', $graduateIds)
             ->select('employment_status', DB::raw('count(*) as count'))
-            ->groupBy('employment_status')
-            ->get();
+            ->groupBy('employment_status');
+            
+        if ($request->has('employment_status') && $request->employment_status) {
+            $employmentStatsQuery->where('employment_status', $request->employment_status);
+        }
+            
+        $employmentStats = $employmentStatsQuery->get();
 
         // If no survey data, fall back to employments table
         if ($employmentStats->isEmpty()) {
-            $employmentStats = Employment::where('is_current', true)
+            $employmentStatsQuery = Employment::where('is_current', true)
+                ->whereIn('graduate_id', $graduateIds)
                 ->select('employment_status', DB::raw('count(*) as count'))
-                ->groupBy('employment_status')
-                ->get();
+                ->groupBy('employment_status');
+                
+            if ($request->has('employment_status') && $request->employment_status) {
+                $employmentStatsQuery->where('employment_status', $request->employment_status);
+            }
+                
+            $employmentStats = $employmentStatsQuery->get();
         }
 
         // Get recent graduates with all necessary fields
-        $recentGraduates = Graduate::select([
+        $recentGraduatesQuery = Graduate::select([
                 'id',
                 'first_name',
                 'last_name',
@@ -66,8 +103,21 @@ class AnalyticsController extends Controller
                 'program',
                 'graduation_year',
                 'created_at'
-            ])
-            ->latest()
+            ]);
+            
+        if ($request->has('graduation_year') && $request->graduation_year) {
+            $recentGraduatesQuery->where('graduation_year', $request->graduation_year);
+        }
+        
+        if ($request->has('program') && $request->program) {
+            $recentGraduatesQuery->where('program', $request->program);
+        }
+        
+        if ($request->has('major') && $request->major) {
+            $recentGraduatesQuery->where('major', 'like', '%' . $request->major . '%');
+        }
+            
+        $recentGraduates = $recentGraduatesQuery->latest()
             ->take(5)
             ->get();
 
@@ -205,9 +255,33 @@ class AnalyticsController extends Controller
         return response()->json($data);
     }
 
-    public function graduatesByYear()
+    public function graduatesByYear(Request $request)
     {
-        $data = Graduate::select('graduation_year', DB::raw('count(*) as count'))
+        $query = Graduate::query();
+        
+        if ($request->has('graduation_year') && $request->graduation_year) {
+            $query->where('graduation_year', $request->graduation_year);
+        }
+        
+        if ($request->has('program') && $request->program) {
+            $query->where('program', $request->program);
+        }
+        
+        if ($request->has('major') && $request->major) {
+            $query->where('major', 'like', '%' . $request->major . '%');
+        }
+        
+        // Apply employment status filter if provided
+        if ($request->has('employment_status') && $request->employment_status) {
+            $query->whereHas('employments', function($q) use ($request) {
+                $q->where('is_current', true)
+                  ->where('employment_status', $request->employment_status);
+            })->orWhereHas('employmentSurveys', function($q) use ($request) {
+                $q->where('employment_status', $request->employment_status);
+            });
+        }
+        
+        $data = $query->select('graduation_year', DB::raw('count(*) as count'))
             ->groupBy('graduation_year')
             ->orderBy('graduation_year', 'desc')
             ->get();

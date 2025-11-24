@@ -61,6 +61,11 @@ class Graduate extends Model
         return $this->hasMany(Employment::class);
     }
 
+    public function employmentSurveys(): HasMany
+    {
+        return $this->hasMany(EmploymentSurvey::class);
+    }
+
     public function surveyResponses(): HasMany
     {
         return $this->hasMany(SurveyResponse::class);

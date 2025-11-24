@@ -28,6 +28,7 @@ import PrivacySettings from './pages/graduate-portal/PrivacySettings';
 import AlumniResources from './pages/graduate-portal/AlumniResources';
 import FeedbackSupport from './pages/graduate-portal/FeedbackSupport';
 import GraduateSettings from './pages/graduate-portal/GraduateSettings';
+import ResumeBuilder from './pages/graduate-portal/ResumeBuilder';
 import GraduatePortalLayout from './components/layout/GraduatePortalLayout';
 
 // Admin Management Pages
@@ -36,10 +37,21 @@ import CareerServicesManagement from './pages/admin/CareerServicesManagement';
 import SupportTicketsManagement from './pages/admin/SupportTicketsManagement';
 import EmploymentSurveysManagement from './pages/admin/EmploymentSurveysManagement';
 
+// SuperAdmin Pages
+import SuperAdminLayout from './pages/superadmin/SuperAdminLayout';
+import SuperAdminDashboard from './pages/superadmin/SuperAdminDashboard';
+import UserManagement from './pages/superadmin/UserManagement';
+import AdminManagement from './pages/superadmin/AdminManagement';
+import SystemSettings from './pages/superadmin/SystemSettings';
+import DatabaseManagement from './pages/superadmin/DatabaseManagement';
+
 function App() {
   return (
     <>
     <Routes>
+      {/* Default Route - Redirect to Login */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      
       {/* Unified Authentication Routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<GraduateRegister />} />
@@ -47,8 +59,8 @@ function App() {
       <Route path="/reset-password" element={<ResetPassword />} />
       
       {/* Admin Routes */}
-      <Route path="/" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><MainLayout /></ProtectedRoute>}>
-        <Route index element={<Navigate to="/dashboard" replace />} />
+      <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><MainLayout /></ProtectedRoute>}>
+        <Route index element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="graduates" element={<GraduateList />} />
         <Route path="graduates/new" element={<AddGraduate />} />
@@ -66,6 +78,16 @@ function App() {
         <Route path="settings" element={<Settings />} />
       </Route>
 
+      {/* Super Admin Routes */}
+      <Route path="/superadmin" element={<ProtectedRoute allowedRoles={['super_admin']}><SuperAdminLayout /></ProtectedRoute>}>
+        <Route index element={<Navigate to="/superadmin/dashboard" replace />} />
+        <Route path="dashboard" element={<SuperAdminDashboard />} />
+        <Route path="users" element={<UserManagement />} />
+        <Route path="admins" element={<AdminManagement />} />
+        <Route path="database" element={<DatabaseManagement />} />
+        <Route path="settings" element={<SystemSettings />} />
+      </Route>
+
       {/* Graduate Portal Routes */}
       <Route path="/graduate/dashboard" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><GraduateDashboard /></GraduatePortalLayout></ProtectedRoute>} />
       <Route path="/graduate/survey" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><EmploymentSurvey /></GraduatePortalLayout></ProtectedRoute>} />
@@ -77,6 +99,7 @@ function App() {
       <Route path="/graduate/resources" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><AlumniResources /></GraduatePortalLayout></ProtectedRoute>} />
       <Route path="/graduate/support" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><FeedbackSupport /></GraduatePortalLayout></ProtectedRoute>} />
       <Route path="/graduate/settings" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><GraduateSettings /></GraduatePortalLayout></ProtectedRoute>} />
+      <Route path="/graduate/resume-builder" element={<ProtectedRoute allowedRoles={['graduate']}><GraduatePortalLayout><ResumeBuilder /></GraduatePortalLayout></ProtectedRoute>} />
     </Routes>
     <Toaster />
   </>

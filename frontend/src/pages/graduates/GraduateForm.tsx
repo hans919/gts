@@ -71,7 +71,7 @@ export default function GraduateForm() {
 
       await axios.put(`https://lightsteelblue-locust-816886.hostingersite.com/api/graduates/${id}`, formData, config);
 
-      navigate('/graduates');
+      navigate('/admin/graduates');
     } catch (err: any) {
       console.error('Error updating graduate:', err.response?.data);
       
@@ -103,7 +103,7 @@ export default function GraduateForm() {
       <div className="flex items-center justify-between space-y-2">
         <div className="flex items-center space-x-2">
           <Button variant="ghost" size="icon" asChild>
-            <Link to="/graduates">
+            <Link to="/admin/graduates">
               <ChevronLeft className="h-4 w-4" />
             </Link>
           </Button>
@@ -392,7 +392,7 @@ export default function GraduateForm() {
             {loading ? 'Updating...' : 'Update Graduate'}
           </Button>
           <Button type="button" variant="outline" asChild>
-            <Link to="/graduates">Cancel</Link>
+            <Link to="/admin/graduates">Cancel</Link>
           </Button>
         </div>
       </form>

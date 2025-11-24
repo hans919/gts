@@ -301,7 +301,7 @@ export default function JobsManagement() {
                   </Button>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button variant="destructive" size="sm" onClick={() => setDeleteId(job.id)}>
+                      <Button variant="destructive" size="sm" onClick={() => setDeleteId(job.id)} className="bg-red-600 hover:bg-red-700">
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </AlertDialogTrigger>

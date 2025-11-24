@@ -105,9 +105,9 @@ export default function EmploymentSurveysManagement() {
   const getEmploymentStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'employed': return 'bg-green-100 text-green-700 border-green-200';
-      case 'self-employed': return 'bg-blue-100 text-blue-700 border-blue-200';
-      case 'unemployed': return 'bg-red-100 text-red-700 border-red-200';
-      case 'further education': return 'bg-purple-100 text-purple-700 border-purple-200';
+      case 'self-employed': return 'bg-green-100 text-green-700 border-green-200';
+      case 'unemployed': return 'bg-green-100 text-green-700 border-green-200';
+      case 'further education': return 'bg-green-100 text-green-700 border-green-200';
       case 'freelancing': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
       default: return 'bg-gray-100 text-gray-700 border-gray-200';
     }
@@ -474,6 +474,7 @@ export default function EmploymentSurveysManagement() {
                           variant="destructive"
                           size="sm"
                           onClick={() => setDeleteId(survey.id)}
+                          className="bg-red-600 hover:bg-red-700"
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
                           Delete

@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Plus, Search, Pencil, Trash, Filter, X } from 'lucide-react';
+import { Plus, Search, Pencil, Trash, Filter, X, Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Select } from '@/components/ui/select';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -51,6 +50,7 @@ export default function GraduateList() {
   const [totalPages, setTotalPages] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [exporting, setExporting] = useState(false);
   
   // Filter states
   const [yearFilter, setYearFilter] = useState('');
@@ -99,6 +99,62 @@ export default function GraduateList() {
 
   const hasActiveFilters = yearFilter || departmentFilter || programFilter || employmentStatusFilter || searchTerm;
 
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const token = localStorage.getItem('token');
+      const params: any = { 
+        export: 'csv',
+        search: searchTerm 
+      };
+      
+      if (yearFilter) params.graduation_year = yearFilter;
+      if (departmentFilter) params.program = departmentFilter;
+      if (programFilter) params.major = programFilter;
+      if (employmentStatusFilter) params.employment_status = employmentStatusFilter;
+      
+      const response = await axios.get(`https://lightsteelblue-locust-816886.hostingersite.com/api/graduates/export`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params,
+        responseType: 'blob',
+      });
+      
+      // Create download link
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // Generate filename with current date and filters
+      const timestamp = new Date().toISOString().split('T')[0];
+      let filename = `graduates_${timestamp}`;
+      if (hasActiveFilters) {
+        filename += '_filtered';
+      }
+      filename += '.csv';
+      
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      
+      toast({
+        title: "Success!",
+        description: "Graduates data exported successfully!",
+        variant: "success",
+      });
+    } catch (error) {
+      console.error('Error exporting graduates:', error);
+      toast({
+        title: "Error",
+        description: "Failed to export graduates data",
+        variant: "destructive",
+      });
+    } finally {
+      setExporting(false);
+    }
+  };
+
   const handleDelete = async () => {
     if (!deleteId) return;
 
@@ -143,8 +199,20 @@ export default function GraduateList() {
           </p>
         </div>
         <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            onClick={handleExport}
+            disabled={exporting || loading}
+          >
+            {exporting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Download className="mr-2 h-4 w-4" />
+            )}
+            Export {hasActiveFilters ? 'Filtered' : 'All'}
+          </Button>
           <Button asChild>
-            <Link to="/graduates/new">
+            <Link to="/admin/graduates/new">
               <Plus className="mr-2 h-4 w-4" />
               Add Graduate
             </Link>
@@ -187,22 +255,24 @@ export default function GraduateList() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-muted/50 rounded-lg">
             <div className="space-y-2">
               <label className="text-sm font-medium">Graduation Year</label>
-              <Select
+              <select
                 value={yearFilter}
                 onChange={(e) => setYearFilter(e.target.value)}
+                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <option value="">All Years</option>
                 {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).map(year => (
                   <option key={year} value={year}>{year}</option>
                 ))}
-              </Select>
+              </select>
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium">Department</label>
-              <Select
+              <select
                 value={departmentFilter}
                 onChange={(e) => setDepartmentFilter(e.target.value)}
+                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <option value="">All Departments</option>
                 <option value="Computer Science">Computer Science</option>
@@ -212,7 +282,7 @@ export default function GraduateList() {
                 <option value="Education">Education</option>
                 <option value="Nursing">Nursing</option>
                 <option value="Arts and Sciences">Arts and Sciences</option>
-              </Select>
+              </select>
             </div>
 
             <div className="space-y-2">
@@ -226,9 +296,10 @@ export default function GraduateList() {
 
             <div className="space-y-2">
               <label className="text-sm font-medium">Employment Status</label>
-              <Select
+              <select
                 value={employmentStatusFilter}
                 onChange={(e) => setEmploymentStatusFilter(e.target.value)}
+                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <option value="">All Status</option>
                 <option value="Employed">Employed</option>
@@ -239,7 +310,7 @@ export default function GraduateList() {
                 <option value="employed">Employed (Old)</option>
                 <option value="self-employed">Self-Employed (Old)</option>
                 <option value="pursuing_higher_education">Pursuing Higher Education (Old)</option>
-              </Select>
+              </select>
             </div>
           </div>
         )}
@@ -280,7 +351,7 @@ export default function GraduateList() {
                     <div className="flex flex-col items-center justify-center py-8">
                       <p className="text-sm text-muted-foreground">No graduates found.</p>
                       <Button variant="link" asChild className="mt-2">
-                        <Link to="/graduates/new">Add your first graduate</Link>
+                        <Link to="/admin/graduates/new">Add your first graduate</Link>
                       </Button>
                     </div>
                   </td>
@@ -323,7 +394,7 @@ export default function GraduateList() {
                     <td className="p-4 align-middle text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Button variant="ghost" size="icon" asChild>
-                          <Link to={`/graduates/${graduate.id}/edit`}>
+                          <Link to={`/admin/graduates/${graduate.id}/edit`}>
                             <Pencil className="h-4 w-4" />
                           </Link>
                         </Button>

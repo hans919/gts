@@ -40,6 +40,12 @@ export default function GraduateRegister() {
     setSuccess('');
 
     // Validation
+    if (!formData.email.endsWith('@sjcbi.edu.ph')) {
+      setError('Email must be a valid @sjcbi.edu.ph address');
+      setLoading(false);
+      return;
+    }
+
     if (formData.password !== formData.password_confirmation) {
       setError('Passwords do not match');
       setLoading(false);
@@ -179,11 +185,12 @@ export default function GraduateRegister() {
                   type="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="juan.delacruz@example.com"
+                  placeholder="juan.delacruz@sjcbi.edu.ph"
                   required
                   className="pl-9"
                 />
               </div>
+              <p className="text-xs text-muted-foreground">Must use @sjcbi.edu.ph email address</p>
             </div>
 
             <div className="space-y-2">

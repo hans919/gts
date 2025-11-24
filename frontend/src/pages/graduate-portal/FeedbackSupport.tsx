@@ -130,17 +130,17 @@ export default function FeedbackSupport() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'open': return 'bg-blue-100 text-blue-700';
-      case 'in_progress': return 'bg-yellow-100 text-yellow-700';
+      case 'open': return 'bg-green-100 text-green-700';
+      case 'in_progress': return 'bg-green-100 text-green-700';
       case 'resolved': return 'bg-green-100 text-green-700';
-      case 'closed': return 'bg-gray-100 text-gray-700';
-      default: return 'bg-gray-100 text-gray-700';
+      case 'closed': return 'bg-green-100 text-green-700';
+      default: return 'bg-green-100 text-green-700';
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'bg-red-100 text-red-700';
+      case 'high': return 'bg-green-100 text-green-700';
       case 'medium': return 'bg-yellow-100 text-yellow-700';
       case 'low': return 'bg-green-100 text-green-700';
       default: return 'bg-gray-100 text-gray-700';
@@ -354,19 +354,19 @@ export default function FeedbackSupport() {
                 <CardContent>
                   <div className="space-y-3">
                     <div>
-                      <span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-700">
+                      <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
                         {ticket.category.replace('_', ' ')}
                       </span>
                     </div>
                     <p className="text-sm text-muted-foreground line-clamp-2">{ticket.description}</p>
                     
                     {ticket.admin_response && (
-                      <div className="mt-4 p-3 bg-blue-50 border-l-4 border-blue-500 rounded">
-                        <p className="text-xs font-semibold text-blue-900 mb-1">Admin Response:</p>
-                        <p className="text-sm text-blue-800">{ticket.admin_response}</p>
+                      <div className="mt-4 p-3 bg-green-50 border-l-4 border-green-500 rounded">
+                        <p className="text-xs font-semibold text-green-900 mb-1">Admin Response:</p>
+                        <p className="text-sm text-green-800">{ticket.admin_response}</p>
                         {ticket.responded_at && (
-                          <p className="text-xs text-blue-600 mt-2">
-                            {new Date(ticket.responded_at).toLocaleDateString()} at {new Date(ticket.responded_at).toLocaleTimeString()}
+                          <p className="text-xs text-green-600 mt-2">
+                            Responded: {new Date(ticket.responded_at).toLocaleString()}
                           </p>
                         )}
                       </div>

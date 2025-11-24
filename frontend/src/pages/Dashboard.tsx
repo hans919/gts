@@ -5,10 +5,13 @@ import {
   ClipboardList, 
   Activity,
   Loader2,
-  Briefcase
+  Briefcase,
+  Filter,
+  X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import axios from 'axios';
 
@@ -50,6 +53,13 @@ export default function Dashboard() {
     recent_graduates: [],
   });
   const [graduatesByYear, setGraduatesByYear] = useState<GraduatesByYear[]>([]);
+  
+  // Filter states
+  const [showFilters, setShowFilters] = useState(false);
+  const [yearFilter, setYearFilter] = useState('');
+  const [departmentFilter, setDepartmentFilter] = useState('');
+  const [programFilter, setProgramFilter] = useState('');
+  const [employmentStatusFilter, setEmploymentStatusFilter] = useState('');
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -58,13 +68,21 @@ export default function Dashboard() {
     }
     fetchDashboardData();
     fetchGraduatesByYear();
-  }, []);
+  }, [yearFilter, departmentFilter, programFilter, employmentStatusFilter]);
 
   const fetchDashboardData = async () => {
     try {
       const token = localStorage.getItem('token');
+      const params: any = {};
+      
+      if (yearFilter) params.graduation_year = yearFilter;
+      if (departmentFilter) params.program = departmentFilter;
+      if (programFilter) params.major = programFilter;
+      if (employmentStatusFilter) params.employment_status = employmentStatusFilter;
+      
       const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/analytics/dashboard', {
         headers: { Authorization: `Bearer ${token}` },
+        params,
       });
       setData(response.data);
       setLoading(false);
@@ -77,8 +95,16 @@ export default function Dashboard() {
   const fetchGraduatesByYear = async () => {
     try {
       const token = localStorage.getItem('token');
+      const params: any = {};
+      
+      if (yearFilter) params.graduation_year = yearFilter;
+      if (departmentFilter) params.program = departmentFilter;
+      if (programFilter) params.major = programFilter;
+      if (employmentStatusFilter) params.employment_status = employmentStatusFilter;
+      
       const response = await axios.get('https://lightsteelblue-locust-816886.hostingersite.com/api/analytics/graduates-by-year', {
         headers: { Authorization: `Bearer ${token}` },
+        params,
       });
       setGraduatesByYear(response.data);
     } catch (error) {
@@ -92,6 +118,15 @@ export default function Dashboard() {
     const employed = data.employed_count || 0;
     return Math.round((employed / data.total_graduates) * 100);
   };
+
+  const clearFilters = () => {
+    setYearFilter('');
+    setDepartmentFilter('');
+    setProgramFilter('');
+    setEmploymentStatusFilter('');
+  };
+
+  const hasActiveFilters = yearFilter || departmentFilter || programFilter || employmentStatusFilter;
 
   if (!user) return null;
 
@@ -109,9 +144,98 @@ export default function Dashboard() {
         <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
         <div className="flex items-center space-x-2">
           <Button asChild>
-            <Link to="/graduates/new">Add Graduate</Link>
+            <Link to="/admin/graduates/new">Add Graduate</Link>
           </Button>
         </div>
+      </div>
+
+      {/* Filter Section */}
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-2">
+          <Button
+            variant={showFilters ? "default" : "outline"}
+            size="sm"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <Filter className="mr-2 h-4 w-4" />
+            Filters
+          </Button>
+          {hasActiveFilters && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearFilters}
+            >
+              <X className="mr-2 h-4 w-4" />
+              Clear Filters
+            </Button>
+          )}
+        </div>
+
+        {showFilters && (
+          <Card>
+            <CardContent className="pt-6">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Graduation Year</label>
+                  <select
+                    value={yearFilter}
+                    onChange={(e) => setYearFilter(e.target.value)}
+                    className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option value="">All Years</option>
+                    {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Department</label>
+                  <select
+                    value={departmentFilter}
+                    onChange={(e) => setDepartmentFilter(e.target.value)}
+                    className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option value="">All Departments</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Business Administration">Business Administration</option>
+                    <option value="Education">Education</option>
+                    <option value="Nursing">Nursing</option>
+                    <option value="Arts and Sciences">Arts and Sciences</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Program/Major</label>
+                  <Input
+                    placeholder="Filter by program/major..."
+                    value={programFilter}
+                    onChange={(e) => setProgramFilter(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Employment Status</label>
+                  <select
+                    value={employmentStatusFilter}
+                    onChange={(e) => setEmploymentStatusFilter(e.target.value)}
+                    className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option value="">All Status</option>
+                    <option value="Employed">Employed</option>
+                    <option value="Self-employed">Self-employed</option>
+                    <option value="Unemployed">Unemployed</option>
+                    <option value="Further Education">Further Education</option>
+                    <option value="Freelancing">Freelancing</option>
+                  </select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -221,7 +345,7 @@ export default function Dashboard() {
                   </div>
                   <div className="ml-auto font-medium">
                     <Button variant="ghost" size="sm" asChild>
-                      <Link to="/graduates/new">Add</Link>
+                      <Link to="/admin/graduates/new">Add</Link>
                     </Button>
                   </div>
                 </div>
@@ -253,7 +377,7 @@ export default function Dashboard() {
                 {data.total_graduates > 5 && (
                   <div className="pt-2 border-t">
                     <Button variant="link" className="w-full" asChild>
-                      <Link to="/graduates">View all graduates</Link>
+                      <Link to="/admin/graduates">View all graduates</Link>
                     </Button>
                   </div>
                 )}
